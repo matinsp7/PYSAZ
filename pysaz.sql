@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS ADDRESS
 
     PRIMARY KEY(ID, Province, Remainder),
     FOREIGN KEY (ID) REFERENCES CLIENT(ID)
--- if aclient change its addres in ADDRES table automatic updated.
+-- if aclient change its addres in ADDRES table will update automaticly.
     ON UPDATE CASCADE
     ON DELETE CASCADE  
 );
@@ -55,5 +55,80 @@ CREATE TABLE IF NOT EXISTS WALLET_TRANSACTION
     FOREIGN KEY(Tracking_code) REFERENCES TRANSACTION(Tracking_code)
     ON UPDATE CASCADE
     ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS SUBSCRIBES
+(
+    Tracking_code INT PRIMARY KEY,
+    ID INT,
+
+    FOREIGN KEY(Tracking_code) REFERENCES TRANSACTION(Tracking_code)
+    ON UPDATE CASCADE  
+    ON DELETE CASCADE,
+    
+    FOREIGN KEY(ID) REFERENCES CLIENT(ID)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS DEPOSITS_INTO_WALLET
+(
+    Tracking_code INT PRIMARY KEY,
+    ID INT,
+    Amount INT,
+
+    CHECK(Amount > 0),
+
+    FOREIGN KEY (ID) REFERENCES CLIENT(ID)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+
+    FOREIGN KEY (Tracking_code) REFERENCES TRANSACTION(Tracking_code)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS VIP_CLIENTS
+(
+    ID INT PRIMARY KEY,
+    Subcription_expiration_time data,
+
+    FOREIGN KEY (ID) REFERENCES CLIENT(ID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+
+-- which table and column is this foreign key?
+CREATE TABLE IF NOT EXISTS REFERS
+(
+    Referee VARCHAR(20) PRIMARY KEY,
+    Referrer VARCHAR(20),
+
+    FOREIGN KEY (Referee) 
+);
+
+CREATE TABLE IF NOT EXISTS SHOPPING_CART
+(
+    ID INT,
+    Number INT,
+    Status boolean,
+
+    PRIMARY KEY(ID, Number),
+    FOREIGN KEY (ID) REFERENCES CLIENT(ID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS DISCOUNT_CODE
+(
+    Code INT PRIMARY KEY,
+    Amount INT,
+    Limit INT,
+    Usage_count INT,
+    Expiration_date data,
+
+    -- check it later
+    CHECK(Amount > 0)
 );
 
