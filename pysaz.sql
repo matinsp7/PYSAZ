@@ -187,218 +187,49 @@ CREATE TABLE IF NOT EXISTS ISSUED_FOR
     ON UPDATE CASCADE
 );
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+CREATE TABLE IF NOT EXISTS PRODUCT 
+(
+    ID INT PRIMARY KEY,
+    Category VARCHAR(20),
+    Image BLOB,
+    Current_price INT,
+    Stock_count INT, 
+    Brand VARCHAR(20),
+    Model VARCHAR(30)
+
+    CHECK (Current_price > 0 and Stock_count > 0)
+);
+
+CREATE TABLE IF NOT EXISTS ADDED_TO
+(
+    ID INT,
+    Cart_number INT,
+    Locked_number INT,
+    Product_ID INT,
+    Quantity VARCHAR(20),
+    Cart_price INT CHECK (Cart_price > 0),
+
+    PRIMARY KEY (ID, Cart_number, Locked_number, Product_ID),
+
+    FOREIGN KEY (ID, Cart_number, Locked_number) REFERENCES LOCKED_SHOPPING_CART (ID, Cart_number, Number)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+
+    FOREIGN KEY (Product_ID) REFERENCES PRODUCT (ID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS APPLIED_TO
+(
+    ID INT,
+    Cart_number INT,
+    Locked_number INT,
+    Code INT,
+    Timestamp date,
+
+    PRIMARY KEY (ID, Cart_number, Locked_number, Code)
+);
 
 CREATE TABLE IF NOT EXISTS HDD
 (
@@ -509,3 +340,4 @@ ON SCHEDULE EVERY 1 DAY
 DO
 DELETE FROM VIP_CLIENTS
 WHERE Subcription_expiration_time < NOW() - INTERVAL 1 MONTH;
+
