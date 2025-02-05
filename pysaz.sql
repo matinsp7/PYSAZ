@@ -400,7 +400,16 @@ CREATE TABLE IF NOT EXISTS ISSUED_FOR
 
 
 
-
+CREATE TABLE IF NOT EXISTS HDD
+(
+    ID INT PRIMARY KEY,
+    Rotational_speed INT,
+    Wattage INT,
+    Capacity INT,
+    Depth INT,
+    Height INT,
+    Width INT
+)
 
 
 ------------------------------------------------------------------------------------------------
