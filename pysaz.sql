@@ -408,9 +408,98 @@ CREATE TABLE IF NOT EXISTS HDD
     Capacity INT,
     Depth INT,
     Height INT,
-    Width INT
+    Width INT,
+
+-- forign key
 )
 
+CREATE TABLE IF NOT EXISTS GPU
+(
+    ID INT PRIMARY KEY,
+    Clock_speed INT,
+    Ram_size INT,
+    Number_of_fans INT,
+    Wattage INT,
+    Depth INT,
+    Height INT,
+    Width INT,
+
+-- foriegn key
+)
+
+
+CREATE TABLE IF NOT EXISTS POWER_SUPPLY
+(   
+    ID INT PRIMARY KEY,
+    Supported_Wattage INT,
+    Depth INT,
+    Height INT,
+    Width INT,
+-- foriegn key
+)
+
+
+CREATE TABLE OF NOT EXISTS COOLER
+(   
+    ID INT PRIMARY KEY,
+    Maximum_rotational_speed INT,
+    Wattage INT,
+    Fan_size INT,
+    Cooling_method INT,
+    Depth INT,
+    Height INT,
+    Width INT,
+
+-- foriegn key
+)
+
+CREATE TABLE OF NOT EXISTS CPU
+(   
+    ID INT PRIMARY KEY,
+    Maximum_addressable_memory_limit INT,
+    Boost_frequency INT,
+    Base_frequency INT,
+    Number_of_cores INT,
+    Number_of_Threads INT,
+    Number_of_Threads INT,
+    Generation INT,
+    Wattage INT,
+
+-- foriegn key
+)
+
+CREATE TABLE OF NOT EXISTS MOTHERBOARD
+(   
+    ID INT PRIMARY KEY,
+    Chipset VARCHAR(30),
+    Number_of_memory_slots INT,
+    Memory_speed_range INT,
+    Wattage INT,
+    Depth INT,
+    Height INT,
+    Width INT,
+
+-- foriegn key
+)
+
+CREATE TABLE IF NOT EXISTS RAM_STICK
+(
+    ID INT PRIMARY KEY,
+    Frequency INT,  
+    Wattage INT,
+    Capacity INT,
+    Generation VARCHAR(10),
+    Depth INT,
+    Height INT,
+    Width INT,
+)
+
+CREATE TABLE IF NOT EXISTS SSD
+(
+    ID INT PRIMARY KEY,
+    Wattage INT,
+    Capacity INT,
+)
 
 ------------------------------------------------------------------------------------------------
 --                                      EVENTS
