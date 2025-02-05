@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS DEPOSITS_INTO_WALLET
 CREATE TABLE IF NOT EXISTS VIP_CLIENTS
 (
     ID INT PRIMARY KEY,
-    Subcription_expiration_time data,
+    Subcription_expiration_time date,
 
     FOREIGN KEY (ID) REFERENCES CLIENT(ID)
     ON DELETE CASCADE
@@ -103,9 +103,9 @@ CREATE TABLE IF NOT EXISTS VIP_CLIENTS
 CREATE TABLE IF NOT EXISTS REFERS
 (
     Referee VARCHAR(20) PRIMARY KEY,
-    Referrer VARCHAR(20),
+    Referrer VARCHAR(20)
 
-    FOREIGN KEY (Referee) 
+    -- FOREIGN KEY (Referee) 
 );
 
 CREATE TABLE IF NOT EXISTS SHOPPING_CART
@@ -124,11 +124,66 @@ CREATE TABLE IF NOT EXISTS DISCOUNT_CODE
 (
     Code INT PRIMARY KEY,
     Amount INT,
-    Limit INT,
+    Limt INT,
     Usage_count INT,
-    Expiration_date data,
+    Expiration_date date,
 
     -- check it later
     CHECK(Amount > 0)
+);
+
+CREATE TABLE IF NOT EXISTS PRIVATE_CODE
+(   
+    Code INT PRIMARY KEY,
+    ID INT,
+    Ttimestamp TIMESTAMP,
+
+    FOREIGN KEY (ID) REFERENCES CLIENT(ID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE, 
+
+    FOREIGN KEY (Code) REFERENCES DISCOUNT_CODE(Code)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS PUBLIC_CODE
+(
+    Code INT PRIMARY KEY,
+
+    FOREIGN KEY (Code) REFERENCES DISCOUNT_CODE(Code)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE 
+);
+
+CREATE TABLE IF NOT EXISTS LOCKED_SHOPPING_CART
+(
+    ID INT,
+    Cart_number INT,
+    Number INT,
+    Ttimestamp TIMESTAMP,
+
+    PRIMARY KEY(ID, Cart_number, Number),
+
+    FOREIGN KEY (ID, Cart_number) REFERENCES SHOPPING_CART(ID, Number)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+ 
+);
+
+CREATE TABLE IF NOT EXISTS ISSUED_FOR
+(
+    Tracking_code INT PRIMARY KEY,
+    ID INT, 
+    Cart_number INT,
+    Locked_number INT,
+
+    FOREIGN KEY (Tracking_code) REFERENCES TRANSACTION(Tracking_code)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+
+    FOREIGN KEY (ID, Cart_number, Locked_number) REFERENCES LOCKED_SHOPPING_CART(ID, Cart_number, Number)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
 
