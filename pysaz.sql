@@ -408,10 +408,10 @@ CREATE TABLE IF NOT EXISTS HDD
     Capacity INT,
     Depth INT,
     Height INT,
-    Width INT,
+    Width INT
 
 -- forign key
-)
+);
 
 CREATE TABLE IF NOT EXISTS GPU
 (
@@ -422,10 +422,10 @@ CREATE TABLE IF NOT EXISTS GPU
     Wattage INT,
     Depth INT,
     Height INT,
-    Width INT,
+    Width INT
 
 -- foriegn key
-)
+);
 
 
 CREATE TABLE IF NOT EXISTS POWER_SUPPLY
@@ -434,12 +434,12 @@ CREATE TABLE IF NOT EXISTS POWER_SUPPLY
     Supported_Wattage INT,
     Depth INT,
     Height INT,
-    Width INT,
+    Width INT
 -- foriegn key
-)
+);
 
 
-CREATE TABLE OF NOT EXISTS COOLER
+CREATE TABLE IF NOT EXISTS COOLER
 (   
     ID INT PRIMARY KEY,
     Maximum_rotational_speed INT,
@@ -448,12 +448,12 @@ CREATE TABLE OF NOT EXISTS COOLER
     Cooling_method INT,
     Depth INT,
     Height INT,
-    Width INT,
+    Width INT
 
 -- foriegn key
-)
+);
 
-CREATE TABLE OF NOT EXISTS CPU
+CREATE TABLE IF NOT EXISTS CPU
 (   
     ID INT PRIMARY KEY,
     Maximum_addressable_memory_limit INT,
@@ -461,14 +461,13 @@ CREATE TABLE OF NOT EXISTS CPU
     Base_frequency INT,
     Number_of_cores INT,
     Number_of_Threads INT,
-    Number_of_Threads INT,
     Generation INT,
-    Wattage INT,
+    Wattage INT
 
 -- foriegn key
-)
+);
 
-CREATE TABLE OF NOT EXISTS MOTHERBOARD
+CREATE TABLE IF NOT EXISTS MOTHERBOARD
 (   
     ID INT PRIMARY KEY,
     Chipset VARCHAR(30),
@@ -477,10 +476,10 @@ CREATE TABLE OF NOT EXISTS MOTHERBOARD
     Wattage INT,
     Depth INT,
     Height INT,
-    Width INT,
+    Width INT
 
 -- foriegn key
-)
+);
 
 CREATE TABLE IF NOT EXISTS RAM_STICK
 (
@@ -491,15 +490,15 @@ CREATE TABLE IF NOT EXISTS RAM_STICK
     Generation VARCHAR(10),
     Depth INT,
     Height INT,
-    Width INT,
-)
+    Width INT
+);
 
 CREATE TABLE IF NOT EXISTS SSD
 (
     ID INT PRIMARY KEY,
     Wattage INT,
-    Capacity INT,
-)
+    Capacity INT
+);
 
 ------------------------------------------------------------------------------------------------
 --                                      EVENTS
@@ -509,4 +508,4 @@ CREATE EVENT IF NOT EXISTS CheckExpirationVip
 ON SCHEDULE EVERY 1 DAY
 DO
 DELETE FROM VIP_CLIENTS
-WHERE Subcription_expiration_time < NOW() - INTRVAL 1 MONTH;
+WHERE Subcription_expiration_time < NOW() - INTERVAL 1 MONTH;
