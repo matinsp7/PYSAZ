@@ -229,6 +229,9 @@ CREATE TABLE IF NOT EXISTS APPLIED_TO
     Timestamp date,
 
     PRIMARY KEY (ID, Cart_number, Locked_number, Code)
+
+--  foreign key  
+
 );
 
 CREATE TABLE IF NOT EXISTS HDD
@@ -239,9 +242,12 @@ CREATE TABLE IF NOT EXISTS HDD
     Capacity INT,
     Depth INT,
     Height INT,
-    Width INT
+    Width INT,
 
--- forign key
+    FOREIGN KEY (ID) REFERENCES PRODUCT(ID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+
 );
 
 CREATE TABLE IF NOT EXISTS GPU
@@ -253,9 +259,13 @@ CREATE TABLE IF NOT EXISTS GPU
     Wattage INT,
     Depth INT,
     Height INT,
-    Width INT
+    Width INT,
 
--- foriegn key
+    FOREIGN KEY (ID) REFERENCES PRODUCT(ID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+
+
 );
 
 
@@ -265,8 +275,12 @@ CREATE TABLE IF NOT EXISTS POWER_SUPPLY
     Supported_Wattage INT,
     Depth INT,
     Height INT,
-    Width INT
--- foriegn key
+    Width INT,
+
+    FOREIGN KEY (ID) REFERENCES PRODUCT(ID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+
 );
 
 
@@ -279,9 +293,11 @@ CREATE TABLE IF NOT EXISTS COOLER
     Cooling_method INT,
     Depth INT,
     Height INT,
-    Width INT
+    Width INT,
 
--- foriegn key
+    FOREIGN KEY (ID) REFERENCES PRODUCT(ID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS CPU
@@ -293,9 +309,11 @@ CREATE TABLE IF NOT EXISTS CPU
     Number_of_cores INT,
     Number_of_Threads INT,
     Generation INT,
-    Wattage INT
+    Wattage INT,
 
--- foriegn key
+    FOREIGN KEY (ID) REFERENCES PRODUCT(ID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS MOTHERBOARD
@@ -307,9 +325,13 @@ CREATE TABLE IF NOT EXISTS MOTHERBOARD
     Wattage INT,
     Depth INT,
     Height INT,
-    Width INT
+    Width INT,
 
--- foriegn key
+    FOREIGN KEY (ID) REFERENCES PRODUCT(ID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+
+
 );
 
 CREATE TABLE IF NOT EXISTS RAM_STICK
@@ -321,14 +343,22 @@ CREATE TABLE IF NOT EXISTS RAM_STICK
     Generation VARCHAR(10),
     Depth INT,
     Height INT,
-    Width INT
+    Width INT,
+
+    FOREIGN KEY (ID) REFERENCES PRODUCT(ID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS SSD
 (
     ID INT PRIMARY KEY,
     Wattage INT,
-    Capacity INT
+    Capacity INT,
+
+    FOREIGN KEY (ID) REFERENCES PRODUCT(ID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
 
 ------------------------------------------------------------------------------------------------
@@ -340,4 +370,27 @@ ON SCHEDULE EVERY 1 DAY
 DO
 DELETE FROM VIP_CLIENTS
 WHERE Subcription_expiration_time < NOW() - INTERVAL 1 MONTH;
+
+
+
+DELIMITER //
+
+CREATE TRIGGER IF NOT EXISTS checkQuantity
+BEFORE INSERT
+ON ADDED_TO
+FOR EACH ROW
+BEGIN
+
+    DECLARE product_count INT;
+
+    SELECT Stock_count INTO product_count
+    FROM PRODUCT
+    WHERE PRODUCT.ID = NEW.PRODUCT_ID; 
+
+    IF NEW.Quantity > product_count THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'ERROR: you can not choose more than stock_count! ';
+    END IF;
+END; //
+DELIMITER ;
 
