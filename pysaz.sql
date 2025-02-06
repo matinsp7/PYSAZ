@@ -373,6 +373,30 @@ WHERE Subcription_expiration_time < NOW() - INTERVAL 1 MONTH;
 
 
 
+DELIMITER $$
+
+CREATE TRIGGER check_block_before_insert_ADDED_TO
+BEFORE INSERT ON ADDED_TO
+FOR EACH ROW
+BEGIN
+    DECLARE cart_locked BOOLEAN;
+
+    -- Check if the SHOPPING_CART is locked
+    SELECT Status INTO cart_locked
+    FROM SHOPPING_CART
+    WHERE ID = NEW.ID AND Number = NEW.Cart_number;
+
+    -- If the cart is locked, prevent the insert
+    IF cart_locked THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Cannot add item: Cart is locked.';
+    END IF;
+END$$
+
+DELIMITER ;
+
+
+
 DELIMITER //
 
 CREATE TRIGGER IF NOT EXISTS checkQuantity
