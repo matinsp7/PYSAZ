@@ -362,7 +362,7 @@ CREATE TABLE IF NOT EXISTS SSD
 );
 
 ------------------------------------------------------------------------------------------------
---                                      EVENTS
+--                                      EVENTS AND TRIGGER
 ------------------------------------------------------------------------------------------------
 
 CREATE EVENT IF NOT EXISTS CheckExpirationVip
@@ -375,7 +375,7 @@ WHERE Subcription_expiration_time < NOW() - INTERVAL 1 MONTH;
 
 DELIMITER $$
 
-CREATE TRIGGER check_block_before_insert_ADDED_TO
+CREATE TRIGGER IF NOT EXISTS check_block_before_insert_ADDED_TO
 BEFORE INSERT ON ADDED_TO
 FOR EACH ROW
 BEGIN
@@ -419,8 +419,57 @@ END; //
 DELIMITER ;
 
 
+-- when a product added to ADDED_TO table stock_count of products change
+DELIMITER //
+
+CREATE TRIGGER IF NOT EXISTS controlStockCount
+BEFORE INSERT
+ON ADDED_TO
+FOR EACH ROW
+BEGIN
+
+    DECLARE product_count INT;
+
+    SELECT Stock_count INTO product_count
+    FROM PRODUCT
+    WHERE PRODUCT.ID = NEW.PRODUCT_ID; 
+
+    UPDATE PRODUCT
+    SET Stock_count = Stock_count - NEW.Quantity
+    WHERE ID = NEW.PRODUCT_ID;
+    
+END; //
+DELIMITER ;
 
 
+
+-- check Expirationdata of discount codes
+DELIMITER //
+
+CREATE TRIGGER IF NOT EXISTS checkDiscountCodeExpiration
+BEFORE INSERT 
+ON APPLIED_TO
+FOR EACH ROW
+BEGIN
+
+    DECLARE codeExpiration date;
+
+    SELECT Expiration_date INTO codeExpiration
+    FROM DISCOUNT_CODE
+    WHERE Code = NEW.Code;
+
+    IF NOW() > codeExpiration THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'you can not use from this code because this code has expired!';
+    END IF;
+END; //
+DELIMITER ;
+
+
+
+-----------------------------------------------------------------------------------------------------
+--                                      INSERTING DATA
+-----------------------------------------------------------------------------------------------------
 
 
 
