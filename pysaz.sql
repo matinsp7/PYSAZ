@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS SHOPPING_CART
 (
     ID INT,
     Number INT,
-    Status boolean,
+    Status ENUM ('active', 'locked', 'blocked'),
 
     PRIMARY KEY(ID, Number),
     FOREIGN KEY (ID) REFERENCES CLIENT(ID)
@@ -157,10 +157,11 @@ CREATE TABLE IF NOT EXISTS PUBLIC_CODE
 );
 
 CREATE TABLE IF NOT EXISTS LOCKED_SHOPPING_CART
-(
+(   
     ID INT,
     Cart_number INT,
-    Number INT,
+-- might auto incremnt needed-----------------
+    Number INT,          
     Ttimestamp TIMESTAMP,
 
     PRIMARY KEY(ID, Cart_number, Number),
@@ -168,7 +169,6 @@ CREATE TABLE IF NOT EXISTS LOCKED_SHOPPING_CART
     FOREIGN KEY (ID, Cart_number) REFERENCES SHOPPING_CART(ID, Number)
     ON UPDATE CASCADE
     ON DELETE CASCADE
- 
 );
 
 CREATE TABLE IF NOT EXISTS ISSUED_FOR
@@ -371,29 +371,29 @@ DO
 DELETE FROM VIP_CLIENTS
 WHERE Subcription_expiration_time < NOW() - INTERVAL 1 MONTH;
 
+-- check if cart is locked can't add to it product
 
+-- DELIMITER $$
 
-DELIMITER $$
+-- CREATE TRIGGER IF NOT EXISTS check_block_before_insert_ADDED_TO
+-- BEFORE INSERT ON ADDED_TO
+-- FOR EACH ROW
+-- BEGIN
+--     DECLARE cart_locked VARCHAR(10);
 
-CREATE TRIGGER IF NOT EXISTS check_block_before_insert_ADDED_TO
-BEFORE INSERT ON ADDED_TO
-FOR EACH ROW
-BEGIN
-    DECLARE cart_locked BOOLEAN;
+--     -- Check if the SHOPPING_CART is locked
+--     SELECT 'locked' INTO cart_locked
+--     FROM SHOPPING_CART
+--     WHERE ID = NEW.ID AND Number = NEW.Cart_number;
 
-    -- Check if the SHOPPING_CART is locked
-    SELECT Status INTO cart_locked
-    FROM SHOPPING_CART
-    WHERE ID = NEW.ID AND Number = NEW.Cart_number;
+--     -- If the cart is locked, prevent the insert
+--     IF cart_locked = 'locked' THEN
+--         SIGNAL SQLSTATE '45000'
+--         SET MESSAGE_TEXT = 'Cannot add item: Cart is locked.';
+--     END IF;
+-- END$$
 
-    -- If the cart is locked, prevent the insert
-    IF cart_locked THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Cannot add item: Cart is locked.';
-    END IF;
-END$$
-
-DELIMITER ;
+-- DELIMITER ;
 
 
 
@@ -462,6 +462,74 @@ BEGIN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'you can not use from this code because this code has expired!';
     END IF;
+END; //
+DELIMITER ;
+
+
+-- check maxmimum cart of users
+
+DELIMITER //
+
+CREATE TRIGGER IF NOT EXISTS checkNumberOFCartShop
+BEFORE INSERT
+ON SHOPPING_CART
+FOR EACH ROW
+BEGIN
+
+    DECLARE activeCart INT;
+    DECLARE isVip BOOLEAN;
+
+    IF EXISTS (SELECT 1 FROM VIP_CLIENTS WHERE NEW.ID = ID) THEN
+        SET isVip = TRUE;
+    ELSE 
+        SET isVip = FALSE;
+    END IF;
+
+    SELECT COUNT(*) INTO activeCart
+    FROM SHOPPING_CART
+    WHERE ID = NEW.ID and (Status = 'active' or Status = 'locked');
+
+    IF (activeCart >= 1 and isVip = FALSE) or (activeCart >= 5 and isVip = TRUE) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'your limit of shopping cart exceeded!';
+    END IF;
+END; //
+
+DELIMITER ;
+
+
+-- after submmit a cart that cart will be active
+
+DELIMITER //
+
+CREATE TRIGGER IF NOT EXISTS controlSubmmitedCart
+BEFORE INSERT
+ON ISSUED_FOR
+FOR EACH ROW
+BEGIN
+
+    UPDATE SHOPPING_CART
+    SET Status = 'active'
+    WHERE NEW.ID = ID and NEW.Cart_number = Number;
+
+END; //
+
+DELIMITER ;
+
+-- adding wallet_balance after deposists into wallet
+
+DELIMITER //
+
+CREATE TRIGGER IF NOT EXISTS depositWallet
+AFTER INSERT
+ON DEPOSITS_INTO_WALLET
+FOR EACH ROW
+BEGIN 
+
+    UPDATE CLIENT 
+    SET Wallet_balance = Wallet_balance + NEW.Amount
+    WHERE NEW.ID = ID;
+
 END; //
 DELIMITER ;
 
@@ -553,11 +621,11 @@ INSERT INTO VIP_CLIENTS (ID, Subcription_expiration_time) VALUES
 
 -- Insert SHOPPING_CART data
 INSERT INTO SHOPPING_CART (ID, Number, Status) VALUES
-(1, 1, TRUE),
-(2, 2, FALSE),
-(3, 3, TRUE),
-(4, 4, FALSE),
-(5, 5, TRUE);
+(1, 1, 'locked'),
+(2, 2, 'locked'),
+(3, 3, 'active'),
+(4, 4, 'active'),
+(5, 5, 'locked');
 
 -- Insert DISCOUNT_CODE data
 INSERT INTO DISCOUNT_CODE (Code, Amount, Limt, Usage_count, Expiration_date) VALUES
@@ -592,12 +660,12 @@ INSERT INTO LOCKED_SHOPPING_CART (ID, Cart_number, Number, Ttimestamp) VALUES
 (5, 5, 5, '2025-01-24 16:00:00');
 
 -- Insert ISSUED_FOR data
-INSERT INTO ISSUED_FOR (Tracking_code, ID, Cart_number, Locked_number) VALUES
-(1001, 1, 1, 1),
-(1002, 2, 2, 2),
-(1003, 3, 3, 3),
-(1004, 4, 4, 4),
-(1005, 5, 5, 5);
+-- INSERT INTO ISSUED_FOR (Tracking_code, ID, Cart_number, Locked_number) VALUES
+-- (1001, 1, 1, 1),
+-- (1002, 2, 2, 2),
+-- (1003, 3, 3, 3),
+-- (1004, 4, 4, 4),
+-- (1005, 5, 5, 5);
 
 -- Insert PRODUCT data
 INSERT INTO PRODUCT (ID, Category, Image, Current_price, Stock_count, Brand, Model) VALUES
