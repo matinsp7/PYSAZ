@@ -502,15 +502,22 @@ DELIMITER ;
 
 DELIMITER //
 
+
 CREATE TRIGGER IF NOT EXISTS controlSubmmitedCart
 BEFORE INSERT
 ON ISSUED_FOR
 FOR EACH ROW
 BEGIN
 
+    DECLARE payStatus BOOLEAN;
+    
+    SELECT TStatus INTO payStatus
+    FROM TRANSACTION
+    WHERE Tracking_code = NEW.Tracking_code;
+
     UPDATE SHOPPING_CART
     SET Status = 'active'
-    WHERE NEW.ID = ID and NEW.Cart_number = Number;
+    WHERE NEW.ID = ID and NEW.Cart_number = Number and payStatus = TRUE;
 
 END; //
 
