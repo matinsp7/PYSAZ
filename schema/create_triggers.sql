@@ -53,6 +53,30 @@ END;
 
 DELIMITER ;
 
+-- avoid to submmit a blocekd shopping cart
+
+DELIMITER //
+
+CREATE TRIGGER IF NOT EXISTS preventSubmmitBlockedCart
+BEFORE INSERT ON ISSUED_FOR
+FOR EACH ROW
+BEGIN 
+
+    DECLARE cartStatus VARCHAR(10);
+
+    SELECT Status INTO cartStatus
+    FROM SHOPPING_CART
+    WHERE NEW.ID = ID and NEW.Cart_number = Number;
+
+    IF cartStatus = 'blocked' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'submmit not allowed shopping cart is blocked';
+    END IF;
+END; //
+
+DELIMITER ;
+    
+
 
 
 DELIMITER //
@@ -190,15 +214,14 @@ AFTER INSERT
 ON DEPOSITS_INTO_WALLET
 FOR EACH ROW
 BEGIN 
- DECLARE payStatus BOOLEAN;
+    DECLARE payStatus BOOLEAN;
 
     SELECT Tstatus INTO payStatus
     FROM TRANSACTION
-    WHERE NEW.Tracking_code = Tracking_code
+    WHERE NEW.Tracking_code = Tracking_code;
 
     UPDATE CLIENT
     SET Wallet_balance = Wallet_balance + NEW.Amount
     WHERE NEW.ID = ID and payStatus = TRUE;
-
 END; //
 DELIMITER ;
