@@ -161,10 +161,15 @@ AFTER INSERT
 ON DEPOSITS_INTO_WALLET
 FOR EACH ROW
 BEGIN 
+ DECLARE payStatus BOOLEAN;
 
-    UPDATE CLIENT 
+    SELECT Tstatus INTO payStatus
+    FROM TRANSACTION
+    WHERE NEW.Tracking_code = Tracking_code
+
+    UPDATE CLIENT
     SET Wallet_balance = Wallet_balance + NEW.Amount
-    WHERE NEW.ID = ID;
+    WHERE NEW.ID = ID and payStatus = TRUE;
 
 END; //
 DELIMITER ;
