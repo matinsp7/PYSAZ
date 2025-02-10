@@ -139,7 +139,10 @@ DELIMITER ;
 
 
 DELIMITER //
-
+/*
+The inventory should not be less than the requested amount.
+when a product added to ADDED_TO table stock_count of products decreases.
+*/
 CREATE TRIGGER IF NOT EXISTS checkQuantity
 BEFORE INSERT
 ON ADDED_TO
@@ -156,6 +159,10 @@ BEGIN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'ERROR: you can not choose more than stock_count! ';
     END IF;
+
+    UPDATE PRODUCT
+    SET Stock_count = Stock_count - NEW.Quantity
+    WHERE ID = NEW.PRODUCT_ID;
 END; //
 DELIMITER ;
 
@@ -182,30 +189,6 @@ END; //
 
 DELIMITER ;
     
-
--- when a product added to ADDED_TO table stock_count of products change
-DELIMITER //
-
-CREATE TRIGGER IF NOT EXISTS controlStockCount
-BEFORE INSERT
-ON ADDED_TO
-FOR EACH ROW
-BEGIN
-
-    DECLARE product_count INT;
-
-    SELECT Stock_count INTO product_count
-    FROM PRODUCT
-    WHERE PRODUCT.ID = NEW.PRODUCT_ID; 
-
-    UPDATE PRODUCT
-    SET Stock_count = Stock_count - NEW.Quantity
-    WHERE ID = NEW.PRODUCT_ID;
-    
-END; //
-DELIMITER ;
-
-
 
 -- check Expirationdata of discount codes
 DELIMITER //
