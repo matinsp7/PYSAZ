@@ -26,8 +26,68 @@ BEGIN
         SET MESSAGE_TEXT = 'Insert not allowed: Shopping cart is blocked';
     END IF;
 
-END;
-//
+END; //
+
+DELIMITER ;
+
+
+/*
+Because the information added to is also used as history,
+deleting and updating it is not allowed.
+*/
+DELIMITER //
+
+CREATE TRIGGER IF NOT EXISTS prevent_ADDED_TO_deletion 
+BEFORE DELETE ON ADDED_TO
+FOR EACH ROW 
+BEGIN
+    SIGNAL SQLSTATE '45000'
+    SET MESSAGE_TEXT = 'Deletion not allowed in ADDED_TO';
+END; //
+
+DELIMITER ;
+
+
+DELIMITER //
+
+CREATE TRIGGER IF NOT EXISTS prevent_ADDED_TO_update
+BEFORE UPDATE ON ADDED_TO
+FOR EACH ROW
+BEGIN 
+    SIGNAL SQLSTATE '45000'
+    SET MESSAGE_TEXT = 'Update not allowed in ADDED_TO';
+END; //
+
+DELIMITER ;
+
+/*
+The information inside LOCKED_SHOPPING_CART has three states:
+either successful payment, blocked, or currently finalized.
+In all three states, no data should be deleted from them
+(because they are our history in a way).
+*/
+DELIMITER //
+
+CREATE TRIGGER prevent_LOCKED_SHOPPING_CART_deletion
+BEFORE DELETE ON LOCKED_SHOPPING_CART
+FOR EACH ROW
+BEGIN
+    SIGNAL SQLSTATE '45000'
+    SET MESSAGE_TEXT = 'Deletion not allowed: Rows cannot be deleted from LOCKED_SHOPPING_CART';
+END; //
+
+DELIMITER ;
+
+
+DELIMITER //
+
+CREATE TRIGGER prevent_LOCKED_SHOPPING_CART_update
+BEFORE UPDATE ON LOCKED_SHOPPING_CART
+FOR EACH ROW
+BEGIN
+    SIGNAL SQLSTATE '45000'
+    SET MESSAGE_TEXT = 'Update not allowed: Rows cannot be updated in LOCKED_SHOPPING_CART';
+END; //
 
 DELIMITER ;
 
