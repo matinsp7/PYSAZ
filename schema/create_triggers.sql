@@ -2,28 +2,6 @@ USE PYSAZ;
 
 -- check if cart is locked can't add to it product
 
--- DELIMITER $$
-
--- CREATE TRIGGER IF NOT EXISTS check_block_before_insert_ADDED_TO
--- BEFORE INSERT ON ADDED_TO
--- FOR EACH ROW
--- BEGIN
---     DECLARE cart_locked VARCHAR(10);
-
---     -- Check if the SHOPPING_CART is locked
---     SELECT 'locked' INTO cart_locked
---     FROM SHOPPING_CART
---     WHERE ID = NEW.ID AND Number = NEW.Cart_number;
-
---     -- If the cart is locked, prevent the insert
---     IF cart_locked = 'locked' THEN
---         SIGNAL SQLSTATE '45000'
---         SET MESSAGE_TEXT = 'Cannot add item: Cart is locked.';
---     END IF;
--- END$$
-
--- DELIMITER ;
-
 DELIMITER //
 
 CREATE TRIGGER IF NOT EXISTS prevent_insert_if_locked_or_blocked
@@ -53,30 +31,51 @@ END;
 
 DELIMITER ;
 
--- avoid to submmit a blocekd shopping cart
+
+-- check maxmimum cart of users
 
 DELIMITER //
 
-CREATE TRIGGER IF NOT EXISTS preventSubmmitBlockedCart
-BEFORE INSERT ON ISSUED_FOR
+CREATE TRIGGER IF NOT EXISTS checkNumberOFCartShop
+BEFORE INSERT
+ON SHOPPING_CART
 FOR EACH ROW
-BEGIN 
+BEGIN
 
-    DECLARE cartStatus VARCHAR(10);
+    DECLARE cartNumbers INT;
+    DECLARE isVip BOOLEAN;
 
-    SELECT Status INTO cartStatus
+    IF EXISTS (SELECT 1 FROM VIP_CLIENTS WHERE NEW.ID = ID) THEN
+        SET isVip = TRUE;
+    ELSE 
+        SET isVip = FALSE;
+    END IF;
+
+    SELECT COUNT(*) INTO cartNumbers
     FROM SHOPPING_CART
-    WHERE NEW.ID = ID and NEW.Cart_number = Number;
+    WHERE ID = NEW.ID and (Status = 'active' or Status = 'locked' or Status = 'blocked');
 
-    IF cartStatus = 'blocked' THEN
+    IF (cartNumbers >= 1 and isVip = FALSE) or (cartNumbers >= 5) THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'submmit not allowed shopping cart is blocked';
+        SET MESSAGE_TEXT = 'your limit of shopping cart exceeded!';
     END IF;
 END; //
 
 DELIMITER ;
-    
 
+
+DELIMITER //
+
+CREATE TRIGGER prevent_shopping_cart_deletion
+BEFORE DELETE ON SHOPPING_CART
+FOR EACH ROW
+BEGIN
+    -- Raise an error to prevent deletion
+    SIGNAL SQLSTATE '45000'
+    SET MESSAGE_TEXT = 'Deletion not allowed: Rows cannot be deleted from SHOPPING_CART';
+END; //
+
+DELIMITER ;
 
 
 DELIMITER //
@@ -100,6 +99,29 @@ BEGIN
 END; //
 DELIMITER ;
 
+-- avoid to submmit a blocekd shopping cart
+
+DELIMITER //
+
+CREATE TRIGGER IF NOT EXISTS preventSubmmitBlockedCart
+BEFORE INSERT ON ISSUED_FOR
+FOR EACH ROW
+BEGIN 
+
+    DECLARE cartStatus VARCHAR(10);
+
+    SELECT Status INTO cartStatus
+    FROM SHOPPING_CART
+    WHERE NEW.ID = ID and NEW.Cart_number = Number;
+
+    IF cartStatus = 'blocked' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'submmit not allowed shopping cart is blocked';
+    END IF;
+END; //
+
+DELIMITER ;
+    
 
 -- when a product added to ADDED_TO table stock_count of products change
 DELIMITER //
@@ -145,38 +167,6 @@ BEGIN
         SET MESSAGE_TEXT = 'you can not use from this code because this code has expired!';
     END IF;
 END; //
-DELIMITER ;
-
-
--- check maxmimum cart of users
-
-DELIMITER //
-
-CREATE TRIGGER IF NOT EXISTS checkNumberOFCartShop
-BEFORE INSERT
-ON SHOPPING_CART
-FOR EACH ROW
-BEGIN
-
-    DECLARE activeCart INT;
-    DECLARE isVip BOOLEAN;
-
-    IF EXISTS (SELECT 1 FROM VIP_CLIENTS WHERE NEW.ID = ID) THEN
-        SET isVip = TRUE;
-    ELSE 
-        SET isVip = FALSE;
-    END IF;
-
-    SELECT COUNT(*) INTO activeCart
-    FROM SHOPPING_CART
-    WHERE ID = NEW.ID and (Status = 'active' or Status = 'locked');
-
-    IF (activeCart >= 1 and isVip = FALSE) or (activeCart >= 5 and isVip = TRUE) THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'your limit of shopping cart exceeded!';
-    END IF;
-END; //
-
 DELIMITER ;
 
 
