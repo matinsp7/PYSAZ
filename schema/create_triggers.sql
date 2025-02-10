@@ -26,7 +26,7 @@ USE PYSAZ;
 
 DELIMITER //
 
-CREATE TRIGGER prevent_insert_if_locked_or_blocked
+CREATE TRIGGER IF NOT EXISTS prevent_insert_if_locked_or_blocked
 BEFORE INSERT ON ADDED_TO
 FOR EACH ROW
 BEGIN
