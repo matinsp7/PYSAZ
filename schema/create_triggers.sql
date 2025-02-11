@@ -2,33 +2,31 @@ USE PYSAZ;
 
 -- check if cart is locked can't add to it product
 
--- DELIMITER //
+DELIMITER //
+CREATE TRIGGER IF NOT EXISTS prevent_insert_if_locked_or_blocked
+BEFORE INSERT ON ADDED_TO
+FOR EACH ROW
+BEGIN
+    DECLARE cart_status VARCHAR(20);
 
--- CREATE TRIGGER IF NOT EXISTS prevent_insert_if_locked_or_blocked
--- BEFORE INSERT ON ADDED_TO
--- FOR EACH ROW
--- BEGIN
---     DECLARE cart_status VARCHAR(20);
+    -- Get the status of the shopping cart
+    SELECT Status INTO cart_status
+    FROM SHOPPING_CART
+    WHERE ID = NEW.ID AND Number = NEW.Cart_number;
 
---     -- Get the status of the shopping cart
---     SELECT Status INTO cart_status
---     FROM SHOPPING_CART
---     WHERE ID = NEW.ID AND Number = NEW.Cart_number;
+    -- Check if the status is 'locked' or 'blocked'
+    IF cart_status = 'locked' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Insert not allowed: Shopping cart is locked';
+    END IF;
 
---     -- Check if the status is 'locked' or 'blocked'
---     IF cart_status = 'locked' THEN
---         SIGNAL SQLSTATE '45000'
---         SET MESSAGE_TEXT = 'Insert not allowed: Shopping cart is locked';
---     END IF;
+    IF cart_status = 'blocked' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Insert not allowed: Shopping cart is blocked';
+    END IF;
 
---      IF cart_status = 'blocked' THEN
---         SIGNAL SQLSTATE '45000'
---         SET MESSAGE_TEXT = 'Insert not allowed: Shopping cart is blocked';
---     END IF;
-
--- END; //
-
--- DELIMITER ;
+END; //
+DELIMITER ;
 
 
 /*
@@ -36,7 +34,6 @@ Because the information added to is also used as history,
 deleting and updating it is not allowed.
 */
 DELIMITER //
-
 CREATE TRIGGER IF NOT EXISTS prevent_ADDED_TO_deletion 
 BEFORE DELETE ON ADDED_TO
 FOR EACH ROW 
@@ -44,7 +41,6 @@ BEGIN
     SIGNAL SQLSTATE '45000'
     SET MESSAGE_TEXT = 'Deletion not allowed in ADDED_TO';
 END; //
-
 DELIMITER ;
 
 
@@ -57,7 +53,6 @@ BEGIN
     SIGNAL SQLSTATE '45000'
     SET MESSAGE_TEXT = 'Update not allowed in ADDED_TO';
 END; //
-
 DELIMITER ;
 
 /*
@@ -75,7 +70,6 @@ BEGIN
     SIGNAL SQLSTATE '45000'
     SET MESSAGE_TEXT = 'Deletion not allowed: Rows cannot be deleted from LOCKED_SHOPPING_CART';
 END; //
-
 DELIMITER ;
 
 
@@ -88,20 +82,17 @@ BEGIN
     SIGNAL SQLSTATE '45000'
     SET MESSAGE_TEXT = 'Update not allowed: Rows cannot be updated in LOCKED_SHOPPING_CART';
 END; //
-
 DELIMITER ;
 
 
 -- check maxmimum cart of users
 
 DELIMITER //
-
 CREATE TRIGGER IF NOT EXISTS checkNumberOFCartShop
 BEFORE INSERT
 ON SHOPPING_CART
 FOR EACH ROW
 BEGIN
-
     DECLARE cartNumbers INT;
     DECLARE isVip BOOLEAN;
 
@@ -120,21 +111,17 @@ BEGIN
         SET MESSAGE_TEXT = 'your limit of shopping cart exceeded!';
     END IF;
 END; //
-
 DELIMITER ;
 
 
 DELIMITER //
-
 CREATE TRIGGER IF NOT EXISTS prevent_shopping_cart_deletion
 BEFORE DELETE ON SHOPPING_CART
 FOR EACH ROW
 BEGIN
-    -- Raise an error to prevent deletion
     SIGNAL SQLSTATE '45000'
     SET MESSAGE_TEXT = 'Deletion not allowed: Rows cannot be deleted from SHOPPING_CART';
 END; //
-
 DELIMITER ;
 
 
@@ -148,7 +135,6 @@ BEFORE INSERT
 ON ADDED_TO
 FOR EACH ROW
 BEGIN
-
     DECLARE product_count INT;
 
     SELECT Stock_count INTO product_count
@@ -166,10 +152,52 @@ BEGIN
 END; //
 DELIMITER ;
 
--- avoid to submmit a blocekd shopping cart
 
+-- check Expirationdata of discount codes
 DELIMITER //
+CREATE TRIGGER IF NOT EXISTS checkDiscountCodeExpiration
+BEFORE INSERT 
+ON APPLIED_TO
+FOR EACH ROW
+BEGIN
+    DECLARE codeExpiration date;
 
+    SELECT Expiration_date INTO codeExpiration
+    FROM DISCOUNT_CODE
+    WHERE Code = NEW.Code;
+
+    IF NOW() > codeExpiration THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'you can not use from this code because this code has expired!';
+    END IF;
+END; //
+DELIMITER ;
+
+
+-- after submmit a cart that cart will be active
+DELIMITER //
+CREATE TRIGGER IF NOT EXISTS controlSubmmitedCart
+BEFORE INSERT
+ON ISSUED_FOR
+FOR EACH ROW
+BEGIN
+    DECLARE payStatus BOOLEAN;
+    
+    SELECT TStatus INTO payStatus
+    FROM TRANSACTION
+    WHERE Tracking_code = NEW.Tracking_code;
+
+    IF payStatus = true THEN
+        UPDATE SHOPPING_CART
+        SET Status = 'active'
+        WHERE NEW.ID = ID and NEW.Cart_number = Number;
+    END IF;
+END; //
+DELIMITER ;
+
+
+-- avoid to submmit a blocekd shopping cart
+DELIMITER //
 CREATE TRIGGER IF NOT EXISTS preventSubmmitBlockedCart
 BEFORE INSERT ON ISSUED_FOR
 FOR EACH ROW
@@ -186,57 +214,8 @@ BEGIN
         SET MESSAGE_TEXT = 'submmit not allowed shopping cart is blocked';
     END IF;
 END; //
-
 DELIMITER ;
     
-
--- check Expirationdata of discount codes
-DELIMITER //
-
-CREATE TRIGGER IF NOT EXISTS checkDiscountCodeExpiration
-BEFORE INSERT 
-ON APPLIED_TO
-FOR EACH ROW
-BEGIN
-
-    DECLARE codeExpiration date;
-
-    SELECT Expiration_date INTO codeExpiration
-    FROM DISCOUNT_CODE
-    WHERE Code = NEW.Code;
-
-    IF NOW() > codeExpiration THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'you can not use from this code because this code has expired!';
-    END IF;
-END; //
-DELIMITER ;
-
-
--- after submmit a cart that cart will be active
-
-DELIMITER //
-
-
-CREATE TRIGGER IF NOT EXISTS controlSubmmitedCart
-BEFORE INSERT
-ON ISSUED_FOR
-FOR EACH ROW
-BEGIN
-
-    DECLARE payStatus BOOLEAN;
-    
-    SELECT Status INTO payStatus
-    FROM TRANSACTION
-    WHERE Tracking_code = NEW.Tracking_code;
-
-    UPDATE SHOPPING_CART
-    SET Status = 'active'
-    WHERE NEW.ID = ID and NEW.Cart_number = Number and payStatus = TRUE;
-
-END; //
-
-DELIMITER ;
 
 -- adding wallet_balance after deposists into wallet
 
