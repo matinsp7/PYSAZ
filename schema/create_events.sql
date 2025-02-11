@@ -18,3 +18,16 @@ LEFT JOIN TRANSACTION T ON ISF.Tracking_code = T.Tracking_code
 SET Stock_count = Stock_count + ADDED_TO.Quantity
 WHERE (ISF.ID IS NULL or T.Status != TRUE) and LSC.Timestamp < NOW() - INTERVAL 3 DAY;
 
+CREATE EVENT IF NOT EXISTS everyMonthBacking15PercentOfShoppingToVipClientsWallet
+ON SCHEDULE EVERY 1 MONTH
+DO
+     CREATE VIEW vipClients AS 
+     SELECT ID, Cart_number, Locked_number ,SUM(Quantity * Cart_price) Total_cart_price FROM ADDED_TO NATURAL JOIN VIP_CLIENTS
+     GROUP BY ID;
+
+     UPDATE CLIENT NATURAL JOIN vipClients NATURAL JOIN ISSUED_FOR JOIN TRANSACTION T
+     ON T.Tracking_code = ISSUED_FOR.Tracking_code
+     SET Wallet_balance = Wallet_balance + (0.15 * Total_cart_price)
+     WHERE T.Status = TRUE;
+
+     DROP VIEW vipClients;
