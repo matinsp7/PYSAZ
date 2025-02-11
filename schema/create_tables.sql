@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS CLIENT
     Phone_number VARCHAR(12) UNIQUE,
     Wallet_balance INT,
     Refferal_code VARCHAR(20) UNIQUE,
-    Time_stamp date,
+    Timestamp Timestamp,
 
     CHECK( Wallet_balance >= 0 )
 );
@@ -30,8 +30,8 @@ CREATE TABLE IF NOT EXISTS ADDRESS
 CREATE TABLE IF NOT EXISTS TRANSACTION
 (
     Tracking_code INT PRIMARY KEY,
-    Tstatus boolean, 
-    Time_stamp date
+    Status boolean, 
+    Timestamp Timestamp
 );
 
 CREATE TABLE IF NOT EXISTS BANK_TRANSACTION
@@ -160,7 +160,7 @@ CREATE TABLE IF NOT EXISTS LOCKED_SHOPPING_CART
     Cart_number INT,
 -- might auto incremnt needed-----------------
     Number INT,          
-    Ttimestamp TIMESTAMP,
+    Timestamp TIMESTAMP,
 
     PRIMARY KEY(ID, Cart_number, Number),
 

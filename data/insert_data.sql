@@ -1,6 +1,6 @@
 USE PYSAZ;
 
-INSERT INTO CLIENT (First_name, Last_name, ID, Phone_number, Wallet_balance, Refferal_code, Time_stamp) VALUES
+INSERT INTO CLIENT (First_name, Last_name, ID, Phone_number, Wallet_balance, Refferal_code, Timestamp) VALUES
 ('John', 'Doe', 1, '1234567890', 1000, 'REF1', '2025-01-01'),
 ('Jane', 'Smith', 2, '0987654321', 2000, 'REF2', '2025-01-02'),
 ('Bob', 'Brown', 3, '1231231234', 1500, 'REF3', '2025-01-03'),
@@ -26,7 +26,7 @@ INSERT INTO ADDRESS (ID, Province, Remainder) VALUES
 (10, 'Province10', 'Address10');
 
 -- Insert TRANSACTION data
-INSERT INTO TRANSACTION (Tracking_code, Tstatus, Time_stamp) VALUES
+INSERT INTO TRANSACTION (Tracking_code, Status, Timestamp) VALUES
 (1001, TRUE, '2025-01-10'),
 (1002, FALSE, '2025-01-11'),
 (1003, TRUE, '2025-01-12'),
@@ -80,11 +80,11 @@ INSERT INTO VIP_CLIENTS (ID, Subcription_expiration_time) VALUES
 
 -- Insert SHOPPING_CART data
 INSERT INTO SHOPPING_CART (ID, Number, Status) VALUES
-(1, 1, 'locked'),
-(2, 2, 'locked'),
+(1, 1, 'active'),
+(2, 2, 'active'),
 (3, 3, 'active'),
 (4, 4, 'active'),
-(5, 5, 'locked');
+(5, 5, 'active');
 
 -- Insert DISCOUNT_CODE data
 INSERT INTO DISCOUNT_CODE (Code, Amount, Limt, Usage_count, Expiration_date) VALUES
@@ -111,7 +111,7 @@ INSERT INTO PUBLIC_CODE (Code) VALUES
 (105);
 
 -- Insert LOCKED_SHOPPING_CART data
-INSERT INTO LOCKED_SHOPPING_CART (ID, Cart_number, Number, Ttimestamp) VALUES
+INSERT INTO LOCKED_SHOPPING_CART (ID, Cart_number, Number, Timestamp) VALUES
 (1, 1, 1, '2025-01-20 12:00:00'),
 (2, 2, 2, '2025-01-21 13:00:00'),
 (3, 3, 3, '2025-01-22 14:00:00'),

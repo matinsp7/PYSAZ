@@ -16,5 +16,5 @@ JOIN LOCKED_SHOPPING_CART LSC ON ADDED_TO.ID = LSC.ID and ADDED_TO.Cart_number =
 LEFT JOIN ISSUED_FOR ISF ON LSC.ID = ISF.ID and LSC.Cart_number = ISF.Cart_number and LSC.Number = ISF.Locked_number
 LEFT JOIN TRANSACTION T ON ISF.Tracking_code = T.Tracking_code  
 SET Stock_count = Stock_count + ADDED_TO.Quantity
-WHERE (ISF.ID = NULL or T.Status = TRUE) and LSC.Timestamp < NOW() - INTERVAL 3 DAY;
+WHERE (ISF.ID IS NULL or T.Status != TRUE) and LSC.Timestamp < NOW() - INTERVAL 3 DAY;
 

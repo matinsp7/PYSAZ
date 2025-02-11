@@ -2,33 +2,33 @@ USE PYSAZ;
 
 -- check if cart is locked can't add to it product
 
-DELIMITER //
+-- DELIMITER //
 
-CREATE TRIGGER IF NOT EXISTS prevent_insert_if_locked_or_blocked
-BEFORE INSERT ON ADDED_TO
-FOR EACH ROW
-BEGIN
-    DECLARE cart_status VARCHAR(20);
+-- CREATE TRIGGER IF NOT EXISTS prevent_insert_if_locked_or_blocked
+-- BEFORE INSERT ON ADDED_TO
+-- FOR EACH ROW
+-- BEGIN
+--     DECLARE cart_status VARCHAR(20);
 
-    -- Get the status of the shopping cart
-    SELECT Status INTO cart_status
-    FROM SHOPPING_CART
-    WHERE ID = NEW.ID AND Number = NEW.Cart_number;
+--     -- Get the status of the shopping cart
+--     SELECT Status INTO cart_status
+--     FROM SHOPPING_CART
+--     WHERE ID = NEW.ID AND Number = NEW.Cart_number;
 
-    -- Check if the status is 'locked' or 'blocked'
-    IF cart_status = 'locked' THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Insert not allowed: Shopping cart is locked';
-    END IF;
+--     -- Check if the status is 'locked' or 'blocked'
+--     IF cart_status = 'locked' THEN
+--         SIGNAL SQLSTATE '45000'
+--         SET MESSAGE_TEXT = 'Insert not allowed: Shopping cart is locked';
+--     END IF;
 
-     IF cart_status = 'blocked' THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Insert not allowed: Shopping cart is blocked';
-    END IF;
+--      IF cart_status = 'blocked' THEN
+--         SIGNAL SQLSTATE '45000'
+--         SET MESSAGE_TEXT = 'Insert not allowed: Shopping cart is blocked';
+--     END IF;
 
-END; //
+-- END; //
 
-DELIMITER ;
+-- DELIMITER ;
 
 
 /*
@@ -226,7 +226,7 @@ BEGIN
 
     DECLARE payStatus BOOLEAN;
     
-    SELECT TStatus INTO payStatus
+    SELECT Status INTO payStatus
     FROM TRANSACTION
     WHERE Tracking_code = NEW.Tracking_code;
 
@@ -249,7 +249,7 @@ FOR EACH ROW
 BEGIN 
     DECLARE payStatus BOOLEAN;
 
-    SELECT Tstatus INTO payStatus
+    SELECT Status INTO payStatus
     FROM TRANSACTION
     WHERE NEW.Tracking_code = Tracking_code;
 
