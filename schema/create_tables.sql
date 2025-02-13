@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS TRANSACTION
 CREATE TABLE IF NOT EXISTS BANK_TRANSACTION
 (
     Tracking_code INT,
-    Card_number VARCHAR(20),
+    Card_number VARCHAR(16),
 
     PRIMARY KEY(Tracking_code),
     FOREIGN KEY(Tracking_code) REFERENCES TRANSACTION(Tracking_code)
