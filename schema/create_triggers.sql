@@ -183,7 +183,7 @@ FOR EACH ROW
 BEGIN
     DECLARE payStatus BOOLEAN;
     
-    SELECT TStatus INTO payStatus
+    SELECT Status INTO payStatus
     FROM TRANSACTION
     WHERE Tracking_code = NEW.Tracking_code;
 

@@ -118,13 +118,15 @@ INSERT INTO LOCKED_SHOPPING_CART (ID, Cart_number, Number, Timestamp) VALUES
 (4, 4, 4, '2025-01-23 15:00:00'),
 (5, 5, 5, '2025-01-24 16:00:00');
 
--- Insert ISSUED_FOR data
--- INSERT INTO ISSUED_FOR (Tracking_code, ID, Cart_number, Locked_number) VALUES
--- (1001, 1, 1, 1),
--- (1002, 2, 2, 2),
--- (1003, 3, 3, 3),
--- (1004, 4, 4, 4),
--- (1005, 5, 5, 5);
+--Insert ISSUED_FOR data
+INSERT INTO ISSUED_FOR (Tracking_code, ID, Cart_number, Locked_number) VALUES
+(1001, 1, 1, 1),
+(1006, 1, 1, 1),
+(1008, 1, 1, 1),
+(1002, 2, 2, 2),
+(1003, 3, 3, 3),
+(1004, 4, 4, 4),
+(1005, 5, 5, 5);
 
 -- Insert PRODUCT data
 INSERT INTO PRODUCT (ID, Category, Image, Current_price, Stock_count, Brand, Model) VALUES

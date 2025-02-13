@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS ADDRESS
 CREATE TABLE IF NOT EXISTS TRANSACTION
 (
     Tracking_code INT PRIMARY KEY,
-    Status boolean, 
+    Status boolean NOT NULL, 
     Timestamp Timestamp
 );
 
