@@ -72,3 +72,14 @@ BEGIN
      DROP table vipClients;
 END;//
 DELIMITER ;
+
+-- after 7 days of blocking carts will active them
+CREATE EVENT IF NOT EXISTS doActiveAfter7Days
+ON SCHEDULE EVERY 1 DAY
+DO 
+
+     UPDATE SHOPPING_CART SH
+     JOIN LOCKED_SHOPPING_CART LSC
+     ON  SH.ID = LSC.ID and SH.Number = LSC.Cart_number
+     SET Status = 'active'
+     WHERE LSC.Timestamp < NOW() - 10 and Status = 'blocked' 
