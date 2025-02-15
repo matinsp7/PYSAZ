@@ -15,7 +15,7 @@ BEGIN
     -- Create a temporary table to store the aggregated data
     CREATE TEMPORARY TABLE IF NOT EXISTS temp_distinct_carts (
         Product_ID INT,
-        Quantity INT,
+        Quantity INT
     );
 
     -- Populate the temporary table with the aggregated quantities
@@ -62,12 +62,13 @@ BEGIN
 
      INSERT INTO vipClients
      SELECT ID, Cart_number, Locked_number ,SUM(Quantity * Cart_price) Total_cart_price FROM ADDED_TO NATURAL JOIN VIP_CLIENTS
-     GROUP BY ID;
+     GROUP BY ID, Cart_number, Locked_number;
 
-     UPDATE CLIENT NATURAL JOIN vipClients NATURAL JOIN ISSUED_FOR JOIN TRANSACTION T
-     ON T.Tracking_code = ISSUED_FOR.Tracking_code
+     UPDATE CLIENT NATURAL JOIN vipClients v NATURAL JOIN ISSUED_FOR JOIN TRANSACTION T
+     ON T.Tracking_code = ISSUED_FOR.Tracking_code JOIN
+     LOCKED_SHOPPING_CART LSC ON v.ID = LSC.ID and v.Cart_number and v.Locked_number = LSC.Number  
      SET Wallet_balance = Wallet_balance + (0.15 * Total_cart_price)
-     WHERE T.Status = TRUE;
+     WHERE T.Status = TRUE and LSC.Timestamp > NOW() - INTERVAL 30 DAY;
 
      DROP table vipClients;
 END;//
