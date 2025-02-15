@@ -6,27 +6,45 @@ DO
 DELETE FROM VIP_CLIENTS
 WHERE Subcription_expiration_time <= NOW();
 
+DELIMITER $$
+
 CREATE EVENT IF NOT EXISTS check3DaysForSubmmitingLockedShoppingCart
 ON SCHEDULE EVERY 1 DAY
 DO
+BEGIN
+    -- Create a temporary table to store the aggregated data
+    CREATE TEMPORARY TABLE IF NOT EXISTS temp_distinct_carts (
+        Product_ID INT,
+        Quantity INT
+    );
 
-     CREATE VIEW distinct_carts AS
-     SELECT Product_ID, SUM(Quantity) Quantity
-     FROM  (SELECT DISTINCT LSC.ID, LSC.Cart_number, LSC.Number, PRODUCT.ID Product_ID, ADDED_TO.Quantity
-     FROM PRODUCT JOIN ADDED_TO ON ADDED_TO.Product_ID = PRODUCT.ID
-     JOIN LOCKED_SHOPPING_CART LSC ON ADDED_TO.ID = LSC.ID and ADDED_TO.Cart_number = LSC.Cart_number
-          and LSC.Number = ADDED_TO.Locked_number 
-     JOIN SHOPPING_CART SH ON LSC.ID = SH.ID and LSC.Cart_number = SH.Number 
-     LEFT JOIN ISSUED_FOR ISF ON LSC.ID = ISF.ID and LSC.Cart_number = ISF.Cart_number 
-          and LSC.Number = ISF.Locked_number
-     LEFT JOIN TRANSACTION T ON ISF.Tracking_code = T.Tracking_code
-     WHERE SH.Status != 'active' and (ISF.ID IS NULL or T.Status != TRUE) )
-     AS distinct_carts GROUP BY Product_ID
+    -- Populate the temporary table with the aggregated quantities
+    INSERT INTO temp_distinct_carts (Product_ID, Quantity)
+    SELECT Product_ID, SUM(Quantity) AS Quantity
+    FROM (
+        SELECT DISTINCT LSC.ID, LSC.Cart_number, LSC.Number, PRODUCT.ID AS Product_ID, ADDED_TO.Quantity
+        FROM PRODUCT
+        JOIN ADDED_TO ON ADDED_TO.Product_ID = PRODUCT.ID
+        JOIN LOCKED_SHOPPING_CART LSC ON ADDED_TO.ID = LSC.ID AND ADDED_TO.Cart_number = LSC.Cart_number
+             AND LSC.Number = ADDED_TO.Locked_number
+        JOIN SHOPPING_CART SH ON LSC.ID = SH.ID AND LSC.Cart_number = SH.Number
+        LEFT JOIN ISSUED_FOR ISF ON LSC.ID = ISF.ID AND LSC.Cart_number = ISF.Cart_number
+             AND LSC.Number = ISF.Locked_number
+        LEFT JOIN TRANSACTION T ON ISF.Tracking_code = T.Tracking_code
+        WHERE SH.Status != 'active' AND LSC.Timestamp < NOW() - INTERVAL 3 DAY
+    ) AS distinct_carts
+    GROUP BY Product_ID;
 
-     UPDATE PRODUCT JOIN distinct_carts ON ID = Product_ID
-     SET Stock_count = Stock_count + Quantity;
+    -- Update the PRODUCT table using the temporary table
+    UPDATE PRODUCT
+    JOIN temp_distinct_carts ON PRODUCT.ID = temp_distinct_carts.Product_ID
+    SET PRODUCT.Stock_count = PRODUCT.Stock_count + temp_distinct_carts.Quantity;
 
-     DROP VIEW distinct_carts
+    -- Drop the temporary table to clean up
+    DROP TEMPORARY TABLE IF EXISTS temp_distinct_carts;
+END$$
+
+DELIMITER ;
 
 -- CREATE EVENT IF NOT EXISTS everyMonthBacking15PercentOfShoppingToVipClientsWallet
 -- ON SCHEDULE EVERY 1 MONTH
