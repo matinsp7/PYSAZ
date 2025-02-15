@@ -15,7 +15,7 @@ BEGIN
     -- Create a temporary table to store the aggregated data
     CREATE TEMPORARY TABLE IF NOT EXISTS temp_distinct_carts (
         Product_ID INT,
-        Quantity INT
+        Quantity INT,
     );
 
     -- Populate the temporary table with the aggregated quantities
@@ -28,9 +28,6 @@ BEGIN
         JOIN LOCKED_SHOPPING_CART LSC ON ADDED_TO.ID = LSC.ID AND ADDED_TO.Cart_number = LSC.Cart_number
              AND LSC.Number = ADDED_TO.Locked_number
         JOIN SHOPPING_CART SH ON LSC.ID = SH.ID AND LSC.Cart_number = SH.Number
-        LEFT JOIN ISSUED_FOR ISF ON LSC.ID = ISF.ID AND LSC.Cart_number = ISF.Cart_number
-             AND LSC.Number = ISF.Locked_number
-        LEFT JOIN TRANSACTION T ON ISF.Tracking_code = T.Tracking_code
         WHERE SH.Status != 'active' AND LSC.Timestamp < NOW() - INTERVAL 3 DAY
     ) AS distinct_carts
     GROUP BY Product_ID;
@@ -39,6 +36,10 @@ BEGIN
     UPDATE PRODUCT
     JOIN temp_distinct_carts ON PRODUCT.ID = temp_distinct_carts.Product_ID
     SET PRODUCT.Stock_count = PRODUCT.Stock_count + temp_distinct_carts.Quantity;
+
+    UPDATE SHOPPING_CART SH JOIN LOCKED_SHOPPING_CART LSC ON SH.ID = LSC.ID and SH.Number = LSC.Cart_number
+    SET Status = 'blocked'
+    WHERE SH.Status != 'active' AND LSC.Timestamp < NOW() - INTERVAL 3 DAY;
 
     -- Drop the temporary table to clean up
     DROP TEMPORARY TABLE IF EXISTS temp_distinct_carts;
