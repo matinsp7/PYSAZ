@@ -46,16 +46,28 @@ END$$
 
 DELIMITER ;
 
--- CREATE EVENT IF NOT EXISTS everyMonthBacking15PercentOfShoppingToVipClientsWallet
--- ON SCHEDULE EVERY 1 MONTH
--- DO
---      CREATE VIEW vipClients AS 
---      SELECT ID, Cart_number, Locked_number ,SUM(Quantity * Cart_price) Total_cart_price FROM ADDED_TO NATURAL JOIN VIP_CLIENTS
---      GROUP BY ID;
+DELIMITER //
 
---      UPDATE CLIENT NATURAL JOIN vipClients NATURAL JOIN ISSUED_FOR JOIN TRANSACTION T
---      ON T.Tracking_code = ISSUED_FOR.Tracking_code
---      SET Wallet_balance = Wallet_balance + (0.15 * Total_cart_price)
---      WHERE T.Status = TRUE;
+CREATE EVENT IF NOT EXISTS everyMonthBacking15PercentOfShoppingToVipClientsWallet
+ON SCHEDULE EVERY 1 MONTH
+DO
+BEGIN 
+     CREATE TEMPORARY TABLE IF NOT EXISTS vipClients (
+          ID INT,
+          Cart_number INT,
+          Locked_number INT,
+          Total_cart_price INT
+     );
 
---      DROP VIEW vipClients;
+     INSERT INTO vipClients
+     SELECT ID, Cart_number, Locked_number ,SUM(Quantity * Cart_price) Total_cart_price FROM ADDED_TO NATURAL JOIN VIP_CLIENTS
+     GROUP BY ID;
+
+     UPDATE CLIENT NATURAL JOIN vipClients NATURAL JOIN ISSUED_FOR JOIN TRANSACTION T
+     ON T.Tracking_code = ISSUED_FOR.Tracking_code
+     SET Wallet_balance = Wallet_balance + (0.15 * Total_cart_price)
+     WHERE T.Status = TRUE;
+
+     DROP table vipClients;
+END;//
+DELIMITER ;
