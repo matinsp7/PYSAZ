@@ -87,12 +87,13 @@ INSERT INTO SHOPPING_CART (ID, Number, Status) VALUES
 (5, 5, 'active');
 
 -- Insert DISCOUNT_CODE data
-INSERT INTO DISCOUNT_CODE (Code, Amount, Limt, Usage_count, Expiration_date) VALUES
+INSERT INTO DISCOUNT_CODE (Code, Amount, Code_limit, Usage_count, Expiration_date) VALUES
 (101, 10, 100, 5, '2025-12-31'),
 (102, 20, 50, 2, '2025-11-30'),
 (103, 15, 80, 3, '2025-10-31'),
 (104, 5, 30, 1, '2025-09-30'),
-(105, 25, 60, 4, '2025-08-31');
+(105, 25, 60, 4, '2025-08-31'),
+(106, 500, NULL, 5, '2026-08-31');
 
 -- Insert PRIVATE_CODE data
 INSERT INTO PRIVATE_CODE (Code, ID, Ttimestamp) VALUES
@@ -143,6 +144,11 @@ INSERT INTO ADDED_TO (ID, Cart_number, Locked_number, Product_ID, Quantity, Cart
 (3, 3, 3, 3, 1, 700),
 (4, 4, 4, 4, 1, 1000),
 (5, 5, 5, 5, 2, 100);
+
+INSERT INTO APPLIED_TO (ID, Cart_number, Locked_number, Code, Timestamp) VALUES 
+(1, 1, 1, 101, NOW()),
+(1, 1, 1, 106, NOW()),
+(1, 1, 1, 105, NOW());
 
 -- Insert HDD data
 INSERT INTO HDD (ID, Rotational_speed, Wattage, Capacity, Depth, Height, Width) VALUES

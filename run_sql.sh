@@ -16,6 +16,7 @@ SQL_FILES=(
     "$SCHEMA_FOLDER/create_tables.sql"
     "$SCHEMA_FOLDER/create_triggers.sql"
     "$SCHEMA_FOLDER/create_events.sql"
+    "$SCHEMA_FOLDER/create_procedure.sql"
     "$DATA_FOLDER/insert_data.sql"
 )
 

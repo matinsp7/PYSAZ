@@ -121,13 +121,10 @@ CREATE TABLE IF NOT EXISTS SHOPPING_CART
 CREATE TABLE IF NOT EXISTS DISCOUNT_CODE
 (
     Code INT PRIMARY KEY,
-    Amount INT,
-    Limt INT,
+    Amount INT NOT NULL CHECK(Amount > 0),
+    Code_limit INT,
     Usage_count INT,
-    Expiration_date date,
-
-    -- check it later
-    CHECK(Amount > 0)
+    Expiration_date date
 );
 
 CREATE TABLE IF NOT EXISTS PRIVATE_CODE
