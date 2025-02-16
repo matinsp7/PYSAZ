@@ -61,12 +61,13 @@ BEGIN
      );
 
      INSERT INTO vipClients
-     SELECT ID, Cart_number, Locked_number ,SUM(Quantity * Cart_price) Total_cart_price FROM ADDED_TO NATURAL JOIN VIP_CLIENTS
+     SELECT ID, Cart_number, Locked_number ,SUM(Quantity * Cart_price) Total_cart_price
+     FROM ADDED_TO NATURAL JOIN VIP_CLIENTS
      GROUP BY ID, Cart_number, Locked_number;
 
      UPDATE CLIENT NATURAL JOIN vipClients v NATURAL JOIN ISSUED_FOR JOIN TRANSACTION T
-     ON T.Tracking_code = ISSUED_FOR.Tracking_code JOIN
-     LOCKED_SHOPPING_CART LSC ON v.ID = LSC.ID and v.Cart_number and v.Locked_number = LSC.Number  
+     ON T.Tracking_code = ISSUED_FOR.Tracking_code
+     JOIN LOCKED_SHOPPING_CART LSC ON v.ID = LSC.ID and v.Cart_number and v.Locked_number = LSC.Number   
      SET Wallet_balance = Wallet_balance + (0.15 * Total_cart_price)
      WHERE T.Status = TRUE and LSC.Timestamp > NOW() - INTERVAL 30 DAY;
 
