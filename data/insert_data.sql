@@ -74,9 +74,7 @@ INSERT INTO DEPOSITS_INTO_WALLET (Tracking_code, ID, Amount) VALUES
 INSERT INTO VIP_CLIENTS (ID, Subcription_expiration_time) VALUES
 (1, '2025-12-31'),
 (2, '2025-11-30'),
-(3, '2025-10-31'),
-(4, '2025-09-30'),
-(5, '2025-08-31');
+(3, '2025-10-31');
 
 -- Insert SHOPPING_CART data
 INSERT INTO SHOPPING_CART (ID, Number, Status) VALUES

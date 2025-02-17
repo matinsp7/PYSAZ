@@ -40,6 +40,44 @@ BEGIN
     
 END //
 DELIMITER ;
-    
 
 
+DELIMITER //
+CREATE PROCEDURE IF NOT EXISTS everyMonthBacking15PercentOfShoppingToVipClientsWallet ()
+BEGIN 
+    DECLARE done INT DEFAULT 0;
+    DECLARE v_ID INT;
+    DECLARE v_Cart_number INT; 
+    DECLARE v_Locked_number INT;
+    DECLARE result INT;
+
+    DECLARE userCursor CURSOR FOR
+        SELECT ID, Cart_number, Number
+        FROM LOCKED_SHOPPING_CART 
+        NATURAL JOIN VIP_CLIENTS;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+    OPEN userCursor;
+
+    userLoop: LOOP
+        FETCH userCursor INTO v_ID, v_Cart_number, v_Locked_number;
+
+        IF done = 1 THEN
+            LEAVE userLoop;
+        END IF;
+
+        CALL calculateCartPrice(v_ID, v_Cart_number, v_Locked_number, result);
+        SELECT result AS res;
+
+        -- Debugging: Print the fetched values
+        SELECT v_ID, v_Cart_number, v_Locked_number;
+
+        UPDATE CLIENT 
+        SET Wallet_balance = Wallet_balance + 0.15 * result
+        WHERE CLIENT.ID = v_ID;
+    END LOOP;
+
+    CLOSE userCursor;
+END //
+DELIMITER ;

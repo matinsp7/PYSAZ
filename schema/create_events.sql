@@ -6,8 +6,8 @@ DO
 DELETE FROM VIP_CLIENTS
 WHERE Subcription_expiration_time <= NOW();
 
-DELIMITER $$
 
+DELIMITER //
 CREATE EVENT IF NOT EXISTS check3DaysForSubmmitingLockedShoppingCart
 ON SCHEDULE EVERY 1 DAY
 DO
@@ -43,37 +43,15 @@ BEGIN
 
     -- Drop the temporary table to clean up
     DROP TEMPORARY TABLE IF EXISTS temp_distinct_carts;
-END$$
-
+END //
 DELIMITER ;
 
-DELIMITER //
 
 CREATE EVENT IF NOT EXISTS everyMonthBacking15PercentOfShoppingToVipClientsWallet
 ON SCHEDULE EVERY 1 MONTH
 DO
-BEGIN 
-     CREATE TEMPORARY TABLE IF NOT EXISTS vipClients (
-          ID INT,
-          Cart_number INT,
-          Locked_number INT,
-          Total_cart_price INT
-     );
+CALL everyMonthBacking15PercentOfShoppingToVipClientsWallet();
 
-     INSERT INTO vipClients
-     SELECT ID, Cart_number, Locked_number ,SUM(Quantity * Cart_price) Total_cart_price
-     FROM ADDED_TO NATURAL JOIN VIP_CLIENTS
-     GROUP BY ID, Cart_number, Locked_number;
-
-     UPDATE CLIENT NATURAL JOIN vipClients v NATURAL JOIN ISSUED_FOR JOIN TRANSACTION T
-     ON T.Tracking_code = ISSUED_FOR.Tracking_code
-     JOIN LOCKED_SHOPPING_CART LSC ON v.ID = LSC.ID and v.Cart_number and v.Locked_number = LSC.Number   
-     SET Wallet_balance = Wallet_balance + (0.15 * Total_cart_price)
-     WHERE T.Status = TRUE and LSC.Timestamp > NOW() - INTERVAL 30 DAY;
-
-     DROP table vipClients;
-END;//
-DELIMITER ;
 
 -- after 7 days of blocking carts will active them
 CREATE EVENT IF NOT EXISTS doActiveAfter7DaysBlock
@@ -83,7 +61,7 @@ DO
     JOIN (
         SELECT ID, Cart_number, MAX(Timestamp) AS LatestTimestamp
         FROM LOCKED_SHOPPING_CART LSC
-     GROUP BY ID, Cart_number 
+        GROUP BY ID, Cart_number 
     ) AS LatestLockedCart
     ON SH.ID = LatestLockedCart.ID AND SH.Number = LatestLockedCart.Cart_number
     SET SH.Status = 'active'
