@@ -173,6 +173,31 @@ BEGIN
 END; //
 DELIMITER ;
 
+-- check Usage_count of discount codes
+DELIMITER //
+CREATE TRIGGER IF NOT EXISTS checkDiscountCodeUsage_count
+BEFORE INSERT 
+ON APPLIED_TO
+FOR EACH ROW
+BEGIN
+    DECLARE numberOfTimesAllowed int;
+    DECLARE codeUsage_count int;
+
+    SELECT Usage_count INTO numberOfTimesAllowed
+    from DISCOUNT_CODE
+    WHERE Code = NEW.Code;
+
+    SELECT COUNT(*) INTO codeUsage_count
+    FROM APPLIED_TO
+    WHERE ID = NEW.ID AND Code = NEW.Code;
+
+    IF codeUsage_count >= numberOfTimesAllowed THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'The number of times you can use this discount code has expired.';
+    END IF;
+END; //
+DELIMITER ;
+
 
 -- after submmit a cart that cart will be active
 DELIMITER //

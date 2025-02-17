@@ -76,12 +76,15 @@ END;//
 DELIMITER ;
 
 -- after 7 days of blocking carts will active them
-CREATE EVENT IF NOT EXISTS doActiveAfter7Days
+CREATE EVENT IF NOT EXISTS doActiveAfter7DaysBlock
 ON SCHEDULE EVERY 1 DAY
-DO 
-
-     UPDATE SHOPPING_CART SH
-     JOIN LOCKED_SHOPPING_CART LSC
-     ON  SH.ID = LSC.ID and SH.Number = LSC.Cart_number
-     SET Status = 'active'
-     WHERE LSC.Timestamp < NOW() - 10 and Status = 'blocked' 
+DO
+    UPDATE SHOPPING_CART SH
+    JOIN (
+        SELECT ID, Cart_number, MAX(Timestamp) AS LatestTimestamp
+        FROM LOCKED_SHOPPING_CART LSC
+     GROUP BY ID, Cart_number 
+    ) AS LatestLockedCart
+    ON SH.ID = LatestLockedCart.ID AND SH.Number = LatestLockedCart.Cart_number
+    SET SH.Status = 'active'
+    WHERE SH.Status = 'blocked' AND LatestTimestamp < NOW() - INTERVAL 10 DAY;

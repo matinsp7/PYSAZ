@@ -2,37 +2,43 @@ USE PYSAZ;
 
 
 DELIMITER //
-
-CREATE PROCEDURE IF NOT EXISTS  calculateCartPrice(
-    in ID INT,
-    in Cart_number INT,
-    in Locked_number INT,
-    out Total_price INT
+CREATE PROCEDURE IF NOT EXISTS calculateCartPrice(
+    IN ID INT,
+    IN Cart_number INT,
+    IN Locked_number INT,
+    OUT Total_price INT
 )
 BEGIN 
-    DECLARE tempPrice INT;
 
-    SELECT SUM(Quantity * Cart_price) into tempPrice
+    SELECT SUM(Quantity * Cart_price) INTO @price
     FROM ADDED_TO   
-    where ADDED_TO.ID = ID 
+    WHERE ADDED_TO.ID = ID 
         AND ADDED_TO.Cart_number = Cart_number
         AND ADDED_TO.Locked_number = Locked_number;
 
-
-        SELECT 
-        @fp := (
+    -- Applying discounts iteratively
+    SELECT
+        @price := (
             CASE 
-                WHEN DISCOUNT_CODE.Limt IS NULL THEN @fp - DISCOUNT_CODE.Amount
-                ELSE @fp - (@fp * DISCOUNT_CODE.Amount)
+                WHEN DISCOUNT_CODE.Code_limit IS NULL THEN @price - DISCOUNT_CODE.Amount
+                ELSE
+                    CASE
+                        WHEN (@price * DISCOUNT_CODE.Amount / 100) <= DISCOUNT_CODE.Code_limit THEN
+                            @price - (@price * DISCOUNT_CODE.Amount / 100)
+                        ELSE @price - DISCOUNT_CODE.Code_limit
+                    END
             END
-        ) AS intermediate_fp
-    FROM DISCOUNT_CODE NATURAL JOIN APPLIED_TO, (SELECT @fp := fp) AS init
+        )
+    FROM DISCOUNT_CODE
+    NATURAL JOIN APPLIED_TO
+    WHERE APPLIED_TO.ID = ID 
+        AND APPLIED_TO.Cart_number = Cart_number
+        AND APPLIED_TO.Locked_number = Locked_number
     ORDER BY APPLIED_TO.Timestamp;
 
-    SET Total_price = @fp;
-
+    SET Total_price = @price;
+    
 END //
-
 DELIMITER ;
     
 
