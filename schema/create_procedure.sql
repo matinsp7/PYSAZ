@@ -1,4 +1,4 @@
-دUSE PYSAZ;
+USE PYSAZ;
 
 
 DELIMITER //
@@ -16,17 +16,19 @@ BEGIN
         AND ADDED_TO.Cart_number = Cart_number
         AND ADDED_TO.Locked_number = Locked_number;
 
-    -- Debugging: Print the initial price
-    SELECT @price AS initial_price;
-
     -- Applying discounts iteratively
     SELECT
         @price := (
             CASE 
                 WHEN DISCOUNT_CODE.Code_limit IS NULL THEN @price - DISCOUNT_CODE.Amount
-                ELSE @price - (@price * DISCOUNT_CODE.Amount / 100)
+                ELSE
+                    CASE
+                        WHEN (@price * DISCOUNT_CODE.Amount / 100) <= DISCOUNT_CODE.Code_limit THEN
+                            @price - (@price * DISCOUNT_CODE.Amount / 100)
+                        ELSE @price - DISCOUNT_CODE.Code_limit
+                    END
             END
-        ) AS intermediate_price
+        )
     FROM DISCOUNT_CODE
     NATURAL JOIN APPLIED_TO
     WHERE APPLIED_TO.ID = ID 
@@ -34,10 +36,6 @@ BEGIN
         AND APPLIED_TO.Locked_number = Locked_number
     ORDER BY APPLIED_TO.Timestamp;
 
-    -- Debugging: Print the final discounted price
-    SELECT @price AS final_price;
-
-    -- Assign the final price to the output parameter
     SET Total_price = @price;
     
 END //
