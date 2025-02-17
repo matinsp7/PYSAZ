@@ -28,7 +28,7 @@ BEGIN
         JOIN LOCKED_SHOPPING_CART LSC ON ADDED_TO.ID = LSC.ID AND ADDED_TO.Cart_number = LSC.Cart_number
              AND LSC.Number = ADDED_TO.Locked_number
         JOIN SHOPPING_CART SH ON LSC.ID = SH.ID AND LSC.Cart_number = SH.Number
-        WHERE SH.Status != 'active' AND LSC.Timestamp < NOW() - INTERVAL 3 DAY
+        WHERE SH.Status != 'active' AND LSC.Timestamp > NOW() - INTERVAL 4 DAY  AND LSC.Timestamp < NOW() - INTERVAL 3 DAY
     ) AS distinct_carts
     GROUP BY Product_ID;
 
