@@ -262,3 +262,80 @@ BEGIN
     WHERE NEW.ID = ID and payStatus = TRUE;
 END; //
 DELIMITER ;
+
+
+DELIMITER //
+
+CREATE TRIGGER IF NOT EXISTS subtractCartPriceFromWallet
+BEFORE INSERT
+ON WALLET_TRANSACTION
+FOR EACH ROW
+BEGIN
+
+    DECLARE payStatus BOOLEAN;
+    DECLARE Total_price INT;
+    DECLARE NID INT;
+    DECLARE NCart_number INt;
+    DECLARE NLocked_number INT;
+
+
+    IF EXISTS (SELECT 1 FROM ISSUED_FOR WHERE NEW.Tracking_code = Tracking_code) THEN
+        
+        SELECT Status INTO payStatus
+        FROM TRANSACTION
+        WHERE NEW.Tracking_code = Tracking_code;
+
+        IF payStatus = TRUE THEN
+            SELECT ID, Cart_number, Locked_number INTO NID, NCart_number, NLocked_number
+            FROM ISSUED_FOR 
+            WHERE NEW.Tracking_code = Tracking_code;
+
+            CALL calculateCartPrice2(NID, NCart_number, NLocked_number, Total_price);
+
+            UPDATE CLIENT
+            SET Wallet_balance = Wallet_balance - Total_price
+            WHERE NID = ID;
+        END IF;
+    END IF;
+END;//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER IF NOT EXISTS subtractsubscriptionFromWallet
+BEFORE INSERT
+ON SUBSCRIBES
+FOR EACH ROW
+BEGIN 
+
+    DECLARE payStatus BOOLEAN;
+    
+
+    SELECT Status INTO payStatus
+    FROM TRANSACTION
+    WHERE NEW.Tracking_code = Tracking_code;
+
+    IF EXISTS (SELECT 1 FROM WALLET_TRANSACTION WHERE NEW.Tracking_code = Tracking_code) THEN
+        IF payStatus = TRUE THEN
+            UPDATE CLIENT
+            SET Wallet_balance = Wallet_balance - 10000
+            WHERE NEW.ID = ID;
+
+            INSERT INTO VIP_CLIENTS VALUES (NEW.ID, NOW() + INTERVAL 30 DAY);
+            
+        END IF;
+    END IF;
+
+END;//
+DELIMITER ;
+
+        
+
+
+
+
+-- ترنز اکشن ها فقط مربوط به سبد خرید نیستند و چک شوند
+
+        
+

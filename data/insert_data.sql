@@ -1,7 +1,7 @@
 USE PYSAZ;
 
 INSERT INTO CLIENT (First_name, Last_name, ID, Phone_number, Wallet_balance, Refferal_code, Timestamp) VALUES
-('John', 'Doe', 1, '1234567890', 1000, 'REF1', '2025-01-01'),
+('John', 'Doe', 1, '1234567890', 2000, 'REF1', '2025-01-01'),
 ('Jane', 'Smith', 2, '0987654321', 2000, 'REF2', '2025-01-02'),
 ('Bob', 'Brown', 3, '1231231234', 1500, 'REF3', '2025-01-03'),
 ('Alice', 'Green', 4, '3213214321', 3000, 'REF4', '2025-01-04'),

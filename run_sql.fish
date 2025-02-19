@@ -17,7 +17,8 @@ set SQL_FILES \
     "$SCHEMA_FOLDER/create_tables.sql" \
     "$SCHEMA_FOLDER/create_triggers.sql" \
     "$SCHEMA_FOLDER/create_events.sql" \
-    "$DATA_FOLDER/insert_data.sql"
+    "$SCHEMA_FOLDER/create_procedure.sql"\
+    "$DATA_FOLDER/insert_data.sql" 
 
 # Function to execute SQL files
 function execute_sql_file
