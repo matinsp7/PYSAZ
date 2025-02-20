@@ -1,0 +1,36 @@
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+.personal
+{
+    width: 400px;
+    height: 300px;
+    background-color: #F5F5F5;
+    padding: 10px;
+    margin-left: 20px;
+    margin-top: 20px;
+    box-shadow: 2px 2px #E0E0E0;
+    border-radius: 15px;
+}
+
+.info
+{
+    margin-top: 18px;
+    font-size: 15px;
+}
+
+.info  span:not(.values)
+{
+    color: #616161;
+}
+
+.values
+{
+    margin-left: 10px;
+    color: #311B92;
+}

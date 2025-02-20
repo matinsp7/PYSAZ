@@ -1,0 +1,63 @@
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+body
+{   
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #EEEEEE;
+}
+
+.wrapper
+{
+    width: 300px;
+    height: 200px;
+}
+
+#login
+{   
+    display: block;
+    margin: 50px auto;
+    width: 200px;
+    height: 45px;
+    outline: none;
+    border: none;
+    background-color: #E0E0E0;
+    border: 1px solid #BDBDBD;
+    border-radius: 15px;
+    padding: 4px;
+}
+
+#btn_login
+{
+    display: block;
+    width: 100px;
+    height: 30px;
+    margin: 0 auto;
+}
+
+#message
+{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    height: 40px;
+    width: 250px;
+    text-align: center;
+    padding-top: 8px;
+    border-radius: 10px;
+
+}
+
+
+
+
+
