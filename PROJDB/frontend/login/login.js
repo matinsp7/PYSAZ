@@ -31,8 +31,7 @@ async function sendPostRequest(PhoneNumber) {
             message.innerHTML = "login is successful!"
             setTimeout(function(){message.style.display = "none"}, 3000)      
 
-            // localStorage.setItem('userData', JSON.stringify(result))
-            localStorage.setItem('userData', result)
+            localStorage.setItem('userData', JSON.stringify(result))
 
     
             setTimeout(function(){window.location.href = "../clientpage/page.html"}, 500)

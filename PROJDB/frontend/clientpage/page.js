@@ -3,10 +3,6 @@ let address
 function setValueInHtml()
 {   
 
-    // const userData = localStorage.getItem('userData');
-    // const result = JSON.parse(userData);
-    // const userResult = result["user"]
-
     const userData = localStorage.getItem("userData")
     const result = JSON.parse(userData)
     const userResult = result["user"]
@@ -26,8 +22,12 @@ function setAddress(address)
 {   
     const length = Object.keys(address).length
     const container = document.getElementById("adr")
+    let len = 0
 
-    const len = length * "50" + "px"
+    if (length <= 1){ len = length * "100" + "px"}
+    
+    else{len = length * "50" + "px"}
+    
     container.style.height = len
     
 
