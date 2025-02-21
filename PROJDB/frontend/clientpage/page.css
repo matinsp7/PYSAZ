@@ -6,16 +6,38 @@
     font-family: 'Roboto', sans-serif;
 }
 
+.container
+{
+    width: 90%;
+    margin: 0 auto;
+}
+
+.personal-orders
+{   
+    display: flex;
+    gap: 30px;
+}
+
 .personal
 {
     width: 400px;
     height: 300px;
     background-color: #F5F5F5;
     padding: 10px;
-    margin-left: 20px;
     margin-top: 20px;
     box-shadow: 2px 2px #E0E0E0;
     border-radius: 15px;
+}
+
+.personal:hover
+{
+    transform: translateY(6px);
+    transition: 250ms;
+}
+
+.personal > h4
+{
+    color: #424242;
 }
 
 .info
@@ -33,4 +55,20 @@
 {
     margin-left: 10px;
     color: #311B92;
+}
+
+.addres
+{
+    padding: 10px;
+    width: 400px;
+    height: 300px;
+    margin-top: 40px;
+    border-radius: 15px;
+    background-color: #F5F5F5;
+    box-shadow: 2px 2px #E0E0E0;
+}
+
+.addres > h4
+{
+    color: #545454;
 }

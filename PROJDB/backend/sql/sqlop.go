@@ -62,3 +62,35 @@ func GetUserFromSql(PhoneNumber string) (*data.Client,error) {
 
 	return &user, nil
 }
+
+
+// ==============================                 WARNING                ===========================================
+//------------------------------- be careful beacuse if a user have'not adrress it's not error!!--------------------
+
+func GetAddressOfUser(id any) (map[int]string, error){
+
+	row, err := db.Query("SELECT * FROM ADDRESS WHERE ID = ?", id)
+
+	if err != nil{
+
+		if err == sql.ErrNoRows{
+
+			return nil, errors.New("you have not registered any address!")
+		
+		} else {return nil, err} 
+	} 
+
+	var addres = make(map[int]string)
+	var counter int = 1
+
+	for row.Next(){
+		var id int
+		var province, remiander string
+
+		row.Scan(&id, &province, &remiander)
+		addres[counter] = province + "," + remiander
+		counter++
+	}
+
+	return addres, nil
+}

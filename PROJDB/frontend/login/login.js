@@ -24,13 +24,16 @@ async function sendPostRequest(PhoneNumber) {
         if(response.status === 200)
         {
             result = await response.json();
+
             message.style.display = "inline"
             message.style.backgroundColor = "#4DB6AC"
             message.style.color = "#006064"
             message.innerHTML = "login is successful!"
             setTimeout(function(){message.style.display = "none"}, 3000)      
 
-            localStorage.setItem('userData', JSON.stringify(result))
+            // localStorage.setItem('userData', JSON.stringify(result))
+            localStorage.setItem('userData', result)
+
     
             setTimeout(function(){window.location.href = "../clientpage/page.html"}, 500)
         }
