@@ -11,6 +11,11 @@ import (
 func AuthoMiddelWare() gin.HandlerFunc{
 	return func(c *gin.Context) {
 
+		if c.Request.URL.Path == "/user/login"{
+			c.Next()
+			return
+		}
+
 		tokeString := c.GetHeader("Authorization")
 
 		if tokeString == ""{

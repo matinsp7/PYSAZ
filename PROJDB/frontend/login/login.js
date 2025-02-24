@@ -10,7 +10,7 @@ function getPhoneNumber()
 
 
 async function sendPostRequest(PhoneNumber) {
-    const url = 'http://localhost:8080/login'
+    const url = 'http://localhost:8080/user/login'
 
     try {
         const response = await fetch(url, {

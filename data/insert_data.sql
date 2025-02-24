@@ -129,11 +129,29 @@ INSERT INTO ISSUED_FOR (Tracking_code, ID, Cart_number, Locked_number) VALUES
 
 -- Insert PRODUCT data
 INSERT INTO PRODUCT (ID, Category, Image, Current_price, Stock_count, Brand, Model) VALUES
-(1, 'Electronics', NULL, 500, 10, 'BrandA', 'ModelX'),
-(2, 'Electronics', NULL, 300, 20, 'BrandB', 'ModelY'),
-(3, 'Home Appliances', NULL, 700, 15, 'BrandC', 'ModelZ'),
-(4, 'Furniture', NULL, 1000, 5, 'BrandD', 'ModelW'),
-(5, 'Clothing', NULL, 50, 100, 'BrandE', 'ModelV');
+(1,  'Electronics', NULL, 500,  10, 'BrandA', 'ModelX'),
+(2,  'Electronics', NULL, 300,  30, 'BrandB', 'ModelY'),
+(3,  'Electronics', NULL, 700,  15, 'BrandC', 'ModelZ'),
+(4,  'Electronics', NULL, 100,  10, 'BrandD', 'ModelW'),
+(5,  'Electronics', NULL,  50, 100, 'BrandE', 'ModelV'),
+(6,  'Electronics', NULL, 400, 100, 'BrandC', 'ModelA'),
+(7,  'Electronics', NULL, 350, 200, 'BrandD', 'ModelA'),
+(8,  'Electronics', NULL, 307, 224, 'BrandE', 'ModelY'),
+(9,  'Electronics', NULL, 312, 221, 'BrandA', 'ModelY'),
+(10, 'Electronics', NULL, 30 ,  20, 'BrandF', 'ModelZ'),
+(11, 'Electronics', NULL, 100, 190, 'BrandV', 'ModelY'),
+(12, 'Electronics', NULL, 300, 140, 'BrandV', 'ModelX'),
+(13, 'Electronics', NULL, 400, 130, 'BrandH', 'ModelM'),
+(14, 'Electronics', NULL, 600, 230, 'BrandN', 'ModelY'),
+(15, 'Electronics', NULL, 400,  53, 'BrandA', 'ModelQ'),
+(16, 'Electronics', NULL, 700, 219, 'BrandF', 'ModelG'),
+(17, 'Electronics', NULL, 400, 324, 'BrandS', 'ModelX'),
+(18, 'Electronics', NULL, 200, 223, 'BrandA', 'ModelW'),
+(19, 'Electronics', NULL, 340, 212, 'BrandA', 'ModelA'),
+(20, 'Electronics', NULL, 350, 212, 'BrandB', 'ModelY'),
+(21, 'Electronics', NULL, 313,  23, 'BrandS', 'ModelM'),
+(22, 'Electronics', NULL, 309, 243, 'BrandF', 'ModelA'),
+(23, 'Electronics', NULL, 408, 235, 'BrandF', 'ModelB');
 
 -- Insert ADDED_TO data
 INSERT INTO ADDED_TO (ID, Cart_number, Locked_number, Product_ID, Quantity, Cart_price) VALUES
@@ -155,44 +173,46 @@ INSERT INTO HDD (ID, Rotational_speed, Wattage, Capacity, Depth, Height, Width) 
 
 -- Insert GPU data
 INSERT INTO GPU (ID, Clock_speed, Ram_size, Number_of_fans, Wattage, Depth, Height, Width) VALUES
-(1, 1500, 8, 2, 200, 20, 20, 20),
-(2, 1400, 6, 1, 180, 18, 18, 18);
+(3, 1500, 8, 2, 200, 20, 20, 20),
+(4, 1400, 6, 1, 180, 18, 18, 18);
 
 -- Insert POWER_SUPPLY data
 INSERT INTO POWER_SUPPLY (ID, Supported_Wattage, Depth, Height, Width) VALUES
-(1, 650, 15, 15, 15),
-(2, 750, 17, 17, 17);
+(5, 650, 15, 15, 15),
+(6, 750, 17, 17, 17);
 
 -- Insert COOLER data
 INSERT INTO COOLER (ID, Maximum_rotational_speed, Wattage, Fan_size, Cooling_method, Depth, Height, Width) VALUES
-(1, 2500, 50, 120, 1, 5, 5, 5),
-(2, 2200, 45, 115, 1, 6, 6, 6);
+(7, 2500, 50, 120, 1, 5, 5, 5),
+(8, 2200, 45, 115, 1, 6, 6, 6);
 
 -- Insert CPU data
 INSERT INTO CPU (ID, Maximum_addressable_memory_limit, Boost_frequency, Base_frequency, Number_of_cores, Number_of_Threads, Generation, Wattage) VALUES
-(1, 64, 4.5, 3.6, 8, 16, 10, 95),
-(2, 128, 5.0, 4.0, 10, 20, 11, 105);
+(9, 64, 4.5, 3.6, 8, 16, 10, 95),
+(10, 128, 5.0, 4.0, 10, 20, 11, 105);
 
 -- Insert MOTHERBOARD data
 INSERT INTO MOTHERBOARD (ID, Chipset, Number_of_memory_slots, Memory_speed_range, Wattage, Depth, Height, Width) VALUES
-(1, 'Z490', 4, 3200, 50, 30, 30, 30),
-(2, 'X570', 4, 3600, 60, 32, 32, 32),
-(3, 'B550', 2, 3200, 45, 28, 28, 28),
-(4, 'Z390', 4, 3000, 55, 31, 31, 31),
-(5, 'H370', 2, 2666, 40, 27, 27, 27);
+(11, 'Z490', 4, 3200, 50, 30, 30, 30),
+(12, 'X570', 4, 3600, 60, 32, 32, 32),
+(13, 'B550', 2, 3200, 45, 28, 28, 28),
+(14, 'Z390', 4, 3000, 55, 31, 31, 31),
+(15, 'H370', 2, 2666, 40, 27, 27, 27);
 
 -- Insert RAM_STICK data
 INSERT INTO RAM_STICK (ID, Frequency, Wattage, Capacity, Generation, Depth, Height, Width) VALUES
-(1, 3200, 15, 16, 'DDR4', 10, 10, 10),
-(2, 3600, 18, 32, 'DDR4', 11, 11, 11),
-(3, 3000, 12, 8, 'DDR3', 9, 9, 9),
-(4, 2666, 10, 4, 'DDR3', 8, 8, 8),
-(5, 2133, 8, 2, 'DDR2', 7, 7, 7);
+(16, 3200, 15, 16, 'DDR4', 10, 10, 10),
+(17, 3600, 18, 32, 'DDR4', 11, 11, 11),
+(18, 3000, 12, 8, 'DDR3', 9, 9, 9),
+(19, 2666, 10, 4, 'DDR3', 8, 8, 8),
+(20, 2133, 8, 2, 'DDR2', 7, 7, 7);
 
 -- Insert SSD data
 INSERT INTO SSD (ID, Wattage, Capacity) VALUES
-(1, 5, 500),
-(2, 7, 1000),
-(3, 6, 250),
-(4, 4, 128),
-(5, 8, 2000);
+(21, 5, 500),
+(22, 7, 1000),
+(23, 6, 250);
+
+
+
+

@@ -2,7 +2,6 @@ package api
 
 import (
 	middleware "PROJDB/backend/midelware"
-
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -23,15 +22,29 @@ func (s *Server) StartServer() error {
 		AllowOrigins:     []string{"*"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
-
     }
 
 	s.Router.Use(cors.New(config))
+	ClientApi(s)
+	CompatibilityFinder(s)
 
-	s.Router.POST("/login", login)
-	s.Router.GET("/getAddress", middleware.AuthoMiddelWare() ,getAddress)
 	
 
 	err := s.Router.Run(s.AddresListen)
 	return err
+}
+
+func ClientApi(r *Server){
+	Group := r.Router.Group("/user")
+	Group.Use(middleware.AuthoMiddelWare())
+	
+	Group.POST("/login", login)
+	Group.GET("/getAddress",  getAddress)
+	Group.POST("/basketShop", getUserBasketShop)
+	Group.POST("/getBasketInfo", getInfoBasket)
+}
+
+func CompatibilityFinder(r *Server){
+	Group := r.Router.Group("/compatiblityFinder")
+	Group.POST("/ramMotherBoard", findCompatibiltyRamMotherBoard)
 }

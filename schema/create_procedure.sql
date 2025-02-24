@@ -102,3 +102,52 @@ END //
 
 DELIMITER ;
 
+
+
+
+
+-- ////////////////////////////////////////////////////////////////////////
+
+
+-- DELIMITER //
+
+-- CREATE PROCEDURE IF NOT EXISTS getbasket (IN CID INT)
+-- BEGIN
+
+--     DECLARE vid INT;
+--     DECLARE vcart INT;
+--     DECLARE vnumber INT;
+--     DECLARE total INT;
+--     DECLARE done BOOLEAN DEFAULT 0;
+
+--     DECLARE userbasket CURSOR FOR
+--         SELECT LSC.ID, LSC.Cart_number, LSC.Number
+--         FROM LOCKED_SHOPPING_CART LSC 
+--         JOIN ISSUED_FOR ISF ON LSC.ID = ISF.ID and LSC.Cart_number = ISF.Cart_number and LSC.Number = ISF.Locked_number
+--         JOIN TRANSACTION T ON ISF.Tracking_code = T.Tracking_code
+--         WHERE LSC.ID = CID and T.Status = True;
+    
+--     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+--     OPEN userbasket;
+
+--     uloop: LOOP
+
+--         FETCH userbasket INTO vid, vcart, vnumber;
+
+--         IF done = 1 THEN
+--             LEAVE uloop;
+--         END IF;
+
+--         CALL calculateCartPrice(vid, vcart, vnumber, total);
+
+--         SELECT vid, vcart, vnumber, total;
+
+--     END LOOP;
+
+--     CLOSE userbasket;
+
+-- END //
+
+-- DELIMITER ;
+

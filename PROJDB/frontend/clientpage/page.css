@@ -72,3 +72,16 @@
 {
     color: #545454;
 }
+
+#message
+{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    height: 40px;
+    width: 250px;
+    text-align: center;
+    padding-top: 8px;
+    border-radius: 10px;
+
+}
