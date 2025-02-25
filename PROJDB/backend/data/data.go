@@ -12,4 +12,12 @@ type Client struct {
 	TimeStamp     string `json:"TimeStamp"`
 }
 
+type Compatible struct{
+
+	Brand string	`json:"brand"`	
+	Model string	`json:"model"`
+	Src string		`json:"src,omitempty"`
+	Dest string		`json:"dest,omitempty"`
+}
+
 

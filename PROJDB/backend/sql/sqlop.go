@@ -139,7 +139,7 @@ func GetBasketInfo(id any, cart_number any, locked_number any) (map[int]string, 
 	return info, nil
 }
 
-func CompatibleRamWithMotherBoard(srcTypeID string, model string, brand string, destTypeID string) (map[int]map[string]string, error) {
+func CompatibleRamWithMotherBoard(srcTypeID string, model string, brand string, destTypeID string) (map[int]data.Compatible, error) {
 
 	var productID int
 
@@ -167,7 +167,7 @@ func CompatibleRamWithMotherBoard(srcTypeID string, model string, brand string, 
 	}
 
 	counter := 1
-	var compatible = make(map[int]map[string]string)
+	var compatible = make(map[int]data.Compatible)
 
 	for row.Next() {
 
@@ -178,10 +178,108 @@ func CompatibleRamWithMotherBoard(srcTypeID string, model string, brand string, 
 
 		_ = db.QueryRow("SELECT Brand, Model FROM PRODUCT WHERE ID = ?", ID).Scan(&brand, &model)
 
-		compatible[counter] = map[string]string{
-			"brand": brand,
-			"model": model,
+		compatible[counter] = data.Compatible{
+			Brand: brand,
+			Model: model,
 		}
+		counter++
+	}
+
+	return compatible, nil
+}
+
+func CampatibleGpuWithPower(srcTypeID string, model string, brand string, destTypeID string) (map[int]data.Compatible, error){
+
+	var productID int
+
+	err := db.QueryRow("SELECT ID FROM PRODUCT WHERE Brand = ? and Model = ?", brand, model).Scan(&productID)
+
+	if errors.Is(err, sql.ErrNoRows){
+		return nil, errors.New("there is nothing to show")
+	}
+
+	if err != nil{
+		log.Print(err.Error())
+		return nil, err
+	}
+
+	query := fmt.Sprintf("SELECT %s FROM CONNECTOR_COMPATIBLE_WITH WHERE %s = ?", destTypeID, srcTypeID)
+	row, err := db.Query(query, productID)
+
+	if errors.Is(err, sql.ErrNoRows){
+		return nil, errors.New("there is nothing to show")
+	}
+
+	if err != nil{
+		return nil, err
+	}
+
+	counter := 1
+	var compatible = make(map[int]data.Compatible)
+
+	for row.Next(){
+
+		var ID int
+		var brand, model string
+
+		row.Scan(&ID)
+
+		_ = db.QueryRow("SELECT Brand, Model FROM PRODUCT WHERE ID = ?", ID).Scan(&brand, &model)
+
+		compatible[counter] = data.Compatible{
+			Brand: brand,
+			Model: model,
+		}
+
+		counter++
+	}
+
+	return compatible, nil
+}
+
+func CampatibleSSDWithMotherBoard(srcTypeID string, model string, brand string, destTypeID string) (map[int]data.Compatible, error){
+
+	var productID int
+
+	err := db.QueryRow("SELECT ID FROM PRODUCT WHERE Brand = ? and Model = ?", brand, model).Scan(&productID)
+
+	if errors.Is(err, sql.ErrNoRows){
+		return nil, errors.New("there is nothing to show")
+	}
+
+	if err != nil{
+		log.Print(err.Error())
+		return nil, err
+	}
+
+	query := fmt.Sprintf("SELECT %s FROM SM_SLOT_COMPATIBLE_WITH WHERE %s = ?", destTypeID, srcTypeID)
+	row, err := db.Query(query, productID)
+
+	if errors.Is(err, sql.ErrNoRows){
+		return nil, errors.New("there is nothing to show")
+	}
+
+	if err != nil{
+		return nil, err
+	}
+
+	counter := 1
+	var compatible = make(map[int]data.Compatible)
+
+	for row.Next(){
+
+		var ID int
+		var brand, model string
+
+		row.Scan(&ID)
+
+		_ = db.QueryRow("SELECT Brand, Model FROM PRODUCT WHERE ID = ?", ID).Scan(&brand, &model)
+
+		compatible[counter] = data.Compatible{
+			Brand: brand,
+			Model: model,
+		}
+
 		counter++
 	}
 

@@ -1,6 +1,7 @@
 package api
 
 import (
+	"PROJDB/backend/data"
 	"PROJDB/backend/jwt"
 	"PROJDB/backend/sql"
 	"io"
@@ -89,9 +90,9 @@ func getInfoBasket(c *gin.Context){
 
 func findCompatibiltyRamMotherBoard(c *gin.Context){
 	
-	var body = make(map[string]string)
+	var income data.Compatible
 
-	err := c.ShouldBindBodyWithJSON(&body)
+	err := c.ShouldBindBodyWithJSON(&income)
 
 	if err != nil{
 		log.Print(err.Error())
@@ -99,12 +100,57 @@ func findCompatibiltyRamMotherBoard(c *gin.Context){
 		return
 	}
 	
-	data, err := sql.CompatibleRamWithMotherBoard(body["src"], body["model"], body["brand"], body["dest"])
+	data, err := sql.CompatibleRamWithMotherBoard(income.Src, income.Model, income.Brand, income.Dest)
+
+	if err != nil{
+		// log.Print(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, data)
+}
+
+
+func findCompatibiltyGpuPower(c *gin.Context){
+
+	var income data.Compatible
+
+	err := c.ShouldBindBodyWithJSON(&income)
+
+	if err != nil{
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return 
+	}
+
+	data, err := sql.CampatibleGpuWithPower(income.Src, income.Model, income.Brand, income.Dest)
+
+	if err !=  nil{
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, data)
+}
+
+func findCompatibiltySSDMotherBoard(c *gin.Context){
+	
+	var income data.Compatible
+	
+	err := c.ShouldBindBodyWithJSON(&income)
 
 	if err != nil{
 		log.Print(err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
+	}
+	
+	data, err := sql.CampatibleSSDWithMotherBoard(income.Src, income.Model, income.Brand, income.Dest)
+
+	if err != nil{
+		log.Print(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return 
 	}
 
 	c.JSON(http.StatusOK, data)

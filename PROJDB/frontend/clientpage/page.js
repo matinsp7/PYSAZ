@@ -95,7 +95,7 @@ async function getAddress()
 
 async function setBaskets() {
     
-    const url = "http://localhost:8080/user/basketShop"
+    const url = "http://localhost:8080/user/getBaskets"
 
     const userData = localStorage.getItem("userData")
     const result = JSON.parse(userData)

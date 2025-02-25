@@ -40,11 +40,13 @@ func ClientApi(r *Server){
 	
 	Group.POST("/login", login)
 	Group.GET("/getAddress",  getAddress)
-	Group.POST("/basketShop", getUserBasketShop)
+	Group.POST("/getBaskets", getUserBasketShop)
 	Group.POST("/getBasketInfo", getInfoBasket)
 }
 
 func CompatibilityFinder(r *Server){
 	Group := r.Router.Group("/compatiblityFinder")
 	Group.POST("/ramMotherBoard", findCompatibiltyRamMotherBoard)
+	Group.POST("/GpuPower", findCompatibiltyGpuPower)
+	Group.POST("/SSDMotherBoard", findCompatibiltySSDMotherBoard)
 }
