@@ -25,7 +25,7 @@ func GetUserFromSql(PhoneNumber string) (*data.Client,error) {
 
 		if err == sql.ErrNoRows {
 
-			return nil, errors.New("phonenumber is inccorect!")
+			return nil, errors.New("phonenumber is inccorect")
 
 		} else {
 			return nil, err
@@ -102,7 +102,7 @@ func GetUserBasketShop(id any) (map[int]string, error) {
 		err = db.QueryRow("SELECT @fp").Scan(&price)
 
 		if err != nil {
-			log.Print(err.Error())
+			log.Print("**********************",err.Error())
 			return nil, err
 		}
 

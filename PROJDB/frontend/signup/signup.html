@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="signup.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Sign Up</h2>
+        <form id="signupForm">
+            <!-- First Name -->
+            <div class="input-group">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" placeholder="Enter your first name" required>
+            </div>
+
+            <!-- Last Name -->
+            <div class="input-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" name="lastName" placeholder="Enter your last name" required>
+            </div>
+
+            <!-- Phone Number -->
+            <div class="input-group">
+                <label for="phoneNumber">Phone Number</label>
+                <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Enter your phone number" pattern="[0-9]{11}" required>
+            </div>
+
+            <!-- Referrer Code -->
+            <div class="input-group">
+                <label for="ReferrerCode">Referrer Code</label>
+                <input type="text" id="RefferalCode" name="ReferrerCode" placeholder="Enter your Refferal Code">
+            </div>
+
+            <!-- Password -->
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" minlength="6" required>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="input-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" minlength="6" required>
+            </div>
+
+            <!-- Submit Button -->
+            <button class="btn">Sign Up</button> <!-- type="submit"-->
+
+            <!-- Error Message -->
+            <p id="errorMessage" class="error-message"></p>
+        </form>
+        <p class="login-link">Already have an account? <a href="../login/login.html">Log in</a></p>
+    </div>
+
+    <script src="signup.js"></script>
+</body>
+</html>

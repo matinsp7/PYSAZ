@@ -11,7 +11,7 @@ import (
 
 func init(){
 
-	fileName := "/home/matin/Desktop/paysaz/PROJDB/backend/sql/dns.json"
+	fileName := "/home/matin/Desktop/paySaz/paysaz/PROJDB/backend/sql/dns.json"
 	dns, err := os.ReadFile(fileName)
 
 	if err != nil{
@@ -26,7 +26,7 @@ func init(){
 	}
 
 	dsn := fmt.Sprintf("%s:%s@tcp(localhost:3306)/%s", data["username"], data["password"], data["database"])
-	db = NewDb("mariadb", dsn)
+	db = NewDb("mysql", dsn)
 
 	err = db.Ping()
 	if err != nil {
