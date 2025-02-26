@@ -1,9 +1,11 @@
 package api
 
 import (
+	"net/http"
 	middleware "PROJDB/backend/midelware"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	//"time"
 )
 
 type Server struct{
@@ -12,8 +14,11 @@ type Server struct{
 }
 
 func NewServer() *Server {
+	router := gin.Default()
+	// Load HTML templates
+	router.LoadHTMLGlob("./frontend/signup/signup.html") // Adjust the path to your templates
 
-	return &Server{gin.Default(), ":8080"}
+	return &Server{router, "0.0.0.0:8080"}
 }
 
 func (s *Server) StartServer() error {
@@ -22,11 +27,25 @@ func (s *Server) StartServer() error {
 		AllowOrigins:     []string{"*"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
+		//AllowMethods:     []string{"*"},
+		//AllowHeaders:     []string{"*"},
+		//ExposeHeaders:    []string{"Content-Length"}, // Optional: Expose specific headers
+    	//MaxAge:           12 * time.Hour,            // Optional: Cache preflight requests for 12 hours
+    	//AllowCredentials: true,
     }
 
 	s.Router.Use(cors.New(config))
 	ClientApi(s)
 	CompatibilityFinder(s)
+
+	s.Router.POST("/signup", signup)
+	
+	s.Router.Static("/static", "./frontend/signup/static")
+	s.Router.GET("/signup", func(c *gin.Context) {
+        c.HTML(http.StatusOK, "signup.html",gin.H{
+            "title": "signup Page",
+        })
+    })
 
 	
 

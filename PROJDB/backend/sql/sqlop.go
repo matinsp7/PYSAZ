@@ -6,10 +6,30 @@ import (
 	"errors"
 	"log"
 	"fmt"
+	
+	"golang.org/x/crypto/bcrypt"
 	_ "github.com/go-sql-driver/mysql"
 )
 
 var db *sql.DB
+
+func hashPassword(password string) string {
+    hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+    if err != nil {
+        log.Fatalf("Failed to hash password: %v", err)
+    }
+    return string(hash)
+}
+
+func InsertNewUser (newUser *data.Client) error {
+	hashedPassword := hashPassword(newUser.Password)
+	query := `
+	INSERT INTO CLIENT (First_name, Last_name, Phone_number, PasswordHash, Timestamp)
+	VALUES (?, ?, ?, ?, ?)
+	`
+	_, err := db.Exec(query, newUser.FirstName, newUser.LastName, newUser.PhoneNumber, hashedPassword, "2025-01-10")
+	return err;
+}
 
 func GetUserFromSql(PhoneNumber string) (*data.Client,error) {
 

@@ -7,9 +7,33 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
+
+func signup (c *gin.Context){
+	var client data.Client
+	if err := c.ShouldBindBodyWithJSON(&client); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
+
+	err := sql.InsertNewUser(&client)
+	if err != nil {
+        if strings.Contains(err.Error(), "Duplicate") {
+            c.JSON(http.StatusConflict, gin.H{"error": "Phone number already exists."})
+            return
+        }
+		log.Print(err.Error())
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user."})
+
+        //c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user."})
+        return
+    }
+
+	c.JSON(http.StatusOK, "")
+}
 
 func login (c *gin.Context){
 

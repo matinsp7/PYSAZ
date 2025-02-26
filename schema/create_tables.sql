@@ -5,13 +5,12 @@ CREATE TABLE IF NOT EXISTS CLIENT
 (
     First_name VARCHAR(15),
     Last_name VARCHAR(15),
-    ID INT PRIMARY KEY,
+    ID INT PRIMARY KEY AUTO_INCREMENT,
     Phone_number VARCHAR(12) UNIQUE,
-    Wallet_balance INT,
+    Wallet_balance INT CHECK (Wallet_balance >= 0),
     Refferal_code VARCHAR(20) UNIQUE,
-    Timestamp Timestamp,
-
-    CHECK( Wallet_balance >= 0 )
+    PasswordHash VARCHAR(255) NOT NULL,
+    Timestamp Timestamp
 );
 
 CREATE TABLE IF NOT EXISTS ADDRESS

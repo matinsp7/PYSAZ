@@ -10,6 +10,7 @@ type Client struct {
 	WalletBalance int    `json:"WalletBalance"`
 	RefferalCode  string `json:"RefferalCode"`
 	TimeStamp     string `json:"TimeStamp"`
+	Password	  string `json:"Password,omitempty"`
 }
 
 type Compatible struct{
