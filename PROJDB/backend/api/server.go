@@ -15,10 +15,9 @@ type Server struct{
 
 func NewServer() *Server {
 	router := gin.Default()
-	// Load HTML templates
-	router.LoadHTMLGlob("./frontend/signup/signup.html") // Adjust the path to your templates
+	//router.LoadHTMLGlob("./frontend/signup/signup.html")
 
-	return &Server{router, "0.0.0.0:8080"}
+	return &Server{router, "0.0.0.0:8088"}
 }
 
 func (s *Server) StartServer() error {
@@ -40,8 +39,18 @@ func (s *Server) StartServer() error {
 
 	s.Router.POST("/signup", signup)
 	
-	s.Router.Static("/static", "./frontend/signup/static")
+	s.Router.Static("/static", "./frontend/homepage/static")
+	s.Router.GET("/", func(c *gin.Context) {
+		s.Router.LoadHTMLGlob("./frontend/homepage/homepage.html")
+        c.HTML(http.StatusOK, "homepage.html",gin.H{
+            "title": "signup Page",
+        })
+    })
+
+
+	s.Router.Static("/staticc", "./frontend/signup/staticc")
 	s.Router.GET("/signup", func(c *gin.Context) {
+		s.Router.LoadHTMLGlob("./frontend/signup/signup.html")
         c.HTML(http.StatusOK, "signup.html",gin.H{
             "title": "signup Page",
         })
