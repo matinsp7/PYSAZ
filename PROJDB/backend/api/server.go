@@ -77,4 +77,7 @@ func CompatibilityFinder(r *Server){
 	Group.POST("/ramMotherBoard", findCompatibiltyRamMotherBoard)
 	Group.POST("/GpuPower", findCompatibiltyGpuPower)
 	Group.POST("/SSDMotherBoard", findCompatibiltySSDMotherBoard)
+	Group.POST("/GpuMotehrBoard", findCompatibiltyGpuMotherboard)
+	Group.POST("/CoolerCPU", findCompatibiltyCoolerCPU)
+	// Group.POST("/CPUMotherBoard", findCompatibiltyCPUMotherBoard)
 }

@@ -180,3 +180,72 @@ func findCompatibiltySSDMotherBoard(c *gin.Context){
 	c.JSON(http.StatusOK, data)
 }
 
+func findCompatibiltyGpuMotherboard(c *gin.Context){
+	
+	var income data.Compatible
+	
+	err := c.ShouldBindBodyWithJSON(&income)
+
+	if err != nil{
+		log.Print(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	
+	data, err := sql.CampatibleSSDWithMotherBoard(income.Src, income.Model, income.Brand, income.Dest)
+
+	if err != nil{
+		log.Print(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return 
+	}
+
+	c.JSON(http.StatusOK, data)
+}
+
+func findCompatibiltyCoolerCPU(c *gin.Context){
+
+	var income data.Compatible
+	
+	err := c.ShouldBindBodyWithJSON(&income)
+
+	if err != nil{
+		log.Print(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	
+	data, err := sql.CampatibleCoolerWithCPU(income.Src, income.Model, income.Brand, income.Dest)
+
+	if err != nil{
+		log.Print(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return 
+	}
+
+	c.JSON(http.StatusOK, data)
+}
+
+
+// func findCompatibiltyCPUMotherBoard(c *gin.Context){
+
+// 	var income data.Compatible
+	
+// 	err := c.ShouldBindBodyWithJSON(&income)
+
+// 	if err != nil{
+// 		log.Print(err.Error())
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+// 		return
+// 	}
+	
+// 	data, err := sql.CampatibleCPUWithMotherBoard(income.Src, income.Model, income.Brand, income.Dest)
+
+// 	if err != nil{
+// 		log.Print(err.Error())
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+// 		return 
+// 	}
+
+// 	c.JSON(http.StatusOK, data)
+// }
