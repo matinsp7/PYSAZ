@@ -1,15 +1,15 @@
 const message = document.getElementById("message")
 let result = null
 
-function getPhoneNumber()
+function getInformation()
 {
-    const PhoneNumber = document.getElementsByTagName("input")
+    const info = document.getElementsByTagName("input")
 
-    sendPostRequest(PhoneNumber[0].value)
+    sendPostRequest(info[0].value, info[1].value)
 }
 
 
-async function sendPostRequest(PhoneNumber) {
+async function sendPostRequest(PhoneNumber, Password) {
     const url = 'http://localhost:8080/user/login'
 
     try {
@@ -18,7 +18,7 @@ async function sendPostRequest(PhoneNumber) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.parse(PhoneNumber)
+            body: JSON.parse(PhoneNumber, Password)
         })
         
         if(response.status === 200)

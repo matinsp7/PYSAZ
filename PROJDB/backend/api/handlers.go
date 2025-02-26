@@ -4,7 +4,6 @@ import (
 	"PROJDB/backend/data"
 	"PROJDB/backend/jwt"
 	"PROJDB/backend/sql"
-	"io"
 	"log"
 	"net/http"
 	"strings"
@@ -37,17 +36,17 @@ func signup (c *gin.Context){
 
 func login (c *gin.Context){
 
-	body := c.Request.Body
+	var client data.Client
 
-	
-	value, err := io.ReadAll(body)
+	err := c.ShouldBindBodyWithJSON(&client)
 	
 	if err != nil{
 		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
-	user, err := sql.GetUserFromSql(string(value))
+	user, err := sql.GetUserFromSql(client.PhoneNumber, client.Password)
+
 
 	if err != nil{
 		c.JSON(http.StatusUnauthorized, gin.H{"message": err.Error()})

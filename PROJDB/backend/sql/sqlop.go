@@ -31,19 +31,19 @@ func InsertNewUser (newUser *data.Client) error {
 	return err;
 }
 
-func GetUserFromSql(PhoneNumber string) (*data.Client,error) {
+func GetUserFromSql(phoneNumber string, passwrod string) (*data.Client,error) {
 
 
-	row := db.QueryRow("SELECT * FROM CLIENT WHERE Phone_number = ?", PhoneNumber)
+	row := db.QueryRow("SELECT * FROM CLIENT WHERE Phone_number = ?", phoneNumber)
 
 	var user data.Client
 
 	err := row.Scan(&user.FirstName, &user.LastName, &user.ID, &user.PhoneNumber, &user.WalletBalance,
-		&user.RefferalCode, &user.TimeStamp)
+		&user.RefferalCode, &user.Password, &user.TimeStamp)
 
 	if err != nil {
 
-		if err == sql.ErrNoRows {
+		if errors.Is(err,sql.ErrNoRows) {
 
 			return nil, errors.New("phonenumber is inccorect")
 
@@ -52,6 +52,14 @@ func GetUserFromSql(PhoneNumber string) (*data.Client,error) {
 		}
 	}
 
+	
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(passwrod))
+	
+	if err != nil{
+		return nil, errors.New("phone number or password is incorrect")
+	}
+	
+	
 	return &user, nil
 }
 
