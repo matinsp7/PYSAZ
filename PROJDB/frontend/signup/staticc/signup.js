@@ -1,4 +1,3 @@
-//salam
 let firstName
 let lastName
 let phoneNumber

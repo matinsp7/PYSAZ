@@ -83,7 +83,7 @@ body
     position: absolute;
     width: 20px;
     height: 20px;
-    background-image: url(./user.png);
+    background-image: url(./assest/user.png);
     background-size: cover;
     /* background-color: red; */
     display: block;
@@ -97,7 +97,7 @@ body
     position: absolute;
     width: 20px;
     height: 20px;
-    background-image: url(./pass.png);
+    background-image: url(./assest/pass.png);
     background-size: cover;
     /* background-color: red; */
     display: block;

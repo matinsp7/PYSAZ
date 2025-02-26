@@ -56,6 +56,12 @@ func (s *Server) StartServer() error {
         })
     })
 
+	s.Router.Static("/staticcc", "./frontend/login/staticcc")
+	s.Router.GET("/login", func(ctx *gin.Context) {
+		s.Router.LoadHTMLGlob("./frontend/login/login.html")
+		ctx.HTML(http.StatusOK, "login.html", gin.H{"title":"login page"})
+	})
+
 	
 
 	err := s.Router.Run(s.AddresListen)
