@@ -21,4 +21,27 @@ type Compatible struct{
 	Dest string		`json:"dest,omitempty"`
 }
 
+type Address struct{
+
+	Province string		`json:"province"`
+	Remainder string	`json:"remainder"`
+
+}
+
+type Basket struct{
+
+	Number int					`json:"number"`
+	TotalPrice int				`json:"price"`
+	Time string					`json:"time"`
+	Products []BasketInfo	`json:"products"`
+}
+
+type BasketInfo struct{
+
+	Brand string		`json:"brand"`
+	Model string		`json:"model"`
+	Quantity int 	`json:"number"`
+	Price int 		`json:"price"`
+}
+
 

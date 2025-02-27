@@ -5,11 +5,12 @@ function getInformation()
 {
     const info = document.getElementsByTagName("input")
 
+
     sendPostRequest(info[0].value, info[1].value)
 }
 
 
-async function sendPostRequest(PhoneNumber, Password) {
+async function sendPostRequest(phoneNumber, password) {
     const url = 'http://localhost:8080/user/login'
 
     try {
@@ -18,7 +19,7 @@ async function sendPostRequest(PhoneNumber, Password) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.parse(PhoneNumber, Password)
+            body: JSON.stringify({PhoneNumber: phoneNumber, Password: password})
         })
         
         if(response.status === 200)
@@ -34,7 +35,7 @@ async function sendPostRequest(PhoneNumber, Password) {
             localStorage.setItem('userData', JSON.stringify(result))
 
     
-            setTimeout(function(){window.location.href = "../clientpage/page.html"}, 500)
+            setTimeout(function(){window.location.href = "/client"}, 500)
         }
 
         else 

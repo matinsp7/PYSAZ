@@ -58,15 +58,14 @@ func GetUserFromSql(phoneNumber string, passwrod string) (*data.Client,error) {
 	if err != nil{
 		return nil, errors.New("phone number or password is incorrect")
 	}
-	
-	
+
 	return &user, nil
 }
 
 // ==============================                 WARNING                ===========================================
 //------------------------------- be careful beacuse if a user have'not adrress it's not error!!--------------------
 
-func GetAddressOfUser(id any) (map[int]string, error) {
+func GetAddressOfUser(id any) (map[int]data.Address, error) {
 
 	row, err := db.Query("SELECT * FROM ADDRESS WHERE ID = ?", id)
 
@@ -81,7 +80,7 @@ func GetAddressOfUser(id any) (map[int]string, error) {
 		}
 	}
 
-	var addres = make(map[int]string)
+	var addres = make(map[int]data.Address)
 	var counter int = 1
 
 	for row.Next() {
@@ -89,7 +88,7 @@ func GetAddressOfUser(id any) (map[int]string, error) {
 		var province, remiander string
 
 		row.Scan(&id, &province, &remiander)
-		addres[counter] = province + "," + remiander
+		addres[counter] = data.Address{Province: province, Remainder: remiander}
 		counter++
 	}
 
@@ -98,9 +97,9 @@ func GetAddressOfUser(id any) (map[int]string, error) {
 
 // ------------------------myabe need set a value for emptiness-------------------------
 
-func GetUserBasketShop(id any) (map[int]string, error) {
+func GetUserBasketShop(id any) (map[int]data.Basket, error) {
 
-	query := "SELECT LSC.ID, LSC.Cart_number, LSC.Number FROM LOCKED_SHOPPING_CART LSC JOIN ISSUED_FOR ISF ON LSC.ID = ISF.ID and LSC.Cart_number = ISF.Cart_number and LSC.Number = ISF.Locked_number JOIN TRANSACTION T ON ISF.Tracking_code = T.Tracking_code WHERE LSC.ID = ? and T.Status = True ORDER BY LSC.Timestamp DESC"
+	query := "SELECT LSC.ID, LSC.Cart_number, LSC.Number, LSC.Timestamp FROM LOCKED_SHOPPING_CART LSC JOIN ISSUED_FOR ISF ON LSC.ID = ISF.ID and LSC.Cart_number = ISF.Cart_number and LSC.Number = ISF.Locked_number JOIN TRANSACTION T ON ISF.Tracking_code = T.Tracking_code WHERE LSC.ID = ? and T.Status = True ORDER BY LSC.Timestamp DESC"
 
 	row, err := db.Query(query, id)
 
@@ -113,12 +112,13 @@ func GetUserBasketShop(id any) (map[int]string, error) {
 		return nil, err
 	}
 
-	var basket = make(map[int]string)
+	var basket = make(map[int]data.Basket)
 	var counter int = 1
 
 	for row.Next() {
-		var id, cartnumber, lockednumber, price int
-		row.Scan(&id, &cartnumber, &lockednumber)
+		var id, cartnumber, lockednumber, totalPrice int
+		var time string
+		row.Scan(&id, &cartnumber, &lockednumber, &time)
 
 		_, err := db.Exec("CALL calculateCartPrice(?, ?, ?, @fp)", id, cartnumber, lockednumber)
 
@@ -127,45 +127,73 @@ func GetUserBasketShop(id any) (map[int]string, error) {
 			return nil, err
 		}
 
-		err = db.QueryRow("SELECT @fp").Scan(&price)
+		err = db.QueryRow("SELECT @fp").Scan(&totalPrice)
 
 		if err != nil {
-			log.Print("**********************",err.Error())
+			log.Print(err.Error())
 			return nil, err
 		}
 
-		basket[counter] = fmt.Sprintf("%d %d %d %d", id, cartnumber, lockednumber, price)
+		query := "SELECT Brand, Model, Quantity, Cart_price FROM ADDED_TO A JOIN PRODUCT P ON P.ID = A.Product_ID WHERE A.ID = ? and A.Cart_number = ? and A.Locked_number = ?"
+
+		row2, err := db.Query(query, id, cartnumber, lockednumber)
+
+		if err != nil {
+			log.Print(err.Error())
+			return nil, err
+		}
+
+		counter2 := 1;
+		basketinfo := []data.BasketInfo{}
+
+		for row2.Next(){
+
+			var model, brand string
+			var quantity, cartPrice int
+
+			err = row2.Scan(&brand, &model, &quantity, &cartPrice)
+
+			if err != nil {
+				log.Print(err.Error())
+			}
+
+			basketinfo = append(basketinfo, data.BasketInfo{Model: model, Brand: brand, Price: cartPrice, Quantity: quantity})
+			counter2++
+		}
+
+		basket[counter] = data.Basket{Number: lockednumber, TotalPrice: totalPrice, Time: time, Products: basketinfo}
+
 		counter++
 	}
 
 	return basket, err
 }
 
-func GetBasketInfo(id any, cart_number any, locked_number any) (map[int]string, error) {
+// func GetBasketInfo(id any, cart_number any, locked_number any) (map[int]string, error) {
 
-	query := "SELECT Brand, Model, Quantity, Cart_price FROM ADDED_TO A JOIN PRODUCT P ON P.ID = A.Product_ID WHERE A.ID = ? and A.Cart_number = ? and A.Locked_number = ?"
+// 	query := "SELECT Brand, Model, Quantity, Cart_price FROM ADDED_TO A JOIN PRODUCT P ON P.ID = A.Product_ID WHERE A.ID = ? and A.Cart_number = ? and A.Locked_number = ?"
 
-	row, err := db.Query(query, id, cart_number, locked_number)
+// 	row, err := db.Query(query, id, cart_number, locked_number)
 
-	if err != nil {
-		log.Print(err.Error())
-		return nil, err
-	}
+// 	if err != nil {
+// 		log.Print(err.Error())
+// 		return nil, err
+// 	}
 
-	var info = make(map[int]string)
-	counter := 1
+// 	var info = make(map[int]string)
+// 	counter := 1
 
-	for row.Next() {
+// 	for row.Next() {
 
-		var brand, model, quantity, price string
+// 		var brand, model, quantity, price string
 
-		row.Scan(&brand, &model, &quantity, &price)
+// 		row.Scan(&brand, &model, &quantity, &price)
 
-		info[counter] = brand + ", " + model + ", " + quantity + ", " + price
-	}
+// 		info[counter] = brand + ", " + model + ", " + quantity + ", " + price
+// 	}
 
-	return info, nil
-}
+// 	return info, nil
+// }
 
 func CompatibleRamWithMotherBoard(srcTypeID string, model string, brand string, destTypeID string) (map[int]data.Compatible, error) {
 

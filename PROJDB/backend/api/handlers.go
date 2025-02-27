@@ -97,19 +97,6 @@ func getUserBasketShop(c *gin.Context){
 	c.JSON(http.StatusOK, basket)
 }
 
-func getInfoBasket(c *gin.Context){
-
-	ID, _ := c.Get("ID")
-
-	basket, err := sql.GetBasketInfo(ID, 1, 1)
-
-	if err != nil{
-		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
-		return 
-	}
-
-	c.JSON(http.StatusOK, basket)
-}
 
 func findCompatibiltyRamMotherBoard(c *gin.Context){
 	

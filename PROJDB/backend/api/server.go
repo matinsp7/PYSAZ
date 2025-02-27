@@ -62,6 +62,12 @@ func (s *Server) StartServer() error {
 		ctx.HTML(http.StatusOK, "login.html", gin.H{"title":"login page"})
 	})
 
+
+	s.Router.Static("/staticccc", "./frontend/clientpage/staticccc")
+	s.Router.GET("/client", func(ctx *gin.Context) {
+		s.Router.LoadHTMLGlob("./frontend/clientpage/client.html")
+		ctx.HTML(http.StatusOK, "client.html", gin.H{"title": "client page"})
+	})
 	
 
 	err := s.Router.Run(s.AddresListen)
@@ -75,7 +81,6 @@ func ClientApi(r *Server){
 	Group.POST("/login", login)
 	Group.GET("/getAddress",  getAddress)
 	Group.POST("/getBaskets", getUserBasketShop)
-	Group.POST("/getBasketInfo", getInfoBasket)
 }
 
 func CompatibilityFinder(r *Server){

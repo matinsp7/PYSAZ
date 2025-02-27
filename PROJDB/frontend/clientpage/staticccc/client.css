@@ -1,0 +1,318 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+main {
+    padding: 20px;
+}
+
+.dashboard-section {
+    margin-bottom: 40px;
+}
+
+.inner-dashboard-section
+{
+    /* background: red; */
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.info
+{
+    margin-top: 20px;
+}
+
+.edit-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 40px;
+}
+
+.edit-button:hover {
+    background-color: #0056b3;
+}
+
+.values
+{
+    margin-left: 10px;
+    color: #757575;
+}
+
+.order-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.order-table th,
+.order-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.order-table th {
+    background-color: #f4f4f4;
+}
+
+#flip-carts
+{
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.flip-cards
+{
+    background-color: transparent;
+    width: 300px;
+    height: 200px;
+    border: 1px solid #F5F5F5;
+    perspective: 1000px; 
+    border-radius: 4px;
+    margin-bottom: 100px;
+    display: none;
+}
+
+.flip-card-inner
+{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s;
+    transition-delay: 100ms;
+    transform-style: preserve-3d;
+}
+
+
+.flip-cards:hover .flip-card-inner
+{
+    transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back 
+{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden; 
+    backface-visibility: hidden;
+    border-radius: 4px;
+}
+
+
+.flip-card-front 
+{
+    background-color: #FAFAFA;
+    background-color: #007bff;
+    color: #fff;
+    box-shadow: 3px 3px 4px 2px #EEEEEE;
+    text-align: left;
+}
+
+
+.flip-card-front-info > h4
+{
+    margin-left: 10px;
+}
+
+.flip-card-front-info
+{
+    margin-top: 35px;
+}
+
+.flip-card-front-info > h4
+{
+    display: inline; 
+    color: #EEEEEE;
+    font-size: 17px;
+
+}
+
+.values-flip-cards
+{
+    color: #fff;
+    font-size: 16px;
+    font-weight: 400;
+    margin-left: 10px;
+
+}
+
+.flip-card-back
+{
+    /* background-color: #088395; */
+    background-color: #512DA8;
+    color: white;
+    transform: rotateY(180deg);
+    width: 100%;
+}
+
+/* .flip-card-back > img
+{
+    width: 35%;
+    height: 40%;
+    padding-top: 10px;
+} */
+
+/* .flip-card-back > h3
+{
+    text-align: left;
+    padding-left: 10px;
+    padding-top: 15px;
+} */
+
+.flip-card-back > h5
+{   
+    position: relative;
+    text-align: left;
+    padding-left: 10px;
+    padding-top: 10px;
+    font-size: 14px;
+}
+
+/* .flip-cards-info
+{
+    padding-top: 10px;
+    padding-left: 10px;
+    width: 85%;
+} */
+
+/* .flip-cards-rate
+{
+    display: flex;
+    align-items: center;
+    padding-top: 5px;
+    gap: 5px;
+}
+
+.flip-cards-rate > h4
+{
+    font-size: 16px;
+}
+
+.price
+{
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+
+.star
+{   
+    color: #FDD835;
+    width: 20px;
+    height: 20px;
+} */
+
+.flip-cards-button
+{   
+    position: absolute;
+    width: 94.645%;
+    left: 10px;
+    bottom: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.flip-cards-button > button
+{   
+    width: 170px;
+    height: 35px;
+    border-radius: 2px;
+    outline: none;
+    border: 2px solid #2DA851;
+    /* background-color: #8F2DA8;
+    background-color: #A8512D; */
+    /* background-color: #2DA851; */
+    /* color: #EEEEEE; */
+    background-color: transparent;
+    color: #4ADE80;
+
+}
+
+.flip-cards-button > button:hover
+{
+    background-color: #4ADE80;
+    color: black;
+    border: none;
+    transition: 400ms;
+}
+
+
+.checkout-button {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.checkout-button:hover {
+    background-color: #1e7e34;
+}
+
+#message
+{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    height: 40px;
+    width: 250px;
+    text-align: center;
+    padding-top: 8px;
+    border-radius: 10px;
+
+}
+
+
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}

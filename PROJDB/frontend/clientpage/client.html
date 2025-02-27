@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client Dashboard - Online Shop</title>
+  <link rel="stylesheet" href="./staticccc/client.css">
+</head>
+<body>
+  <header>
+    <h1>Welcome to Your Client Dashboard</h1>
+    <nav>
+      <ul>
+        <li><a href="#personal-info">Personal Info</a></li>
+        <li><a href="#Address">Address</a></li>
+        <li><a href="#ordered">Order History</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Personal Information Section -->
+    <section id="personal-info" class="dashboard-section">
+      <h2>Personal Information</h2>
+      <div class="inner-dashboard-section">
+        <div class="info-box">
+			<div class="info">
+				<span><strong>Name: </strong></span>
+				<span class="values"></span>
+			</div>
+			<div class="info">
+				<span><strong>Lastame: </strong></span>
+				<span class="values"></span>
+			</div>
+			<div class="info">
+				<span><strong>Phone: </strong></span>
+				<span class="values"></span>
+			</div>
+			<div class="info">
+				<span><strong>Refferalcode: </strong></span>
+				<span class="values"></span>
+			</div>
+			<div class="info">
+				<span><strong>Wallet Balance: </span>
+				<span class="values"></span>
+			</div>
+			<div class="info">
+				<span><strong>Signed at: </span>
+				<span class="values"></span>
+			</div>
+			<div class="info">
+				<span><strong>Role: </span>
+				<span class="values"></span>
+			</div>
+        </div>
+        <button class="edit-button">Edit Information</button>
+      </div>
+    </section>
+
+    <!-- Address Section -->
+
+    <section id="Address" class="dashboard-section">
+      <h2>Address</h2>
+      <table class="order-table">
+        <thead>
+          <tr>
+            <th>Number</th>
+            <th>Province</th>
+            <th>Remainder</th>
+          </tr>
+        </thead>
+        <tbody id="table">
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Shopping Cart Section -->
+
+    <section id="ordered" class="dashboard-section">
+		<h2>Ordered</h2>
+		
+		<div id="flip-carts">
+			<h2 id="NoOrder">You have not Any Order!</h2>
+
+			<!-- one -->
+
+			<div class="flip-cards">
+				<div class="flip-card-inner">
+					<div class="flip-card-front">
+						<div class="flip-card-front-info">
+							<h4>Date:</h4>
+							<span class="values-flip-cards"></span>
+						</div>
+						<div class="flip-card-front-info">
+							<h4>Total Price:</h4>
+							<span class="values-flip-cards"></span>
+						</div>
+						<div class="flip-card-front-info">
+							<h4>Cart Number:</h4>
+							<span class="values-flip-cards"></span>
+						</div>		
+					</div>
+					<div class="flip-card-back">
+						<!-- <div class="flip-cards-button">
+							<button class="buy">Buy</button>
+						</div> -->
+					</div>
+				</div>
+			</div>
+
+			<!-- two -->
+		</div>	
+    </section>
+	<div id="message">
+        
+    </div>
+  </main>
+  <footer>
+    <p>&copy; 2023 Online Shop. All rights reserved.</p>
+  </footer>
+  <script src="./staticccc/client.js"></script>
+</body>
+</html>
