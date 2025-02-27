@@ -17,7 +17,7 @@ func NewServer() *Server {
 	router := gin.Default()
 	//router.LoadHTMLGlob("./frontend/signup/signup.html")
 
-	return &Server{router, "0.0.0.0:8088"}
+	return &Server{router, "0.0.0.0:8080"}
 }
 
 func (s *Server) StartServer() error {
