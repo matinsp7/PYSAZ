@@ -2,19 +2,17 @@ let firstName
 let lastName
 let phoneNumber
 let password
-let confirmPassword
 let errorMessage 
 document.getElementById('signupForm').addEventListener('submit', function (e) {
+
+    console.log('salam')
+    e.preventDefault(); // Prevent form submission
 
     firstName = document.getElementById('firstName').value.trim();
     lastName = document.getElementById('lastName').value.trim();
     phoneNumber = document.getElementById('phoneNumber').value.trim();
     password = document.getElementById('password').value.trim();
-    confirmPassword = document.getElementById('confirmPassword').value.trim();
     errorMessage = document.getElementById('errorMessage');
-
-    e.preventDefault(); // Prevent form submission
-
 
     // Clear previous error message
     errorMessage.textContent = '';
@@ -25,11 +23,7 @@ document.getElementById('signupForm').addEventListener('submit', function (e) {
     //     return;
     // }
 
-    if (password !== confirmPassword) {
-        showError('Passwords do not match.');
-        return;
-    }
-
+    console.log('khoobi')
     if (postSignupForm() == 1) {
         this.reset(); // Reset the form
     }
@@ -43,6 +37,7 @@ function showError(message) {
 
 async function postSignupForm()
 {   
+    console.log('33')
     // an endpoint on the server that handles user registration
     const url = "/signup"
 
@@ -54,6 +49,8 @@ async function postSignupForm()
             headers:{"Content-Type":"application/json"},
             body:JSON.stringify({FirstName:firstName, LastName:lastName, PhoneNumber:phoneNumber, Password:password})
         })
+
+        console.log('44')
 
         const result = await respone.json()
         console.log(result)

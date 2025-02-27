@@ -39,10 +39,10 @@ func (s *Server) StartServer() error {
 
 	s.Router.POST("/signup", signup)
 	
-	s.Router.Static("/static", "./frontend/homepage/static")
+	s.Router.Static("/homepageAsset", "./frontend/homepage/homepageAsset")
 	s.Router.GET("/", func(c *gin.Context) {
-		s.Router.LoadHTMLGlob("./frontend/homepage/homepage.html")
-        c.HTML(http.StatusOK, "homepage.html",gin.H{
+		s.Router.LoadHTMLGlob("./frontend/homepage/index.html")
+        c.HTML(http.StatusOK, "index.html",gin.H{
             "title": "signup Page",
         })
     })
