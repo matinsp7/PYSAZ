@@ -1,25 +1,42 @@
 * {
-    /* margin: 0; */
-    /* padding: 0; */
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    background-color: #9e89ce;
 }
 
+/* Flex container for image and form */
+.form-image-container {
+    display: flex;
+    /* gap: 20px; Space between image and form */
+    max-width: 1800px; /* Limit total width */
+}
+
+/* Style for the image */
+.signup-image {
+    width: 550px; /* Match the form's max-width */
+    height: 600px; /* Maintain aspect ratio */
+    border-radius: 8px; /* Optional: Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Shadow effect */
+}
+
+/* Form container */
 .container {
     background: white;
     padding: 30px 40px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
+    width: 500px;
+    height: 600px;
+    max-width: 1400px; /* Ensure form has a fixed width */
 }
 
 h2 {
@@ -29,7 +46,7 @@ h2 {
 }
 
 .input-group {
-    margin-bottom: 15px;
+    margin-bottom: 7px;
 }
 
 label {
@@ -54,7 +71,7 @@ input:focus {
 .btn {
     width: 100%;
     padding: 10px;
-    background-color: #9500ff;
+    background-color: #9e89ce;
     color: white;
     border: none;
     border-radius: 4px;
@@ -64,7 +81,7 @@ input:focus {
 }
 
 .btn:hover {
-    background-color: #0056b3;
+    background-color: #9500ff;
 }
 
 .error-message {
@@ -88,4 +105,18 @@ input:focus {
 
 .login-link a:hover {
     text-decoration: underline;
+}
+
+/* Responsive design */
+@media (max-width: 800px) {
+    .form-image-container {
+        flex-direction: column; /* Stack image and form vertically */
+        align-items: center;
+    }
+
+    .signup-image {
+        width: 100%; /* Make image full-width */
+        max-width: 400px; /* Limit maximum width */
+        height: auto;
+    }
 }

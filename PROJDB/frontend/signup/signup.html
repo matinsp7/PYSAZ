@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="eng">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,54 +7,55 @@
     <link rel="stylesheet" href="staticc/signup.css">
 </head>
 <body>
-    <div class="container">
-        <h2>Sign Up</h2>
-        <form id="signupForm">
-            <!-- First Name -->
-            <div class="input-group">
-                <label for="firstName">First Name</label>
-                <input type="text" id="firstName" placeholder="Enter your first name" required>
+    <div class="container2">
+        <div class="form-image-container">
+
+            
+            <div class="container">
+                <h2>Sign Up</h2>
+                <form id="signupForm">
+                    
+                    <div class="input-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" placeholder="Enter your first name" required="">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" placeholder="Enter your last name" required="">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="phoneNumber">Phone Number</label>
+                        <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Enter your phone number" pattern="[0-9]{11}" required="">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="ReferrerCode">Referrer Code</label>
+                        <input type="text" id="RefferalCode" name="ReferrerCode" placeholder="Enter your Refferal Code">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" placeholder="Enter your password" required="">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required="">
+                    </div>
+                    
+                    <button class="btn">Sign Up</button>
+                    
+                    <p id="errorMessage" class="error-message"></p>
+                </form>
+                <p class="login-link">Already have an account? <a href="/login">Log in</a></p>
+
             </div>
-
-            <!-- Last Name -->
-            <div class="input-group">
-                <label for="lastName">Last Name</label>
-                <input type="text" id="lastName" name="lastName" placeholder="Enter your last name" required>
-            </div>
-
-            <!-- Phone Number -->
-            <div class="input-group">
-                <label for="phoneNumber">Phone Number</label>
-                <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Enter your phone number" pattern="[0-9]{11}" required>
-            </div>
-
-            <!-- Referrer Code -->
-            <div class="input-group">
-                <label for="ReferrerCode">Referrer Code</label>
-                <input type="text" id="RefferalCode" name="ReferrerCode" placeholder="Enter your Refferal Code">
-            </div>
-
-            <!-- Password -->
-            <div class="input-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Enter your password" required>
-            </div>
-
-            <!-- Confirm Password -->
-            <div class="input-group">
-                <label for="confirmPassword">Confirm Password</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
-            </div>
-
-            <!-- Submit Button -->
-            <button class="btn">Sign Up</button> <!-- type="submit"-->
-
-            <!-- Error Message -->
-            <p id="errorMessage" class="error-message"></p>
-        </form>
-        <p class="login-link">Already have an account? <a href="/login">Log in</a></p>
+            
+            <img src="./staticc/asset/cpu.jpg" alt="CPU Image" class="signup-image">
+        </div>
     </div>
-
     <script src="staticc/signup.js"></script>
+
 </body>
-</html>
