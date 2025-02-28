@@ -24,10 +24,11 @@ func hashPassword(password string) string {
 func InsertNewUser (newUser *data.Client) error {
 	hashedPassword := hashPassword(newUser.Password)
 	query := `
-	INSERT INTO CLIENT (First_name, Last_name, Phone_number, PasswordHash, Timestamp)
-	VALUES (?, ?, ?, ?, ?)
+	INSERT INTO CLIENT (First_name, Last_name, Phone_number, Wallet_balance, Refferal_code, PasswordHash, Timestamp)
+	VALUES (?, ?, ?, ?, ?, ?, ?)
 	`
-	_, err := db.Exec(query, newUser.FirstName, newUser.LastName, newUser.PhoneNumber, hashedPassword, "2025-01-10")
+	_, err := db.Exec(query, newUser.FirstName, newUser.LastName, newUser.PhoneNumber, 
+					newUser.WalletBalance, newUser.RefferalCode ,hashedPassword, "2025-01-10")
 	return err;
 }
 

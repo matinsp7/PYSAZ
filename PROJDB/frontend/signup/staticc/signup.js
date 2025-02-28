@@ -56,9 +56,41 @@ async function postSignupForm()
         console.log(result)
         
         if (respone.status == 200)
-        {
-            return 1;
+        {   
+            const url2 = '/user/login'
+
+            try 
+            {
+                    const responseLogin = await fetch(url2, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json'},
+                    body: JSON.stringify({PhoneNumber: phoneNumber, Password: password})
+                })
+
+                userResult = await responseLogin.json()
+                
+                if(responseLogin.status == 200)
+                {   
+                    alert("salam")
+                    localStorage.setItem('userData', JSON.stringify(userResult))
+                    setTimeout(function(){window.location.href = "/client"}, 500)
+
+                }
+
+                else
+                {
+                    alert(userResult)
+                    console.log("error: ", userResult)
+                }
+            }
+
+            catch(error)
+            {
+                alert(error)
+            }
+        
         }
+
 
         else if (respone.status == 409) {
             showError("Phone number already exists.");

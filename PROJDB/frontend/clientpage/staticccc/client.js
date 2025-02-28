@@ -133,7 +133,7 @@ function setBaskets(baskets)
 async function getAddress()
 {   
 
-    const url = "http://localhost:8080/user/getAddress"
+    const url = "/user/getAddress"
 
     const userData = localStorage.getItem("userData")
     const result = JSON.parse(userData)
@@ -178,7 +178,7 @@ async function getAddress()
 
 async function getBaskets() {
     
-    const url = "http://localhost:8080/user/getBaskets"
+    const url = "/user/getBaskets"
 
     const userData = localStorage.getItem("userData")
     const result = JSON.parse(userData)
@@ -220,7 +220,7 @@ async function getBaskets() {
 
 async function getBasketInfo(){
 
-    const url = "http://localhost:8080/user/getBasketInfo"
+    const url = "/user/getBasketInfo"
 
     const userData = localStorage.getItem("userData")
     const result = JSON.parse(userData)

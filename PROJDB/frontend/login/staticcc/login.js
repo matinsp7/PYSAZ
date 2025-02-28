@@ -1,17 +1,27 @@
 const message = document.getElementById("message")
 let result = null
 
-function getInformation()
-{
+// function getInformation()
+// {
+//     const info = document.getElementsByTagName("input")
+
+
+//     sendPostRequest(info[0].value, info[1].value)
+// }
+
+
+document.getElementById("btn_login").addEventListener("click", function(event){
+
+
     const info = document.getElementsByTagName("input")
 
 
-    sendPostRequest(info[0].value, info[1].value)
-}
-
+    sendPostRequest(info[0].value, info[1].value)   
+    
+})
 
 async function sendPostRequest(phoneNumber, password) {
-    const url = 'http://localhost:8080/user/login'
+    const url = '/user/login'
 
     try {
         const response = await fetch(url, {

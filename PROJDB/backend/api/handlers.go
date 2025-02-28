@@ -18,6 +18,9 @@ func signup (c *gin.Context){
         return
     }
 
+	client.RefferalCode = string(client.PhoneNumber[2:]) + string(client.FirstName[0]) + string(client.LastName[0])
+	client.WalletBalance = 0
+	
 	err := sql.InsertNewUser(&client)
 	if err != nil {
         if strings.Contains(err.Error(), "Duplicate") {

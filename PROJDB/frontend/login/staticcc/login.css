@@ -80,7 +80,7 @@ body
     margin-bottom: 50px;
 }
 
-.inner-wrapp > input::placeholder
+.inner-wrapp  > input::placeholder
 {
     font-weight: 400;
     color: #9E9E9E;
