@@ -10,7 +10,10 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #9e89ce;
+    /* background-color: #9e89ce; */
+    /* background-color: #555; */
+    /* background-color: #1d1f1f; */
+    background-color: #374869;
 }
 
 /* Flex container for image and form */
@@ -76,7 +79,8 @@ input:focus {
 .btn {
     width: 100%;
     padding: 10px;
-    background-color: #9e89ce;
+    /* background-color: #9e89ce; */
+    background-color: #d314aa;
     color: white;
     border: none;
     border-radius: 4px;
@@ -86,7 +90,8 @@ input:focus {
 }
 
 .btn:hover {
-    background-color: #9500ff;
+    /* background-color: #9500ff; */
+    background-color: #a514b3;
 }
 
 .error-message {

@@ -7,8 +7,8 @@ CREATE TABLE IF NOT EXISTS CLIENT
     Last_name VARCHAR(15),
     ID INT PRIMARY KEY AUTO_INCREMENT,
     Phone_number VARCHAR(12) UNIQUE,
-    Wallet_balance INT CHECK (Wallet_balance >= 0),
-    Refferal_code VARCHAR(20) UNIQUE,
+    Wallet_balance INT default 0 CHECK (Wallet_balance >= 0),
+    Refferal_code VARCHAR(20) default "",
     PasswordHash VARCHAR(255) NOT NULL,
     Timestamp Timestamp
 );
