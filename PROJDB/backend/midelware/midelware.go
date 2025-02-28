@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
+	"github.com/ulule/limiter/v3"
 )
 
 func AuthoMiddelWare() gin.HandlerFunc{
@@ -40,3 +41,29 @@ func AuthoMiddelWare() gin.HandlerFunc{
 		c.Next()
 	}
 }
+
+
+func LimitMiddleware(limit *limiter.Limiter) gin.HandlerFunc{
+
+	return func(ctx *gin.Context) {
+
+		clinetIP := ctx.ClientIP()
+
+		context, err := limit.Get(ctx, clinetIP)
+
+		if err != nil{
+			ctx.AbortWithStatusJSON(500, gin.H{"error": "server error"})
+		}
+
+		if context.Reached{
+			ctx.AbortWithStatusJSON(429, gin.H{
+				"error": "too many request. please try again later",
+				"remaining": context.Remaining,
+			})
+		}
+
+		ctx.Next()
+	}
+
+}
+

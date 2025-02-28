@@ -5,7 +5,9 @@ import (
 	middleware "PROJDB/backend/midelware"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	//"time"
+	"github.com/ulule/limiter/v3"
+	"github.com/ulule/limiter/v3/drivers/store/memory"
+	"time"
 )
 
 type Server struct{
@@ -34,6 +36,9 @@ func (s *Server) StartServer() error {
     }
 
 	s.Router.Use(cors.New(config))
+	ApplyMiddleware(s)
+
+
 	ClientApi(s)
 	CompatibilityFinder(s)
 
@@ -75,6 +80,7 @@ func (s *Server) StartServer() error {
 }
 
 func ClientApi(r *Server){
+
 	Group := r.Router.Group("/user")
 	Group.Use(middleware.AuthoMiddelWare())
 	
@@ -91,4 +97,17 @@ func CompatibilityFinder(r *Server){
 	Group.POST("/GpuMotehrBoard", findCompatibiltyGpuMotherboard)
 	Group.POST("/CoolerCPU", findCompatibiltyCoolerCPU)
 	// Group.POST("/CPUMotherBoard", findCompatibiltyCPUMotherBoard)
+}
+
+func ApplyMiddleware(r *Server){
+	
+	rate := limiter.Rate{
+		Period: 1 * time.Second,
+		Limit: 20,
+	}
+	
+	store := memory.NewStore()
+	mylimiter := limiter.New(store, rate)
+
+	r.Router.Use(middleware.LimitMiddleware(mylimiter))
 }

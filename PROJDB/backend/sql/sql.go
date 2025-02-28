@@ -11,7 +11,7 @@ import (
 
 func init(){
 
-	fileName := "/home/arya/Desktop/paysaz/PROJDB/backend/sql/dns.json"
+	fileName := "/home/arya/Desktop/PYSAZ/PROJDB/backend/sql/dns.json"
 	dns, err := os.ReadFile(fileName)
 
 	if err != nil{
