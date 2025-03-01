@@ -45,3 +45,12 @@ type BasketInfo struct{
 }
 
 
+// type Product struct {
+//     ID           int     `json:"id"`
+//     Category     string  `json:"category"`
+//     Image        []byte  `json:"image"`
+//     CurrentPrice int     `json:"current_price"`
+//     StockCount   int     `json:"stock_count"`
+//     Brand        string  `json:"brand"`
+//     Model        string  `json:"model"`
+// }

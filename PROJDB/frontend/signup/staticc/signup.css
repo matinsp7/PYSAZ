@@ -14,6 +14,8 @@ body {
     /* background-color: #555; */
     /* background-color: #1d1f1f; */
     background-color: #374869;
+    /* background: url("asset/cpu.jpg") no-repeat;    */
+    /* background-size: cover; */
 }
 
 /* Flex container for image and form */
@@ -28,7 +30,7 @@ body {
 /* Style for the image */
 .signup-image {
     width: 55%;
-    height: 550px;
+    height: 600px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Shadow effect */
 }
@@ -39,8 +41,8 @@ body {
     padding: 30px 40px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 30%;
-    height: 550px;
+    width: 35%;
+    height: 600px;
 }
 
 h2 {
@@ -80,7 +82,9 @@ input:focus {
     width: 100%;
     padding: 10px;
     /* background-color: #9e89ce; */
-    background-color: #d314aa;
+    
+    /* background-color: #faadda; */
+    background-color: #f594cc;
     color: white;
     border: none;
     border-radius: 4px;
@@ -91,7 +95,9 @@ input:focus {
 
 .btn:hover {
     /* background-color: #9500ff; */
-    background-color: #a514b3;
+    /* background-color: #a514b3; */
+    /* background-color: #faadda; */
+    background-color: #f064b6;
 }
 
 .error-message {
@@ -109,7 +115,8 @@ input:focus {
 }
 
 .login-link a {
-    color: #9500ff;
+    /* color: #9500ff; */
+    color: #f594cc;
     text-decoration: none;
 }
 

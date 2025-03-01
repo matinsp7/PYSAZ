@@ -8,6 +8,12 @@ import (
 	"github.com/ulule/limiter/v3"
 	"github.com/ulule/limiter/v3/drivers/store/memory"
 	"time"
+
+
+
+
+	// "PROJDB/backend/sql"
+	// "PROJDB/backend/data"
 )
 
 type Server struct{
@@ -73,6 +79,19 @@ func (s *Server) StartServer() error {
 		s.Router.LoadHTMLGlob("./frontend/clientpage/client.html")
 		ctx.HTML(http.StatusOK, "client.html", gin.H{"title": "client page"})
 	})
+
+
+	// s.Router.Static("/exploreAsset", "./frontend/explore/exploreAsset")
+	// s.Router.GET("/explore", func(ctx *gin.Context) {
+	// 	s.Router.LoadHTMLGlob("./frontend/explore/explore.html")
+	// 	ctx.HTML(http.StatusOK, "client.html", gin.H{"title": "client page"})
+	// })
+
+	// s.Router.GET("/products", func(c *gin.Context) {
+	// 	var prods []data.Product
+	// 	prods = sql.GetProduct()
+	// 	c.JSON(http.StatusOK, prods)
+	// })
 	
 
 	err := s.Router.Run(s.AddresListen)

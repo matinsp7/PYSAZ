@@ -489,3 +489,18 @@ func CampatibleCoolerWithMotehrBoard(srcTypeID string, model string, brand strin
 
 	return compatible, nil
 }
+
+
+
+// func GetProduct () ([]data.Product) {
+// 	rows, _ := db.Query("SELECT ID, Category, Image, Current_price, Stock_count, Brand, Model FROM PRODUCT")
+// 	defer rows.Close()
+	
+// 	var products []data.Product
+// 	for rows.Next() {
+// 		var p data.Product
+// 		rows.Scan(&p.ID, &p.Category, &p.Image, &p.CurrentPrice, &p.StockCount, &p.Brand, &p.Model)
+// 		products = append(products, p)
+// 	}
+// 	return products;
+// }
