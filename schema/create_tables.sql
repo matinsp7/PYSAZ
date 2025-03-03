@@ -194,7 +194,8 @@ CREATE TABLE IF NOT EXISTS PRODUCT
     Current_price INT,
     Stock_count INT, 
     Brand VARCHAR(20),
-    Model VARCHAR(30)
+    Model VARCHAR(30),
+    Image_address VARCHAR(50) default "/exploreAsset/no-image.jpg"
 
     CHECK (Current_price > 0 and Stock_count > 0)
 );

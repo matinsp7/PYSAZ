@@ -1,3 +1,3 @@
-drop database PYSAZ;
+-- drop database PYSAZ;
 
 CREATE DATABASE IF NOT EXISTS PYSAZ;

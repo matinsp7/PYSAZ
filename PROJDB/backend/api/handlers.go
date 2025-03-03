@@ -238,9 +238,3 @@ func findCompatibiltyCoolerCPU(c *gin.Context){
 
 // 	c.JSON(http.StatusOK, data)
 // }
-
-
-// func explore () {
-// 	var prods []data.Product
-// 	prods := sql.getProduct()
-// }

@@ -222,61 +222,61 @@ USE PYSAZ;
 
 
 -- Insert CPU products
-INSERT INTO PRODUCT (ID, Category, Image, Current_price, Stock_count, Brand, Model)
+INSERT INTO PRODUCT (ID, Category, Image, Current_price, Stock_count, Brand, Model, Image_address)
 VALUES 
-(1, 'CPU', LOAD_FILE('/images/cpu1.jpg'), 350, 50, 'Intel', 'i7-12700K'),
-(2, 'CPU', LOAD_FILE('/images/cpu2.jpg'), 450, 30, 'AMD', 'Ryzen 9 5900X');
+(1, 'CPU', NULL, 350, 50, 'Intel', 'i7-12700K', 'exploreAsset/images/cpuIntelI7-12700K.jpg'),
+(2, 'CPU', NULL, 450, 30, 'AMD', 'Ryzen 9 5900X', 'exploreAsset/images/cpuAmdRyzen-9-5900X.jpg');
 
--- Insert GPU products
-INSERT INTO PRODUCT (ID, Category, Image, Current_price, Stock_count, Brand, Model)
-VALUES 
-(3, 'GPU', LOAD_FILE('/images/gpu1.jpg'), 600, 40, 'NVIDIA', 'RTX 3080'),
-(4, 'GPU', LOAD_FILE('/images/gpu2.jpg'), 800, 20, 'AMD', 'RX 6800 XT');
+-- -- Insert GPU products
+-- INSERT INTO PRODUCT (ID, Category, Image, Current_price, Stock_count, Brand, Model)
+-- VALUES 
+-- (3, 'GPU', LOAD_FILE('/images/gpu1.jpg'), 600, 40, 'NVIDIA', 'RTX 3080'),
+-- (4, 'GPU', LOAD_FILE('/images/gpu2.jpg'), 800, 20, 'AMD', 'RX 6800 XT');
 
--- Insert RAM products
-INSERT INTO PRODUCT (ID, Category, Image, Current_price, Stock_count, Brand, Model)
+-- -- Insert RAM products
+INSERT INTO PRODUCT (ID, Category, Image, Current_price, Stock_count, Brand, Model, Image_address)
 VALUES 
-(5, 'RAM', LOAD_FILE('images/ram1.jpg'), 120, 100, 'Corsair', 'Vengeance LPX 16GB'),
-(6, 'RAM', LOAD_FILE('images/ram2.jpg'), 150, 80, 'G.Skill', 'Trident Z RGB 32GB');
+(5, 'RAM', NULL, 120, 100, 'Corsair', 'Vengeance LPX 16GB', 'exploreAsset/images/115107119.jpg'),
+(6, 'RAM', NULL, 150, 80, 'G.Skill', 'Trident Z RGB 32GB', 'exploreAsset/images/280x280.jpg');
 
 -- Insert Storage products (HDD/SSD)
-INSERT INTO PRODUCT (ID, Category, Image, Current_price, Stock_count, Brand, Model)
+INSERT INTO PRODUCT (ID, Category, Image, Current_price, Stock_count, Brand, Model, Image_address)
 VALUES 
-(7, 'Storage', LOAD_FILE('images/ssd1.jpg'), 100, 120, 'Samsung', '970 EVO Plus 1TB'),
-(8, 'Storage', LOAD_FILE('images/hdd1.jpg'), 50, 150, 'Seagate', 'BarraCuda 2TB');
+(7, 'Storage', NULL, 100, 120, 'Samsung', '970 EVO Plus 1TB', 'exploreAsset/images/1c69dd1d.jpg'),
+(8, 'Storage', NULL, 50, 150, 'Seagate', 'BarraCuda 2TB', 'exploreAsset/images/1375002.jpg');
 
--- Insert Motherboard products
-INSERT INTO PRODUCT (ID, Category, Image, Current_price, Stock_count, Brand, Model)
-VALUES 
-(9, 'Motherboard', LOAD_FILE('images/mobo1.jpg'), 200, 60, 'ASUS', 'ROG Strix B550-E Gaming'),
-(10, 'Motherboard', LOAD_FILE('images/mobo2.jpg'), 180, 70, 'MSI', 'MAG B550 TOMAHAWK WIFI');
+-- -- Insert Motherboard products
+-- INSERT INTO PRODUCT (ID, Category, Image, Current_price, Stock_count, Brand, Model)
+-- VALUES 
+-- (9, 'Motherboard', LOAD_FILE('images/mobo1.jpg'), 200, 60, 'ASUS', 'ROG Strix B550-E Gaming'),
+-- (10, 'Motherboard', LOAD_FILE('images/mobo2.jpg'), 180, 70, 'MSI', 'MAG B550 TOMAHAWK WIFI');
 
--- Insert Power Supply products
-INSERT INTO PRODUCT (ID, Category, Image, Current_price, Stock_count, Brand, Model)
-VALUES 
-(11, 'Power Supply', LOAD_FILE('images/psu1.jpg'), 130, 90, 'Corsair', 'RM750x'),
-(12, 'Power Supply', LOAD_FILE('images/psu2.jpg'), 110, 100, 'EVGA', 'SuperNOVA 650 G5');
+-- -- Insert Power Supply products
+-- INSERT INTO PRODUCT (ID, Category, Image, Current_price, Stock_count, Brand, Model)
+-- VALUES 
+-- (11, 'Power Supply', LOAD_FILE('images/psu1.jpg'), 130, 90, 'Corsair', 'RM750x'),
+-- (12, 'Power Supply', LOAD_FILE('images/psu2.jpg'), 110, 100, 'EVGA', 'SuperNOVA 650 G5');
 
--- Insert Cooling products
-INSERT INTO PRODUCT (ID, Category, Image, Current_price, Stock_count, Brand, Model)
-VALUES 
-(13, 'Cooling', LOAD_FILE('/images/cooler1.jpg'), 70, 80, 'Noctua', 'NH-U12S TR4-SP3'),
-(14, 'Cooling', LOAD_FILE('/images/cooler2.jpg'), 90, 60, 'Cooler Master', 'Hyper 212 Black Edition');
+-- -- Insert Cooling products
+-- INSERT INTO PRODUCT (ID, Category, Image, Current_price, Stock_count, Brand, Model)
+-- VALUES 
+-- (13, 'Cooling', LOAD_FILE('/images/cooler1.jpg'), 70, 80, 'Noctua', 'NH-U12S TR4-SP3'),
+-- (14, 'Cooling', LOAD_FILE('/images/cooler2.jpg'), 90, 60, 'Cooler Master', 'Hyper 212 Black Edition');
 
--- Insert Case products
-INSERT INTO PRODUCT (ID, Category, Image, Current_price, Stock_count, Brand, Model)
-VALUES 
-(15, 'Case', LOAD_FILE('/images/case1.jpg'), 100, 50, 'Lian Li', 'PC-O11 Dynamic XL'),
-(16, 'Case', LOAD_FILE('/images/case2.jpg'), 80, 70, 'Fractal Design', 'Meshify C');
+-- -- Insert Case products
+-- INSERT INTO PRODUCT (ID, Category, Image, Current_price, Stock_count, Brand, Model)
+-- VALUES 
+-- (15, 'Case', LOAD_FILE('/images/case1.jpg'), 100, 50, 'Lian Li', 'PC-O11 Dynamic XL'),
+-- (16, 'Case', LOAD_FILE('/images/case2.jpg'), 80, 70, 'Fractal Design', 'Meshify C');
 
--- Insert Monitor products
-INSERT INTO PRODUCT (ID, Category, Image, Current_price, Stock_count, Brand, Model)
-VALUES 
-(17, 'Monitor', LOAD_FILE('images/monitor1.jpg'), 250, 40, 'Dell', 'S2721DGF'),
-(18, 'Monitor', LOAD_FILE('images/monitor2.jpg'), 300, 30, 'LG', 'UltraGear 27GL850');
+-- -- Insert Monitor products
+-- INSERT INTO PRODUCT (ID, Category, Image, Current_price, Stock_count, Brand, Model)
+-- VALUES 
+-- (17, 'Monitor', LOAD_FILE('images/monitor1.jpg'), 250, 40, 'Dell', 'S2721DGF'),
+-- (18, 'Monitor', LOAD_FILE('images/monitor2.jpg'), 300, 30, 'LG', 'UltraGear 27GL850');
 
--- Insert Keyboard products
-INSERT INTO PRODUCT (ID, Category, Image, Current_price, Stock_count, Brand, Model)
-VALUES 
-(19, 'Keyboard', LOAD_FILE('images/keyboard1.jpg'), 150, 60, 'Logitech', 'G915 TKL'),
-(20, 'Keyboard', LOAD_FILE('images/keyboard2.jpg'), 120, 80, 'Razer', 'BlackWidow V3');
+-- -- Insert Keyboard products
+-- INSERT INTO PRODUCT (ID, Category, Image, Current_price, Stock_count, Brand, Model)
+-- VALUES 
+-- (19, 'Keyboard', LOAD_FILE('images/keyboard1.jpg'), 150, 60, 'Logitech', 'G915 TKL'),
+-- (20, 'Keyboard', LOAD_FILE('images/keyboard2.jpg'), 120, 80, 'Razer', 'BlackWidow V3');

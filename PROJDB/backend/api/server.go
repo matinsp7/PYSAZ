@@ -9,11 +9,8 @@ import (
 	"github.com/ulule/limiter/v3/drivers/store/memory"
 	"time"
 
-
-
-
-	// "PROJDB/backend/sql"
-	// "PROJDB/backend/data"
+	"PROJDB/backend/sql"
+	"PROJDB/backend/data"
 )
 
 type Server struct{
@@ -25,7 +22,7 @@ func NewServer() *Server {
 	router := gin.Default()
 	//router.LoadHTMLGlob("./frontend/signup/signup.html")
 
-	return &Server{router, "0.0.0.0:8010"}
+	return &Server{router, "0.0.0.0:8020"}
 }
 
 func (s *Server) StartServer() error {
@@ -34,11 +31,6 @@ func (s *Server) StartServer() error {
 		AllowOrigins:     []string{"*"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
-		//AllowMethods:     []string{"*"},
-		//AllowHeaders:     []string{"*"},
-		//ExposeHeaders:    []string{"Content-Length"}, // Optional: Expose specific headers
-    	//MaxAge:           12 * time.Hour,            // Optional: Cache preflight requests for 12 hours
-    	//AllowCredentials: true,
     }
 
 	s.Router.Use(cors.New(config))
@@ -49,7 +41,7 @@ func (s *Server) StartServer() error {
 	CompatibilityFinder(s)
 
 	s.Router.POST("/signup", signup)
-	
+
 	s.Router.Static("/homepageAsset", "./frontend/homepage/homepageAsset")
 	s.Router.GET("/", func(c *gin.Context) {
 		s.Router.LoadHTMLGlob("./frontend/homepage/index.html")
@@ -81,17 +73,17 @@ func (s *Server) StartServer() error {
 	})
 
 
-	// s.Router.Static("/exploreAsset", "./frontend/explore/exploreAsset")
-	// s.Router.GET("/explore", func(ctx *gin.Context) {
-	// 	s.Router.LoadHTMLGlob("./frontend/explore/explore.html")
-	// 	ctx.HTML(http.StatusOK, "client.html", gin.H{"title": "client page"})
-	// })
+	s.Router.Static("/exploreAsset", "./frontend/explore/exploreAsset")
+	s.Router.GET("/explore", func(ctx *gin.Context) {
+		s.Router.LoadHTMLGlob("./frontend/explore/explore.html")
+		ctx.HTML(http.StatusOK, "explore.html", gin.H{"title": "explore page"})
+	})
 
-	// s.Router.GET("/products", func(c *gin.Context) {
-	// 	var prods []data.Product
-	// 	prods = sql.GetProduct()
-	// 	c.JSON(http.StatusOK, prods)
-	// })
+	s.Router.GET("/products", func(c *gin.Context) {
+		var prods []data.Product
+		prods = sql.GetProduct()
+		c.JSON(http.StatusOK, prods)
+	})
 	
 
 	err := s.Router.Run(s.AddresListen)
