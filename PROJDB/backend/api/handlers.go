@@ -50,10 +50,10 @@ func login (c *gin.Context){
 
 	user, err := sql.GetUserFromSql(client.PhoneNumber, client.Password)
 
-
 	if err != nil{
+		log.Print(err.Error())
 		c.JSON(http.StatusUnauthorized, gin.H{"message": err.Error()})
-		return 
+		return
 	}
 
 	claims := authorized.CreateJwtClaims(user.ID)
@@ -64,7 +64,15 @@ func login (c *gin.Context){
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"token": tokenstring, "user": user})
+	VIP, err := sql.IsVIP(user.ID)
+
+	if err != nil {
+		log.Print(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"token": tokenstring, "user": user, "isVIP": VIP})
 }
 
 

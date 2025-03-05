@@ -30,7 +30,7 @@ func CreateToken(claims *Claims) (string, error){
 	tokenstring, err :=	token.SignedString(JwtKey)
 	
 	if err != nil{
-		log.Fatal(err.Error())
+		log.Print(err.Error())
 		return "", err
 	}
 

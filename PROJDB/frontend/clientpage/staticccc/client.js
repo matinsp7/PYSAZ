@@ -37,9 +37,7 @@ function setValueInHtml()
     const userData = localStorage.getItem("userData")
     const result = JSON.parse(userData)
     const userResult = result["user"]
-
-    console.log(userResult)
-    
+    const isVIP = result["isVIP"]
     
     const values = document.getElementsByClassName("values")
     
@@ -49,7 +47,15 @@ function setValueInHtml()
     values[3].innerHTML = userResult["RefferalCode"]
     values[4].innerHTML = userResult["WalletBalance"]
     values[5].innerHTML = userResult["TimeStamp"]
+
+    if (isVIP) {
+        values[6].innerHTML = "You are VIP"
+    }
+    else {
+        values[6].innerHTML = "You are not VIP"
+    }
 }
+
 
 function setAddress(address)
 {   

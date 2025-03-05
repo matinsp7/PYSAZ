@@ -130,6 +130,9 @@ body {
   background-color: white;
   border: 1px solid #ddd;
   border-radius: 140px;
+  border-color: #b92554;
+  /* border-color: #070707; */
+  border-width: 0.5rem;
   padding: 1rem;
   margin: 1rem;
   height: 200px;

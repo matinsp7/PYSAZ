@@ -1,23 +1,9 @@
 const message = document.getElementById("message")
 let result = null
 
-// function getInformation()
-// {
-//     const info = document.getElementsByTagName("input")
-
-
-//     sendPostRequest(info[0].value, info[1].value)
-// }
-
-
 document.getElementById("btn_login").addEventListener("click", function(event){
-
-
     const info = document.getElementsByTagName("input")
-
-
     sendPostRequest(info[0].value, info[1].value)   
-    
 })
 
 async function sendPostRequest(phoneNumber, password) {
@@ -60,12 +46,9 @@ async function sendPostRequest(phoneNumber, password) {
 
         }
 
-        // return result
         
     } catch (error) {
         console.error('Error:', error);
     }
 
 }
-
-// fetchData()

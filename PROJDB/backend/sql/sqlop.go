@@ -43,17 +43,13 @@ func GetUserFromSql(phoneNumber string, passwrod string) (*data.Client,error) {
 		&user.RefferalCode, &user.Password, &user.TimeStamp)
 
 	if err != nil {
-
 		if errors.Is(err,sql.ErrNoRows) {
-
-			return nil, errors.New("phonenumber is inccorect")
-
+			return nil, errors.New("this phone number has not yet been registered")
 		} else {
 			return nil, err
 		}
 	}
 
-	
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(passwrod))
 	
 	if err != nil{
@@ -63,10 +59,32 @@ func GetUserFromSql(phoneNumber string, passwrod string) (*data.Client,error) {
 	return &user, nil
 }
 
+func IsVIP(id any) (bool, error) {
+
+    query := `
+        SELECT EXISTS (
+            SELECT 1 FROM VIP_CLIENTS WHERE ID = ?
+        )
+    `
+
+    var exists bool
+    err := db.QueryRow(query, id).Scan(&exists)
+    
+    if err != nil {
+        // Handle both errors and sql.ErrNoRows
+        if err == sql.ErrNoRows {
+            return false, nil
+        }
+        return false, err
+    }
+
+    return exists, nil
+}
+
 // ==============================                 WARNING                ===========================================
 //------------------------------- be careful beacuse if a user have'not adrress it's not error!!--------------------
 
-func GetAddressOfUser(id any) (map[int]data.Address, error) {
+func GetAddressOfUser (id any) (map[int]data.Address, error) {
 
 	row, err := db.Query("SELECT * FROM ADDRESS WHERE ID = ?", id)
 
@@ -74,7 +92,7 @@ func GetAddressOfUser(id any) (map[int]data.Address, error) {
 
 		if errors.Is(err ,sql.ErrNoRows) {
 
-			return nil, errors.New("you have not registered any address!")
+			return nil, errors.New("you have not registered any address")
 
 		} else {
 			return nil, err

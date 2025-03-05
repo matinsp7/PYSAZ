@@ -80,8 +80,7 @@ func (s *Server) StartServer() error {
 	})
 
 	s.Router.GET("/products", func(c *gin.Context) {
-		var prods []data.Product
-		prods = sql.GetProduct()
+		var prods []data.Product = sql.GetProduct()
 		c.JSON(http.StatusOK, prods)
 	})
 	
