@@ -4,11 +4,12 @@ import (
 	"PROJDB/backend/data"
 	"PROJDB/backend/jwt"
 	"PROJDB/backend/sql"
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
-
 	"github.com/gin-gonic/gin"
+	mapset "github.com/deckarep/golang-set/v2"	
 )
 
 func signup (c *gin.Context){
@@ -27,10 +28,9 @@ func signup (c *gin.Context){
             c.JSON(http.StatusConflict, gin.H{"error": "Phone number already exists."})
             return
         }
+		
 		log.Print(err.Error())
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user."})
-
-        //c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user."})
         return
     }
 
@@ -109,33 +109,9 @@ func getUserBasketShop(c *gin.Context){
 }
 
 
-func findCompatibiltyRamMotherBoard(c *gin.Context){
-	
-	var income data.Compatible
+func compatiblity(c *gin.Context){
 
-	err := c.ShouldBindBodyWithJSON(&income)
-
-	if err != nil{
-		log.Print(err.Error())
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	
-	data, err := sql.CompatibleRamWithMotherBoard(income.Src, income.Model, income.Brand, income.Dest)
-
-	if err != nil{
-		// log.Print(err.Error())
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusOK, data)
-}
-
-
-func findCompatibiltyGpuPower(c *gin.Context){
-
-	var income data.Compatible
+	var income map[int]data.Product
 
 	err := c.ShouldBindBodyWithJSON(&income)
 
@@ -144,105 +120,117 @@ func findCompatibiltyGpuPower(c *gin.Context){
 		return 
 	}
 
-	data, err := sql.CampatibleGpuWithPower(income.Src, income.Model, income.Brand, income.Dest)
-
-	if err !=  nil{
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
+	var functionMap = map[string]data.HandlerFunc{
+		"FindCompatibleWithMotherBoard": sql.FindCompatibleWithMotherBoard,
+		"FindCompatibleWithSSD": sql.FindCompatibleWithSSD, 
+		"FindCompatibleWithRAM": sql.FindCompatibleWithRAM,
+		"FindCompatibleWithGPU": sql.FindCompatibleWithGPU,
+		"FindCompatibleWithPower": sql.FindCompatibleWithPower,
+		"FindCompatibleWithCooler": sql.FindCompatibleWithCooler,
 	}
 
-	c.JSON(http.StatusOK, data)
+	var result = make(map[string][]data.Compatible, 0)
+
+	for _, product := range income{
+		
+		functionName := fmt.Sprintf("FindCompatibleWith%s", product.Category)
+
+		if fn, exists := functionMap[functionName]; exists {
+		
+			res, err := fn(product)
+	
+			if err != nil{
+				log.Print(err)
+				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				return 
+			}
+
+			result[product.Category] = res
+			
+		} else {
+				fmt.Println("Function not found")
+		}
+	} 
+			
+		common := getCommon(result)
+	
+	c.JSON(http.StatusOK, common)
 }
 
-func findCompatibiltySSDMotherBoard(c *gin.Context){
-	
-	var income data.Compatible
-	
-	err := c.ShouldBindBodyWithJSON(&income)
+//check if len == 1
 
-	if err != nil{
-		log.Print(err.Error())
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
+func getCommon(common map[string][]data.Compatible)map[string]mapset.Set[data.Compatible]{
+
+	intersect := mapset.NewSet[data.Compatible]()
+	newCommon := make(map[string]mapset.Set[data.Compatible])
+	mustDeleteExcept := make(map[string]mapset.Set[data.Compatible])
+
+	firstproduct := ""
+
+	if len(common) > 1{
+
+		for key, list := range common{
+
+			firstproduct = key
+
+			for _, data := range list{
+
+				intersect.Add(data)
+			}
+
+			break
+		}
+
+		for key, list := range common{
+
+			if key == firstproduct{continue}
+
+			for _, data := range list{
+
+				if has := intersect.Contains(data); has{
+
+					if mustDeleteExcept[data.Category] == nil{
+						
+						mustDeleteExcept[data.Category] = mapset.NewSet(data)
+					
+					} else{
+						
+						mustDeleteExcept[data.Category].Add(data)
+					}
+
+				} else{intersect.Add(data)}
+
+			}
+		} 
+
+		for _, list := range common{
+
+			for _, data := range list{
+
+				if shouldRemoveExcept, has := mustDeleteExcept[data.Category]; has{
+					
+					if isIn := shouldRemoveExcept.Contains(data); isIn{
+
+						if newCommon[data.Category] == nil{
+
+							newCommon[data.Category] = mapset.NewSet(data)
+						
+						} else {newCommon[data.Category].Add(data)}
+					} 
+				
+				} else {
+
+					if newCommon[data.Category] == nil{
+
+						newCommon[data.Category] = mapset.NewSet(data)
+						
+					} else {newCommon[data.Category].Add(data)}
+				}
+			}
+		}
+
+		return newCommon
 	}
 	
-	data, err := sql.CampatibleSSDWithMotherBoard(income.Src, income.Model, income.Brand, income.Dest)
-
-	if err != nil{
-		log.Print(err.Error())
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return 
-	}
-
-	c.JSON(http.StatusOK, data)
+	return nil
 }
-
-func findCompatibiltyGpuMotherboard(c *gin.Context){
-	
-	var income data.Compatible
-	
-	err := c.ShouldBindBodyWithJSON(&income)
-
-	if err != nil{
-		log.Print(err.Error())
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	
-	data, err := sql.CampatibleSSDWithMotherBoard(income.Src, income.Model, income.Brand, income.Dest)
-
-	if err != nil{
-		log.Print(err.Error())
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return 
-	}
-
-	c.JSON(http.StatusOK, data)
-}
-
-func findCompatibiltyCoolerCPU(c *gin.Context){
-
-	var income data.Compatible
-	
-	err := c.ShouldBindBodyWithJSON(&income)
-
-	if err != nil{
-		log.Print(err.Error())
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	
-	data, err := sql.CampatibleCoolerWithCPU(income.Src, income.Model, income.Brand, income.Dest)
-
-	if err != nil{
-		log.Print(err.Error())
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return 
-	}
-
-	c.JSON(http.StatusOK, data)
-}
-
-
-// func findCompatibiltyCPUMotherBoard(c *gin.Context){
-
-// 	var income data.Compatible
-	
-// 	err := c.ShouldBindBodyWithJSON(&income)
-
-// 	if err != nil{
-// 		log.Print(err.Error())
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-// 		return
-// 	}
-	
-// 	data, err := sql.CampatibleCPUWithMotherBoard(income.Src, income.Model, income.Brand, income.Dest)
-
-// 	if err != nil{
-// 		log.Print(err.Error())
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-// 		return 
-// 	}
-
-// 	c.JSON(http.StatusOK, data)
-// }

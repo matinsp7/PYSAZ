@@ -11,11 +11,9 @@ body {
     align-items: center;
     height: 100vh;
     /* background-color: #9e89ce; */
-    /* background-color: #555; */
-    /* background-color: #1d1f1f; */
-    background-color: #374869;
-    /* background: url("asset/cpu.jpg") no-repeat;    */
-    /* background-size: cover; */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('./asset/cpu.jpg');
+    background-size: cover;
+    background-position: center;
 }
 
 /* Flex container for image and form */
@@ -25,30 +23,37 @@ body {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    width: 425px
 }
 
 /* Style for the image */
-.signup-image {
+/* .signup-image {
     width: 55%;
     height: 600px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Shadow effect */
-}
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+} */
 
 /* Form container */
 .container {
-    background: white;
+    /* background: white; */
+    background-color: transparent;
+    backdrop-filter: blur(20px);
     padding: 30px 40px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 35%;
-    height: 600px;
+    width: 100%;
+    height: 550px;
+    border: 2px solid rgba(255, 255, 255, .2);
+    color: #fff;
+
 }
 
 h2 {
     text-align: center;
     margin-bottom: 20px;
-    color: #333;
+    /* color: #333; */
+    color: #fff;
 }
 
 .input-group {
@@ -62,15 +67,20 @@ h2 {
 label {
     display: block;
     margin-bottom: 5px;
-    color: #555;
+    /* color: #555; */
+    color: #EEEEEE;
 }
 
 input {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 10px;
     font-size: 14px;
+    background-color: transparent;
+    border: 2px solid rgba(255, 255, 255, .2);
+    color: #fff;
+
 }
 
 input:focus {
@@ -87,7 +97,7 @@ input:focus {
     background-color: #f594cc;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 10px;
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
