@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find Compatible Products</title>
+  <link rel="stylesheet" href="./compatibility/compatible.css">
+</head>
+<body>
+  <!-- Header Section -->
+  <header class="header">
+    <h2>Find Compatible Products</h2>
+    <p>Search for a product and discover compatible components.</p>
+  </header>
+
+  <!-- Search Bar -->
+  <section class="search-section">
+    <input type="text" id="search-input" placeholder="Enter product name or model (Intel i7-13700K, NVIDIA RTX 4090)">
+    <button id="search-button">🔍Search</button>
+    <button id="clear">Clear</button>
+  </section>
+
+  <!-- Filter Options -->
+  <section class="filter-section">
+    <h3>Filter Results By:</h3>
+    <div class="filters">
+      <label><input type="radio" name="filter" value="all" checked> All Components</label>
+      <label><input type="radio" name="filter" value="CPU"> CPU</label>
+      <label><input type="radio" name="filter" value="GPU"> GPU</label>
+      <label><input type="radio" name="filter" value="Motherboard"> Motherboard</label>
+      <label><input type="radio" name="filter" value="RAM"> RAM</label>
+      <label><input type="radio" name="filter" value="SSD"> Storage</label>
+    </div>
+  </section>
+
+  <!-- Results Section -->
+  <section class="results-section">
+    <h2 id="results-title">Compatible Products for <span id="product-name">...</span></h2>
+    <div class="view-toggle">
+      <button id="grid-view"><img src="grid-icon.png" alt="Grid View"></button>
+      <button id="list-view"><img src="list-icon.png" alt="List View"></button>
+    </div>
+    <div id="results-container" class="grid-view">
+      <!-- Product Cards will be dynamically inserted here -->
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <!-- <footer class="footer">
+    <p>&copy; 2023 Your Shop Name. All rights reserved.</p>
+  </footer> -->
+
+  <script src="./compatibility/compatible.js"></script>
+</body>
+</html>

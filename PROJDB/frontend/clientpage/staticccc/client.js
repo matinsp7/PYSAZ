@@ -105,13 +105,13 @@ function setBaskets(baskets)
 {
     const flipcarts = document.getElementsByClassName("flip-cards")
     const NoOrder = document.getElementById("NoOrder")
-    NoOrder.style.display = "none"
-
+    
     let counter = 0;  
-
+    
     
     for(let key in baskets)
     {   
+        NoOrder.style.display = "none"
         flipcarts[key - 1].style.display = "block"  
 
         const values = document.getElementsByClassName("values-flip-cards")
@@ -215,8 +215,10 @@ async function getBaskets() {
         if (response.status === 200)
         {   
             const result = await response.json()
-            console.log(result)
-            setBaskets(result)
+            
+
+            if (result["error"] == null){setBaskets(result)}
+    
         }
 
         else 
@@ -257,7 +259,7 @@ async function getBasketInfo(){
         if (response.status === 200)
         {   
             const result = await response.json()
-            console.log(result)
+            console.log("salam",result)
         }
 
         else

@@ -8,8 +8,9 @@ import (
 	"log"
 	"net/http"
 	"strings"
+
+	mapset "github.com/deckarep/golang-set/v2"
 	"github.com/gin-gonic/gin"
-	mapset "github.com/deckarep/golang-set/v2"	
 )
 
 func signup (c *gin.Context){
@@ -103,7 +104,14 @@ func getUserBasketShop(c *gin.Context){
 	basket, err := sql.GetUserBasketShop(ID)
 
 	if err != nil{
-		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		
+		if err.Error() == "You haven't any Order"{
+
+			c.JSON(http.StatusOK, gin.H{"error":err.Error()})
+			return 
+		}
+
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return 
 	}
 
@@ -113,9 +121,11 @@ func getUserBasketShop(c *gin.Context){
 
 func compatiblity(c *gin.Context){
 
-	var income map[int]data.Product
+	var income map[int]data.Compatible
 
 	err := c.ShouldBindBodyWithJSON(&income)
+
+	log.Print("********************", income)
 
 	if err != nil{
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -123,12 +133,13 @@ func compatiblity(c *gin.Context){
 	}
 
 	var functionMap = map[string]data.HandlerFunc{
-		"FindCompatibleWithMotherBoard": sql.FindCompatibleWithMotherBoard,
+		"FindCompatibleWithMotherboard": sql.FindCompatibleWithMotherBoard,
 		"FindCompatibleWithSSD": sql.FindCompatibleWithSSD, 
 		"FindCompatibleWithRAM": sql.FindCompatibleWithRAM,
 		"FindCompatibleWithGPU": sql.FindCompatibleWithGPU,
 		"FindCompatibleWithPower": sql.FindCompatibleWithPower,
 		"FindCompatibleWithCooler": sql.FindCompatibleWithCooler,
+		"FindCompatibleWithCPU": sql.FindCompatibleWithCPU,
 	}
 
 	var result = make(map[string][]data.Compatible, 0)
@@ -136,6 +147,8 @@ func compatiblity(c *gin.Context){
 	for _, product := range income{
 		
 		functionName := fmt.Sprintf("FindCompatibleWith%s", product.Category)
+
+		log.Print(functionName)
 
 		if fn, exists := functionMap[functionName]; exists {
 		
@@ -147,14 +160,29 @@ func compatiblity(c *gin.Context){
 				return 
 			}
 
-			result[product.Category] = res
+			if len(res) >= 1{
+
+				result[product.Category] = res
+			} else{
+				c.JSON(http.StatusOK, "no product found!")
+				return 
+			}
+
 			
 		} else {
-				fmt.Println("Function not found")
+			fmt.Println("Function not found")
+			c.JSON(http.StatusBadRequest, gin.H{"error":"this category not exist"})
+			return 
 		}
 	} 
-			
+		
+		if len(result) == 1{
+			c.JSON(http.StatusOK, result)
+			return
+		}
+		
 		common := getCommon(result)
+
 	
 	c.JSON(http.StatusOK, common)
 }

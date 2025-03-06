@@ -117,10 +117,6 @@ func GetUserBasketShop(id any) (map[int]data.Basket, error) {
 
 	row, err := db.Query(query, id)
 
-	if errors.Is(err, sql.ErrNoRows) {
-		return nil, errors.New("tehre is nothing to show!")
-	}
-
 	if err != nil {
 		log.Print(err)
 		return nil, err
@@ -180,11 +176,15 @@ func GetUserBasketShop(id any) (map[int]data.Basket, error) {
 		counter++
 	}
 
+	if len(basket) == 0{
+		err = errors.New("You haven't any Order")
+	}
+
 	return basket, err
 }
 
 
-func FindCompatibleWithMotherBoard(product data.Product) ([]data.Compatible, error) {
+func FindCompatibleWithMotherBoard(product data.Compatible) ([]data.Compatible, error) {
 
 	products := make([]data.Compatible, 0)
 
@@ -192,30 +192,29 @@ func FindCompatibleWithMotherBoard(product data.Product) ([]data.Compatible, err
 
 
 	if err != nil {
-		// log.Print(err.Error())
-		// return nil, err
+		return nil, err
 	}
 
 	SSD, err := CompatibleSSDWithMotherBoard("SSD_ID", product.Model, product.Brand, "Motherboard_ID")
 
 
 	if err != nil {
-		// log.Print(err.Error())
-		// return nil, err
+		log.Print(err.Error())
+		return nil, err
 	}
 
 	GPU, err := CompatibleGPUWithMotherboard("GPU_ID", product.Model, product.Brand, "Motherboard_ID")
 
 	if err != nil {
-		// log.Print(err.Error())
-		// return nil, err
+		log.Print(err.Error())
+		return nil, err
 	}
 
 	CPU, err := CompatibleCPUWithMotehrBoard("CPU_ID", product.Model, product.Brand, "Motherboard_ID")
 
 	if err != nil {
-		// log.Print(err.Error())
-		// return nil, err
+		log.Print(err.Error())
+		return nil, err
 	}
 
 	products = append(products, CPU...)
@@ -227,7 +226,7 @@ func FindCompatibleWithMotherBoard(product data.Product) ([]data.Compatible, err
 	return products, nil
 }
 
-func FindCompatibleWithSSD(product data.Product) ([]data.Compatible, error) {
+func FindCompatibleWithSSD(product data.Compatible) ([]data.Compatible, error) {
 
 	products := make([]data.Compatible, 0)
 
@@ -235,8 +234,8 @@ func FindCompatibleWithSSD(product data.Product) ([]data.Compatible, error) {
 
 
 	if err != nil {
-		// log.Print(err.Error())
-		// return nil, err
+		log.Print(err.Error())
+		return nil, err
 	}
 
 	products = append(products, Motherboard...)
@@ -244,7 +243,7 @@ func FindCompatibleWithSSD(product data.Product) ([]data.Compatible, error) {
 	return products, nil
 }
 
-func FindCompatibleWithCPU(product data.Product) ([]data.Compatible, error) {
+func FindCompatibleWithCPU(product data.Compatible) ([]data.Compatible, error) {
 
 	products := make([]data.Compatible, 0)
 
@@ -252,15 +251,15 @@ func FindCompatibleWithCPU(product data.Product) ([]data.Compatible, error) {
 
 
 	if err != nil {
-		// log.Print(err.Error())
-		// return nil, err
+		log.Print(err.Error())
+		return nil, err
 	}
 
 	Motherboard, err := CompatibleCPUWithMotehrBoard("Motherboard_ID", product.Model, product.Brand, "CPU_ID")
 
 	if err != nil {
-		// log.Print(err.Error())
-		// return nil, err
+		log.Print(err.Error())
+		return nil, err
 	}
 
 
@@ -270,7 +269,7 @@ func FindCompatibleWithCPU(product data.Product) ([]data.Compatible, error) {
 	return products, nil
 }
 
-func FindCompatibleWithRAM(product data.Product) ([]data.Compatible, error) {
+func FindCompatibleWithRAM(product data.Compatible) ([]data.Compatible, error) {
 
 	products := make([]data.Compatible, 0)
 
@@ -278,8 +277,8 @@ func FindCompatibleWithRAM(product data.Product) ([]data.Compatible, error) {
 
 
 	if err != nil {
-		// log.Print(err.Error())
-		// return nil, err
+		log.Print(err.Error())
+		return nil, err
 	}
 
 	products = append(products, Motherboard...)
@@ -287,7 +286,7 @@ func FindCompatibleWithRAM(product data.Product) ([]data.Compatible, error) {
 	return products, nil
 }
 
-func FindCompatibleWithGPU(product data.Product) ([]data.Compatible, error) {
+func FindCompatibleWithGPU(product data.Compatible) ([]data.Compatible, error) {
 
 	products := make([]data.Compatible, 0)
 
@@ -295,8 +294,8 @@ func FindCompatibleWithGPU(product data.Product) ([]data.Compatible, error) {
 
 
 	if err != nil {
-		// log.Print(err.Error())
-		// return nil, err
+		log.Print(err.Error())
+		return nil, err
 	}
 
 	Power, err := CompatibleGPUWithPower("Power_ID", product.Model, product.Brand, "GPU_ID")
@@ -308,7 +307,7 @@ func FindCompatibleWithGPU(product data.Product) ([]data.Compatible, error) {
 }
 
 
-func FindCompatibleWithPower(product data.Product) ([]data.Compatible, error) {
+func FindCompatibleWithPower(product data.Compatible) ([]data.Compatible, error) {
 
 	products := make([]data.Compatible, 0)
 
@@ -316,8 +315,8 @@ func FindCompatibleWithPower(product data.Product) ([]data.Compatible, error) {
 
 
 	if err != nil {
-		// log.Print(err.Error())
-		// return nil, err
+		log.Print(err.Error())
+		return nil, err
 	}
 
 	products = append(products, GPU...)
@@ -326,7 +325,7 @@ func FindCompatibleWithPower(product data.Product) ([]data.Compatible, error) {
 }
 
 
-func FindCompatibleWithCooler(product data.Product) ([]data.Compatible, error) {
+func FindCompatibleWithCooler(product data.Compatible) ([]data.Compatible, error) {
 
 	products := make([]data.Compatible, 0)
 
@@ -334,8 +333,8 @@ func FindCompatibleWithCooler(product data.Product) ([]data.Compatible, error) {
 
 
 	if err != nil {
-		// log.Print(err.Error())
-		// return nil, err
+		log.Print(err.Error())
+		return nil, err
 	}
 
 	products = append(products, CPU...)
@@ -465,7 +464,7 @@ func FindProductID(brand string, model string) (int, error) {
 	err := db.QueryRow("SELECT ID FROM PRODUCT WHERE Brand = ? and Model = ?", brand, model).Scan(&productID)
 
 	if errors.Is(err, sql.ErrNoRows) {
-		return 0, errors.New("tehre is nothing to show!")
+		return 0, errors.New("this product not exist")
 	}
 
 	if err != nil {

@@ -83,6 +83,12 @@ func (s *Server) StartServer() error {
 		var prods []data.Product = sql.GetProduct()
 		c.JSON(http.StatusOK, prods)
 	})
+
+	s.Router.Static("/compatibility", "./frontend/compatible/compatibility")
+	s.Router.GET("/compatibility", func(ctx *gin.Context) {
+		s.Router.LoadHTMLGlob("./frontend/compatible/compatible.html")
+		ctx.HTML(http.StatusOK, "compatible.html", gin.H{"title": "compatibility"})
+	})
 	
 
 	err := s.Router.Run(s.AddresListen)

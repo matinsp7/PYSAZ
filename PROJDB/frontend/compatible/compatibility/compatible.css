@@ -1,0 +1,221 @@
+body {
+    font-family: 'Poppins', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+.header {
+    text-align: center;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header h2 {
+    font-size: 2rem;
+    margin: 0px;
+    margin-top: 5px ;
+}
+
+.header p {
+    font-size: 1.2rem;
+    margin-top: 10px;
+}
+
+.search-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px 0;
+}
+
+#search-input {
+width: 400px;
+padding: 15px;
+font-size: 1rem;
+border: 2px solid #ddd;
+border-radius: 8px;
+transition: border-color 0.3s ease;
+}
+
+#search-input:focus {
+border-color: #6a11cb;
+outline: none;
+}
+
+#search-button {
+padding: 15px 30px;
+font-size: 1rem;
+margin-left: 10px;
+background: linear-gradient(135deg, #6a11cb, #2575fc);
+color: white;
+border: none;
+border-radius: 8px;
+cursor: pointer;
+transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#search-button:hover {
+transform: scale(1.05);
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#clear {
+    padding: 15px 30px;
+    font-size: 1rem;
+    margin-left: 10px;
+    background: #AD1457; /* Red color for emphasis */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  #clear:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+
+.filter-section {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.filters input {
+    /* accent-color: red; */
+    accent-color: #512DA8;
+    /* accent-color: #004D40; */
+    /* accent-color: #AD1457; */
+    /* accent-color: #1A237E; */
+    /* accent-color: #4CAF50; */
+}
+
+.filters label {
+    margin: 0 13px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.results-section {
+    padding: 20px;
+    text-align: center;
+}
+
+#results-title {
+font-size: 1.8rem;
+margin-bottom: 20px;
+}
+
+.view-toggle {
+    margin-bottom: 20px;
+}
+
+.view-toggle button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #6a11cb;
+    transition: color 0.3s ease;
+}
+
+.view-toggle button:hover {
+    color: #2575fc;
+}
+
+.grid-view {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 25px;
+}
+
+.product-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+}
+
+.product-card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.product-card h3 {
+    font-size: 1.2rem;
+    margin: 10px 0;
+}
+
+.product-card p {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.product-card button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.product-card button:hover {
+    transform: scale(1.05);
+}
+
+.footer {
+    text-align: center;
+    padding: 15px;
+    background: #2575fc;
+    color: white;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.list-view {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .list-view .product-card {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    gap: 20px;
+  }
+  
+  .list-view .product-card img {
+    max-width: 100px;
+    height: auto;
+    border-radius: 8px;
+  }
+  
+  .list-view .product-card h3 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  
+  .list-view .product-card p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+  }

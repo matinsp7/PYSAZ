@@ -56,4 +56,4 @@ type Product struct {
 	Image_address string `json:"Image_address"`
 }
 
-type HandlerFunc func(product Product)([]Compatible, error)
+type HandlerFunc func(product Compatible)([]Compatible, error)
