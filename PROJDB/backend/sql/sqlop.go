@@ -60,26 +60,27 @@ func GetUserFromSql(phoneNumber string, passwrod string) (*data.Client, error) {
 	return &user, nil
 }
 
-func IsVIP(id any) (bool, error) {
+func IsVIP(id any) (string, error) {
 
     query := `
-        SELECT EXISTS (
-            SELECT 1 FROM VIP_CLIENTS WHERE ID = ?
-        )
+            SELECT Subcription_expiration_time FROM VIP_CLIENTS WHERE ID = ?
     `
+	log.Print()
 
-    var exists bool
-    err := db.QueryRow(query, id).Scan(&exists)
-    
+    // var exists bool
+	// var a int
+	var b string
+    err := db.QueryRow(query, id).Scan(&b)
+    log.Print("b: --------->", b)
     if err != nil {
         // Handle both errors and sql.ErrNoRows
         if err == sql.ErrNoRows {
-            return false, nil
+            return "", nil
         }
-        return false, err
+        return "", err
     }
 
-    return exists, nil
+    return b, nil
 }
 
 // ==============================                 WARNING                ===========================================

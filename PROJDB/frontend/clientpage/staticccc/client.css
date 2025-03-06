@@ -188,20 +188,6 @@ main {
     width: 100%;
 }
 
-/* .flip-card-back > img
-{
-    width: 35%;
-    height: 40%;
-    padding-top: 10px;
-} */
-
-/* .flip-card-back > h3
-{
-    text-align: left;
-    padding-left: 10px;
-    padding-top: 15px;
-} */
-
 .flip-card-back > h5
 {   
     position: relative;
@@ -210,41 +196,6 @@ main {
     padding-top: 10px;
     font-size: 14px;
 }
-
-/* .flip-cards-info
-{
-    padding-top: 10px;
-    padding-left: 10px;
-    width: 85%;
-} */
-
-/* .flip-cards-rate
-{
-    display: flex;
-    align-items: center;
-    padding-top: 5px;
-    gap: 5px;
-}
-
-.flip-cards-rate > h4
-{
-    font-size: 16px;
-}
-
-.price
-{
-    display: flex;
-    align-items: center;
-    gap: 2px;
-}
-
-
-.star
-{   
-    color: #FDD835;
-    width: 20px;
-    height: 20px;
-} */
 
 .flip-cards-button
 {   
@@ -264,10 +215,6 @@ main {
     border-radius: 2px;
     outline: none;
     border: 2px solid #2DA851;
-    /* background-color: #8F2DA8;
-    background-color: #A8512D; */
-    /* background-color: #2DA851; */
-    /* color: #EEEEEE; */
     background-color: transparent;
     color: #4ADE80;
 
@@ -281,14 +228,18 @@ main {
     transition: 400ms;
 }
 
-
-.checkout-button {
-    background-color: #28a745;
+.VIPBtn {
+    /* background-color: #28a745; */
+    background-color: #007bff;
     color: #fff;
     border: none;
     padding: 10px 15px;
     border-radius: 5px;
     cursor: pointer;
+    margin-left: 1rem;
+}
+.VIPBtn:hover {
+    background-color: #0056b3;
 }
 
 .checkout-button:hover {
@@ -305,7 +256,6 @@ main {
     text-align: center;
     padding-top: 8px;
     border-radius: 10px;
-
 }
 
 

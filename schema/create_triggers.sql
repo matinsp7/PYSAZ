@@ -330,12 +330,46 @@ BEGIN
 END;//
 DELIMITER ;
 
-        
-
-
-
 
 -- ترنز اکشن ها فقط مربوط به سبد خرید نیستند و چک شوند
 
-        
+     
+DELIMITER //
+CREATE TRIGGER After_REFERS_Insert
+AFTER INSERT ON REFERS
+FOR EACH ROW
+BEGIN
 
+    DECLARE current_referrer_id INT;
+    DECLARE discount_amount DECIMAL(5,2);
+    DECLARE discount_code INT;
+
+    SET current_referrer_id = NEW.Referee; 
+    SET discount_amount = 50.00;
+
+    WHILE current_referrer_id IS NOT NULL DO
+        -- Generate a unique discount code
+        SET discount_code = FLOOR(RAND() * 1000000);
+
+        IF (discount_amount >= 1) THEN
+            INSERT INTO DISCOUNT_CODE (Code, Amount, Code_limit, Usage_count, Expiration_date)
+            VALUES (discount_code, discount_amount, 1000000, 1, DATE_ADD(CURDATE(), INTERVAL 7 DAY));
+        ELSE 
+            INSERT INTO DISCOUNT_CODE (Code, Amount, Code_limit, Usage_count, Expiration_date)
+            VALUES (discount_code, 50000, NULL, 1, DATE_ADD(CURDATE(), INTERVAL 7 DAY));
+        END IF;
+
+        -- Link the discount code to the referrer in PRIVATE_CODE table
+        INSERT INTO PRIVATE_CODE (Code, ID, Ttimestamp)
+        VALUES (discount_code, current_referrer_id, NOW());
+
+        -- Update variables for the next iteration
+        SET current_referrer_id = (
+            SELECT Referrer
+            FROM REFERS
+            WHERE Referee = current_referrer_id
+        );
+        SET discount_amount = discount_amount / 2;
+    END WHILE;
+END //
+DELIMITER ;
