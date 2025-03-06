@@ -62,25 +62,18 @@ func GetUserFromSql(phoneNumber string, passwrod string) (*data.Client, error) {
 
 func IsVIP(id any) (string, error) {
 
-    query := `
-            SELECT Subcription_expiration_time FROM VIP_CLIENTS WHERE ID = ?
-    `
-	log.Print()
+    query := `SELECT Subcription_expiration_time FROM VIP_CLIENTS WHERE ID = ?`
 
-    // var exists bool
-	// var a int
-	var b string
-    err := db.QueryRow(query, id).Scan(&b)
-    log.Print("b: --------->", b)
+	var date string
+    err := db.QueryRow(query, id).Scan(&date)
     if err != nil {
-        // Handle both errors and sql.ErrNoRows
         if err == sql.ErrNoRows {
             return "", nil
         }
         return "", err
     }
 
-    return b, nil
+    return date, nil
 }
 
 // ==============================                 WARNING                ===========================================
@@ -530,4 +523,19 @@ func GetProduct () ([]data.Product) {
 		products = append(products, p)
 	}
 	return products;
+}
+
+func NumberOfIntroduction (id int) int {
+	query := `
+			SELECT COUNT(*)
+			FROM REFERS 
+			WHERE Referrer = ?
+	`
+	var num int
+	err := db.QueryRow(query, id).Scan(&num)
+    if err != nil {
+        log.Print(err.Error())
+		return -5
+    }
+	return num
 }

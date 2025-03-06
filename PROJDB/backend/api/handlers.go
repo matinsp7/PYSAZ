@@ -72,7 +72,9 @@ func login (c *gin.Context){
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"token": tokenstring, "user": user, "isVIP": VIP})
+	num := sql.NumberOfIntroduction(user.ID)
+
+	c.JSON(http.StatusOK, gin.H{"token": tokenstring, "user": user, "isVIP": VIP, "NumberOfIntroduction": num})
 }
 
 

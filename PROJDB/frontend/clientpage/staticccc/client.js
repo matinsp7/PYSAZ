@@ -38,6 +38,7 @@ function setValueInHtml()
     const result = JSON.parse(userData)
     const userResult = result["user"]
     const isVIP = result["isVIP"]
+    const numOfIntr = result["NumberOfIntroduction"]
     
     const values = document.getElementsByClassName("values")
     // const valuess = document.getElementsByClassName("valuess")
@@ -48,24 +49,25 @@ function setValueInHtml()
     values[3].innerHTML = userResult["RefferalCode"]
     values[4].innerHTML = userResult["WalletBalance"]
     values[5].innerHTML = userResult["TimeStamp"]
+    values[6].innerHTML = numOfIntr
 
     if (isVIP === '') {
-        values[6].innerHTML = "You are not VIP"
-        values[6].style.color = "red"
-        const ss = document.getElementsByClassName ("info")
+        values[7].innerHTML = "You are not VIP"
+        values[7].style.color = "red"
+        const infos = document.getElementsByClassName ("info")
         const btn = document.createElement('button')
         btn.className = 'VIPBtn'
         btn.innerHTML = "Become a VIP"
-        ss[6].append(btn)
+        infos[7].append(btn)
     }
     else {
-        values[6].innerHTML = "You are VIP until"
-        values[6].style.color = "green"
-        const ss = document.getElementsByClassName ("info")
+        values[7].innerHTML = "You are VIP until"
+        values[7].style.color = "green"
+        const infos = document.getElementsByClassName ("info")
         const EXDate = document.createElement('span')
         EXDate.innerHTML = isVIP
         EXDate.style.color = "green"
-        ss[6].append(EXDate)
+        infos[7].append(EXDate)
     }
 }
 
