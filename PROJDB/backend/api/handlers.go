@@ -130,7 +130,11 @@ func getUserBasketShop(c *gin.Context){
 	c.JSON(http.StatusOK, basket)
 }
 
-func saveAddress (c *gin.Context){
+func NumberOfReferralCodes() {
+
+}
+
+func saveAddress(c *gin.Context){
 	ID, _ := c.Get("ID")
 
 	var income data.Address

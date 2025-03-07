@@ -583,7 +583,3 @@ func InsertAdress(id any, address data.Address) error{
 func NumberOfReferralCodes () {
 
 }
-
-func NumberOfReferralCodes () {
-
-}
