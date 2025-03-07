@@ -109,6 +109,18 @@ func getDisCodes(c *gin.Context){
 	c.JSON(http.StatusOK, gin.H{"codes": codes})
 }
 
+func getShoppingCart (c *gin.Context) {
+	ID, _ := c.Get("ID")
+
+	carts, err := sql.GetShoppingCart(ID)
+	if err != nil {
+		log.Print(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H {"carts": carts})
+}
+
 func getUserBasketShop(c *gin.Context){
 
 	ID, _ := c.Get("ID")

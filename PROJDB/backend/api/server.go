@@ -103,6 +103,7 @@ func ClientApi(r *Server){
 	Group.POST("/login", login)
 	Group.GET("/getAddress",  getAddress)
 	Group.GET("/getDisCodes", getDisCodes)
+	Group.GET("/getShoppingCart", getShoppingCart)
 	Group.POST("/getBaskets", getUserBasketShop)
 	Group.POST("/addAddress", saveAddress)
 }

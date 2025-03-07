@@ -28,7 +28,13 @@ type DisCode struct {
 	Expiration_date string	`json:"Expiration_date"`
 }
 
-type Address struct{
+type ShoppingCart struct {
+	ID int			`json:"id"`
+    Number int		`json:"number"`
+    Status string	`json:"status"`
+}
+
+type Address struct {
 
 	Province string		`json:"province"`
 	Remainder string	`json:"remainder"`

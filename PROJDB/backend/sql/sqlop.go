@@ -110,7 +110,7 @@ func GetAddressOfUser (id any) (map[int]data.Address, error) {
 }
 
 func GetDisCodes (id any) ([]data.DisCode, error) {
-	
+
 	query := `
 		select DISCOUNT_CODE.Code, Amount, Code_limit, Usage_count, Expiration_date 
 		from  DISCOUNT_CODE JOIN PRIVATE_CODE ON DISCOUNT_CODE.Code = PRIVATE_CODE.Code
@@ -132,11 +132,53 @@ func GetDisCodes (id any) ([]data.DisCode, error) {
 	for row.Next() {
 		var tmp data.DisCode
 		err := row.Scan(&tmp.Code, &tmp.Amount, &tmp.Code_limit, &tmp.Usage_count, &tmp.Expiration_date)
-		log.Print("tmp: ", tmp)
 		if err != nil {log.Print(err)}
 		codes = append(codes, tmp)
 	}
 	return codes, nil
+}
+
+func GetShoppingCart (id any) ([]data.ShoppingCart, error) {
+	log.Print("hiiiiio")
+	isVIP, err := IsVIP(id)
+	if err != nil {
+		log.Print(err.Error())
+		return nil, err
+	}
+	var query string
+	if isVIP == "" {
+		query = `
+			select * 
+			from SHOPPING_CART
+			WHERE ID = ? AND Number = 1
+		`
+	} else {
+		query = `
+			select * 
+			from SHOPPING_CART
+			WHERE ID = ?
+		`
+	}
+
+	row, err := db.Query(query, id)
+	if err != nil {
+		log.Print(err.Error())
+		return nil, err
+	}
+
+	log.Print("hiiiiio2")
+
+	var carts []data.ShoppingCart
+	for row.Next() {
+		log.Print("hiiiiio3")
+		var cart data.ShoppingCart 
+		row.Scan(&cart.ID, &cart.Number, &cart.Status)
+		log.Print(cart)
+		carts = append(carts, cart)
+	}
+
+	log.Print("hiiiiio4")
+	return carts, nil
 }
 
 // ------------------------myabe need set a value for emptiness-------------------------

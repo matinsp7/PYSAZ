@@ -216,7 +216,6 @@ async function setDisCodes (codes) {
         Code.innerHTML = codeList[key].Code
         Amount.innerHTML = codeList[key].Amount
         if (codeList[key].Code_limit === null) {
-            console.log("Yooooooooo")
             Code_limit.innerHTML = "No limit"
         }
         else {
@@ -231,6 +230,92 @@ async function setDisCodes (codes) {
         
     }
 }
+
+async function getCarts() {
+    const url = "/user/getShoppingCart"
+
+    const userData = localStorage.getItem("userData")
+    const result = JSON.parse(userData)
+    const token = result["token"]
+
+    try {
+
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {"Authorization": token} 
+        })
+
+        if (response.status === 200) {   
+            carts = await response.json()
+            setCarts(carts)
+        }
+    
+        else
+        {   
+            const result = await response.json()
+            message.style.display = "inline"
+            message.style.backgroundColor = "#EC407A"
+            message.style.color = "#212121"
+            message.innerHTML = result["error"]
+            console.assert.log(result["error"])
+            setTimeout(function(){message.style.display = "none"}, 2000) 
+        }
+
+    } catch(error) {
+        console.log(error) 
+        message.style.display = "inline"
+        message.style.backgroundColor = "#EC407A"
+        message.style.color = "#212121"
+        message.innerHTML = error
+        setTimeout(function(){message.style.display = "none"}, 2000)
+    }
+
+}
+
+async function setCarts (carts) {
+    console.log(201)
+    console.log(carts)
+    console.log(carts["carts"])
+    const cartList = carts["carts"]
+    // console.log(codeList[0])
+    // console.log(codeList[0].Code)
+
+    const container = document.getElementById("shopTable")
+
+    for (let key in cartList){
+
+        console.log("key: ", key)
+
+        const openTr = document.createElement("tr")
+
+        
+        const number = document.createElement("td")
+        const status = document.createElement("td")
+
+
+        number.innerHTML = cartList[key].number
+        // const tdTable = document.get("order-table")
+        if (cartList[key].status === "active") {
+            status.innerHTML = "active"
+            status.style.backgroundColor = "green"
+        }
+        else if (cartList[key].status === "locked"){
+            status.innerHTML = "locked"
+            status.style.backgroundColor = "blue"
+        }
+        else {
+            status.innerHTML = "blocked"
+            status.style.backgroundColor = "red"
+        }
+
+        openTr.append(number, status)
+
+        container.append(openTr)
+        
+    }
+}
+
+
 function setBaskets(baskets)
 {
     const flipcarts = document.getElementsByClassName("flip-cards")
@@ -416,6 +501,7 @@ async function getCompatible()
 
 getAddress()
 getDisCodes()
+getCarts()
 setValueInHtml()
 // getBasketInfo()
 getBaskets()
