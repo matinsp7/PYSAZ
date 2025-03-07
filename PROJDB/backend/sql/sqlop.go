@@ -537,4 +537,15 @@ func NumberOfIntroduction (id int) int {
 		return -5
     }
 	return num
+} 
+
+func InsertAdress(id any, address data.Address) error{
+	query := `
+		INSERT INTO ADDRESS VALUES(?,?,?)
+	` 
+	_,err := db.Exec(query,  id, address.Province, address.Remainder)
+	if err != nil{
+		return err
+	}
+	return nil
 }

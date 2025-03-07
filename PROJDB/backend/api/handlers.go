@@ -118,6 +118,25 @@ func getUserBasketShop(c *gin.Context){
 	c.JSON(http.StatusOK, basket)
 }
 
+func saveAddress (c *gin.Context){
+	ID, _ := c.Get("ID")
+
+	var income data.Address
+	err := c.ShouldBindBodyWithJSON(&income)
+
+	if err != nil{
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err = sql.InsertAdress(ID, income)
+	if err != nil{
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, "")
+}
+
 
 func compatiblity(c *gin.Context){
 

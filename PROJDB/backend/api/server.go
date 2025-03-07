@@ -103,6 +103,7 @@ func ClientApi(r *Server){
 	Group.POST("/login", login)
 	Group.GET("/getAddress",  getAddress)
 	Group.POST("/getBaskets", getUserBasketShop)
+	Group.POST("/addAddress", saveAddress)
 }
 
 func CompatibilityFinder(r *Server){
