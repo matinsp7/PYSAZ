@@ -71,6 +71,51 @@ function setValueInHtml()
     }
 }
 
+async function getAddress()
+{   
+
+    const url = "/user/getAddress"
+
+    const userData = localStorage.getItem("userData")
+    const result = JSON.parse(userData)
+    const token = result["token"]
+
+
+    try
+    {
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {"Authorization": token} 
+        })
+
+        if (response.status === 200)
+        {   
+
+            address = await response.json()
+            setAddress(address)
+        }
+
+        else
+        {   
+            const result = await response.json()
+            message.style.display = "inline"
+            message.style.backgroundColor = "#EC407A"
+            message.style.color = "#212121"
+            message.innerHTML = result["error"]
+            setTimeout(function(){message.style.display = "none"}, 2000) 
+        }
+
+    }
+
+    catch(error)
+    {
+        message.style.display = "inline"
+        message.style.backgroundColor = "#EC407A"
+        message.style.color = "#212121"
+        message.innerHTML = error
+        setTimeout(function(){message.style.display = "none"}, 2000) 
+    }
+}
 
 function setAddress(address)
 {   
@@ -101,6 +146,91 @@ function setAddress(address)
     }
 }
 
+async function getDisCodes () {
+    const url = "/user/getDisCodes"
+
+    const userData = localStorage.getItem("userData")
+    const result = JSON.parse(userData)
+    const token = result["token"]
+
+
+    try
+    {
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {"Authorization": token} 
+        })
+
+        if (response.status === 200)
+        {   
+            codes = await response.json()
+            setDisCodes (codes)
+        }
+
+        else
+        {   
+            const result = await response.json()
+            message.style.display = "inline"
+            message.style.backgroundColor = "#EC407A"
+            message.style.color = "#212121"
+            message.innerHTML = result["error"]
+            setTimeout(function(){message.style.display = "none"}, 2000) 
+        }
+
+    }
+
+    catch(error)
+    {
+        console.log(error) 
+        message.style.display = "inline"
+        message.style.backgroundColor = "#EC407A"
+        message.style.color = "#212121"
+        message.innerHTML = error
+        setTimeout(function(){message.style.display = "none"}, 2000)
+    }
+}
+
+async function setDisCodes (codes) {
+    console.log(codes)
+    console.log(codes["codes"])
+    const codeList = codes["codes"]
+    console.log(codeList[0])
+    console.log(codeList[0].Code)
+
+    const container = document.getElementById("codeTable")
+
+    for (let key in codeList){
+
+        console.log("key: ", key)
+
+        const openTr = document.createElement("tr")
+
+        
+        const Code = document.createElement("td")
+        const Amount = document.createElement("td")
+        const Code_limit = document.createElement("td")
+        const Usage_count = document.createElement("td")
+        const Expiration_date = document.createElement("td")
+
+
+        Code.innerHTML = codeList[key].Code
+        Amount.innerHTML = codeList[key].Amount
+        if (codeList[key].Code_limit === null) {
+            console.log("Yooooooooo")
+            Code_limit.innerHTML = "No limit"
+        }
+        else {
+            Code_limit.innerHTML = codeList[key].Code_limit
+        }
+        Usage_count.innerHTML = codeList[key].Usage_count
+        Expiration_date.innerHTML = codeList[key].Expiration_date
+
+        openTr.append(Code, Amount, Code_limit, Usage_count, Expiration_date)
+
+        container.append(openTr)
+        
+    }
+}
 function setBaskets(baskets)
 {
     const flipcarts = document.getElementsByClassName("flip-cards")
@@ -147,53 +277,6 @@ function setBaskets(baskets)
             
             back[key - 1].append(h5)
         }
-    }
-}
-
-
-async function getAddress()
-{   
-
-    const url = "/user/getAddress"
-
-    const userData = localStorage.getItem("userData")
-    const result = JSON.parse(userData)
-    const token = result["token"]
-
-
-    try
-    {
-        const response = await fetch(url, {
-            method: "GET",
-            headers: {"Authorization": token} 
-        })
-
-        if (response.status === 200)
-        {   
-
-            address = await response.json()
-            setAddress(address)
-        }
-
-        else
-        {   
-            const result = await response.json()
-            message.style.display = "inline"
-            message.style.backgroundColor = "#EC407A"
-            message.style.color = "#212121"
-            message.innerHTML = result["error"]
-            setTimeout(function(){message.style.display = "none"}, 2000) 
-        }
-
-    }
-
-    catch(error)
-    {
-        message.style.display = "inline"
-        message.style.backgroundColor = "#EC407A"
-        message.style.color = "#212121"
-        message.innerHTML = error
-        setTimeout(function(){message.style.display = "none"}, 2000) 
     }
 }
 
@@ -330,6 +413,7 @@ async function getCompatible()
 }
 
 getAddress()
+getDisCodes()
 setValueInHtml()
 // getBasketInfo()
 getBaskets()

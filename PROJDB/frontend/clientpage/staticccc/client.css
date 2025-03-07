@@ -86,12 +86,19 @@ main {
 
 .order-table th,
 .order-table td {
-    border: 1px solid #ddd;
+    /* border: 1px solid #ddd; */
+    border: 1px solid #8f3e3e;
     padding: 10px;
     text-align: left;
 }
 
 .order-table th {
+    /* background-color: #f4f4f4; */
+    background-color: #007bff;
+    /* background-color: #007bff6c; */
+}
+
+.order-table td {
     background-color: #f4f4f4;
 }
 

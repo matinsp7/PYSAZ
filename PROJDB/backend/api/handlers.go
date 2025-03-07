@@ -95,6 +95,18 @@ func getAddress(c *gin.Context){
 	c.JSON(http.StatusOK, addres)
 }
 
+func getDisCodes(c *gin.Context){
+
+	ID, _ := c.Get("ID")
+
+	codes, err := sql.GetDisCodes(ID)
+	if err != nil {
+		log.Print(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"codes": codes})
+}
 
 func getUserBasketShop(c *gin.Context){
 

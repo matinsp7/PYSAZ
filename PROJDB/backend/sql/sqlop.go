@@ -109,6 +109,36 @@ func GetAddressOfUser (id any) (map[int]data.Address, error) {
 	return addres, nil
 }
 
+func GetDisCodes (id any) ([]data.DisCode, error) {
+	
+	query := `
+		select DISCOUNT_CODE.Code, Amount, Code_limit, Usage_count, Expiration_date 
+		from  DISCOUNT_CODE JOIN PRIVATE_CODE ON DISCOUNT_CODE.Code = PRIVATE_CODE.Code
+		WHERE ID = ? and Expiration_date < NOW() + INTERVAL 7 DAY AND Expiration_date >= NOW()
+	`
+
+	row, err := db.Query(query, id)
+	if err != nil {
+
+		if errors.Is(err, sql.ErrNoRows) {
+
+			return nil, nil
+
+		} else {
+			return nil, err
+		}
+	}
+	var codes []data.DisCode
+	for row.Next() {
+		var tmp data.DisCode
+		err := row.Scan(&tmp.Code, &tmp.Amount, &tmp.Code_limit, &tmp.Usage_count, &tmp.Expiration_date)
+		log.Print("tmp: ", tmp)
+		if err != nil {log.Print(err)}
+		codes = append(codes, tmp)
+	}
+	return codes, nil
+}
+
 // ------------------------myabe need set a value for emptiness-------------------------
 
 func GetUserBasketShop(id any) (map[int]data.Basket, error) {
@@ -538,4 +568,8 @@ func NumberOfIntroduction (id int) int {
 		return -5
     }
 	return num
+}
+
+func NumberOfReferralCodes () {
+
 }

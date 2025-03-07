@@ -20,6 +20,14 @@ type Compatible struct{
 	Category string `json:"category"`
 }
 
+type DisCode struct {
+	Code int				`json:"Code"`
+	Amount int				`json:"Amount"`
+	Code_limit any			`json:"Code_limit"`
+	Usage_count int			`json:"Usage_count"`
+	Expiration_date string	`json:"Expiration_date"`
+}
+
 type Address struct{
 
 	Province string		`json:"province"`
