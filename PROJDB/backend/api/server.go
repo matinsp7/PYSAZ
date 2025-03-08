@@ -109,7 +109,7 @@ func ClientApi(r *Server){
 }
 
 func CompatibilityFinder(r *Server){
-	Group := r.Router.Group("/compatiblityFinder")
+	Group := r.Router.Group("/compatiblityFinder", middleware.IsVip())
 	Group.POST("/compatiblity", compatiblity)
 }
 

@@ -209,7 +209,12 @@ func compatiblity(c *gin.Context){
 
 			if len(res) >= 1{
 
-				result[product.Category] = res
+				// result[product.Category] = res
+				for _, data := range res{
+
+					result[data.Category] = append(result[data.Category], data)
+				}
+
 			} else{
 				c.JSON(http.StatusOK, "no product found!")
 				return 
@@ -308,6 +313,5 @@ func getCommon(common map[string][]data.Compatible)map[string]mapset.Set[data.Co
 
 		return newCommon
 	}
-	
 	return nil
 }

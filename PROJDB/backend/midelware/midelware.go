@@ -2,6 +2,7 @@ package middleware
 
 import (
 	authorized "PROJDB/backend/jwt"
+	"PROJDB/backend/sql"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -65,5 +66,22 @@ func LimitMiddleware(limit *limiter.Limiter) gin.HandlerFunc{
 		ctx.Next()
 	}
 
+}
+
+func IsVip() gin.HandlerFunc{
+
+	return func(ctx *gin.Context) {
+
+		var id string
+		id = ctx.GetHeader("id")
+
+		if value, _ := sql.IsVIP(id); value == ""{
+
+			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "only for VIP users"})
+			ctx.Abort()
+		}
+
+		ctx.Next()
+	}
 }
 

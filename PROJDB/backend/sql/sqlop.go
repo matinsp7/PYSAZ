@@ -583,7 +583,7 @@ func GetCompatiblesProducts(destTypeID string, srcTypeID string, productID int, 
 	return compatible, nil
 }
 
-func GetProduct () ([]data.Product) {
+func GetProduct() ([]data.Product) {
 	rows, _ := db.Query("SELECT ID, Category, Image, Current_price, Stock_count, Brand, Model, Image_address FROM PRODUCT")
 	defer rows.Close()
 	
@@ -596,7 +596,7 @@ func GetProduct () ([]data.Product) {
 	return products;
 }
 
-func NumberOfIntroduction (id int) int {
+func NumberOfIntroduction(id int) int {
 	query := `
 			SELECT COUNT(*)
 			FROM REFERS 
