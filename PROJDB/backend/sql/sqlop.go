@@ -139,7 +139,7 @@ func GetDisCodes (id any) ([]data.DisCode, error) {
 }
 
 func GetShoppingCart (id any) ([]data.ShoppingCart, error) {
-	log.Print("hiiiiio")
+	// log.Print("hiiiiio")
 	isVIP, err := IsVIP(id)
 	if err != nil {
 		log.Print(err.Error())
@@ -166,18 +166,18 @@ func GetShoppingCart (id any) ([]data.ShoppingCart, error) {
 		return nil, err
 	}
 
-	log.Print("hiiiiio2")
+	// log.Print("hiiiiio2")
 
 	var carts []data.ShoppingCart
 	for row.Next() {
-		log.Print("hiiiiio3")
+		// log.Print("hiiiiio3")
 		var cart data.ShoppingCart 
 		row.Scan(&cart.ID, &cart.Number, &cart.Status)
-		log.Print(cart)
+		// log.Print(cart)
 		carts = append(carts, cart)
 	}
 
-	log.Print("hiiiiio4")
+	// log.Print("hiiiiio4")
 	return carts, nil
 }
 
@@ -624,4 +624,50 @@ func InsertAdress(id any, address data.Address) error{
 
 func NumberOfReferralCodes () {
 
+}
+
+func MonthlyBonus (id any) (float32, error){
+	query := `
+		SELECT LOCKED_SHOPPING_CART.ID, LOCKED_SHOPPING_CART.Cart_number, LOCKED_SHOPPING_CART.Number
+        FROM LOCKED_SHOPPING_CART
+		JOIN ISSUED_FOR ON  LOCKED_SHOPPING_CART.ID = ISSUED_FOR.ID
+		AND LOCKED_SHOPPING_CART.Cart_number = ISSUED_FOR.Cart_number
+		AND LOCKED_SHOPPING_CART.Number = ISSUED_FOR.Locked_number
+		JOIN TRANSACTION ON ISSUED_FOR.Tracking_code = TRANSACTION.Tracking_code
+        WHERE LOCKED_SHOPPING_CART.ID = ? AND LOCKED_SHOPPING_CART.TIMESTAMP > NOW() - INTERVAL 30 DAY
+		AND TRANSACTION.Status = true;
+	`
+	log.Print("idddd: ", id)
+	row, err := db.Query(query, id)
+	log.Print(row.Columns())
+	if err != nil {
+		log.Print(err)
+		return 0, err
+	}
+
+	query = `
+		call calculateCartPrice (?, ?, ?, @fp)
+	`
+	var res float32 = 0
+	for row.Next() {
+		log.Print("Poooo", res)
+		var (
+			id int
+			cartNumber int
+			number int
+			tmp float32
+		)
+		row.Scan(&id, &cartNumber, &number)
+		log.Print(&number)
+		db.Exec(query, id, cartNumber, number)
+		err:= db.QueryRow("select @fp").Scan(&tmp)
+		log.Print("tmmmmmp: ", tmp)
+		if err != nil {
+			log.Print(err)
+			return 0, err
+		}
+		res = res + 0.15 * tmp
+	}
+	log.Print("reeeeees: ", res)
+	return res, nil
 }

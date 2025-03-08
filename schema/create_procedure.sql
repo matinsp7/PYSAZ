@@ -13,7 +13,8 @@ BEGIN
     DECLARE userCursor CURSOR FOR
         SELECT ID, Cart_number, Number
         FROM LOCKED_SHOPPING_CART 
-        NATURAL JOIN VIP_CLIENTS;
+        NATURAL JOIN VIP_CLIENTS
+        WHERE LOCKED_SHOPPING_CART.TIMESTAMP > NOW() - INTERVAL - 30 DAY;
 
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
 
@@ -72,6 +73,8 @@ BEGIN
     WHERE ADDED_TO.ID = ID
         AND ADDED_TO.Cart_number = Cart_number
         AND ADDED_TO.Locked_number = Locked_number;
+
+    SELECT @price;
 
     -- Open the cursor to apply discounts
     OPEN cur;

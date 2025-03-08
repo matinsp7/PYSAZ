@@ -106,6 +106,7 @@ func ClientApi(r *Server){
 	Group.GET("/getShoppingCart", getShoppingCart)
 	Group.POST("/getBaskets", getUserBasketShop)
 	Group.POST("/addAddress", saveAddress)
+	Group.GET("/monthlyBounes", monthlyBonus)
 }
 
 func CompatibilityFinder(r *Server){

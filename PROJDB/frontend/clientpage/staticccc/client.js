@@ -31,14 +31,15 @@
 let address
 // const message = document.getElementById("message")
 
-function setValueInHtml()
+async function setValueInHtml()
 {   
-
+    
     const userData = localStorage.getItem("userData")
     const result = JSON.parse(userData)
     const userResult = result["user"]
     const isVIP = result["isVIP"]
     const numOfIntr = result["NumberOfIntroduction"]
+    const token = result["token"]
     
     const values = document.getElementsByClassName("values")
     // const valuess = document.getElementsByClassName("valuess")
@@ -52,22 +53,37 @@ function setValueInHtml()
     values[6].innerHTML = numOfIntr
 
     if (isVIP === '') {
-        values[7].innerHTML = "You are not VIP"
-        values[7].style.color = "red"
+        values[8].innerHTML = "You are not VIP"
+        values[8].style.color = "red"
         const infos = document.getElementsByClassName ("info")
         const btn = document.createElement('button')
         btn.className = 'VIPBtn'
         btn.innerHTML = "Become a VIP"
-        infos[7].append(btn)
+        infos[8].append(btn)
+        values[7].innerHTML = 0
     }
     else {
-        values[7].innerHTML = "You are VIP until"
-        values[7].style.color = "green"
+        values[8].innerHTML = "You are VIP until"
+        values[8].style.color = "green"
         const infos = document.getElementsByClassName ("info")
         const EXDate = document.createElement('span')
         EXDate.innerHTML = isVIP
         EXDate.style.color = "green"
-        infos[7].append(EXDate)
+        infos[8].append(EXDate)
+        const res = await fetch("/user/monthlyBounes", {
+            method: "GET",
+            headers: {"Authorization": token} 
+        })
+        console.log("ggg", res.status)
+        if (res.status === 200)
+        {
+            a = await res.json()
+            // console.log("mmm", a["monthlyBonus"])
+            values[7].innerHTML = a["monthlyBonus"]
+        }
+        else {
+            console.log("lll98po")
+        }
     }
 }
 
@@ -123,7 +139,7 @@ function setAddress(address)
     const container = document.getElementById("table")
     let len = 0
     
-    console.log(address)
+    // console.log(address)
     
     for (let key in  address){
 
@@ -191,11 +207,11 @@ async function getDisCodes () {
 }
 
 async function setDisCodes (codes) {
-    console.log(codes)
-    console.log(codes["codes"])
-    const codeList = codes["codes"]
-    console.log(codeList[0])
-    console.log(codeList[0].Code)
+    // console.log(codes)
+    // console.log(codes["codes"])
+    // const codeList = codes["codes"]
+    // console.log(codeList[0])
+    // console.log(codeList[0].Code)
 
     const container = document.getElementById("codeTable")
 
@@ -273,9 +289,9 @@ async function getCarts() {
 }
 
 async function setCarts (carts) {
-    console.log(201)
-    console.log(carts)
-    console.log(carts["carts"])
+    // console.log(201)
+    // console.log(carts)
+    // console.log(carts["carts"])
     const cartList = carts["carts"]
     // console.log(codeList[0])
     // console.log(codeList[0].Code)
@@ -284,7 +300,7 @@ async function setCarts (carts) {
 
     for (let key in cartList){
 
-        console.log("key: ", key)
+        // console.log("key: ", key)
 
         const openTr = document.createElement("tr")
 
@@ -342,7 +358,7 @@ function setBaskets(baskets)
         const len = baskets[key]["products"].length * 60
         
         // console.log(baskets[key]["products"].length * 75)
-        console.log(len)
+        // console.log(len)
 
         if (baskets[key]["products"].length >= 3)
         {   
