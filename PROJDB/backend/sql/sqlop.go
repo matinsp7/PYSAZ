@@ -216,7 +216,10 @@ func GetUserBasketShop(id any) (map[int]data.Basket, error) {
 			return nil, err
 		}
 
-		query := "SELECT Brand, Model, Quantity, Cart_price FROM ADDED_TO A JOIN PRODUCT P ON P.ID = A.Product_ID WHERE A.ID = ? and A.Cart_number = ? and A.Locked_number = ?"
+		query := `SELECT Brand, Model, Quantity, Cart_price 
+		FROM ADDED_TO A JOIN PRODUCT P ON P.ID = A.Product_ID 
+		WHERE A.ID = ? and A.Cart_number = ? and A.Locked_number = ?
+		LIMIT 5`
 
 		row2, err := db.Query(query, id, cartnumber, lockednumber)
 

@@ -1,41 +1,40 @@
-// const flipcarts = document.getElementsByClassName("flip-cards")
-
-// flipcarts[0].style.display = "block"
-// // flipcarts[2].style.display = "block"
-// // flipcarts[3].style.display = "block"
-
-// const ordermess = document.getElementById("NoOrder")
-// ordermess.style.display = "none"
-
-// const backCart = document.getElementsByClassName("flip-card-back")
-
-// backCart[0].style.height = "300px"
-
-// number = 5
-// pname = "CPU"
-// price = 1000
-
-
-// const h5 = document.createElement("h5")
-// h5.style.position = "relative"
-// h5.style.textAlign = "left"
-// h5.style.fontSize = "14px"
-// h5.style.paddingTop = "10px"
-// h5.style.marginLeft = "10px"
-// h5.innerText = number + " * " + pname + price
-
-// backCart[0].append(h5)
-
-
-
 let address
-// const message = document.getElementById("message")
+const compatibility = document.getElementById("compatibility")
+const userData = localStorage.getItem("userData")
+const result = JSON.parse(userData)
+
+console.log(result)
+
+
+compatibility.addEventListener("click", function(e)
+{   
+    e.preventDefault()
+
+    if(result["isVIP"] != "")
+    {
+        window.location.href = "/compatibility"
+    }
+
+    else
+    {   
+        console.log(result)
+        message.style.display = "block"
+        message.style.backgroundColor = "#EC407A"
+        message.style.color = "#212121"
+        message.innerHTML = "this is for VIP users only"
+        setTimeout(function(){message.style.display = "none"}, 2000) 
+    }
+})
 
 async function setValueInHtml()
 {   
+<<<<<<< Updated upstream
     
     const userData = localStorage.getItem("userData")
     const result = JSON.parse(userData)
+=======
+
+>>>>>>> Stashed changes
     const userResult = result["user"]
     const isVIP = result["isVIP"]
     const numOfIntr = result["NumberOfIntroduction"]
@@ -91,9 +90,6 @@ async function getAddress()
 {   
 
     const url = "/user/getAddress"
-
-    const userData = localStorage.getItem("userData")
-    const result = JSON.parse(userData)
     const token = result["token"]
 
 
@@ -135,9 +131,8 @@ async function getAddress()
 
 function setAddress(address)
 {   
-    const length = Object.keys(address).length
+
     const container = document.getElementById("table")
-    let len = 0
     
     // console.log(address)
     
@@ -164,9 +159,6 @@ function setAddress(address)
 
 async function getDisCodes () {
     const url = "/user/getDisCodes"
-
-    const userData = localStorage.getItem("userData")
-    const result = JSON.parse(userData)
     const token = result["token"]
 
 
@@ -250,8 +242,6 @@ async function setDisCodes (codes) {
 async function getCarts() {
     const url = "/user/getShoppingCart"
 
-    const userData = localStorage.getItem("userData")
-    const result = JSON.parse(userData)
     const token = result["token"]
 
     try {
@@ -337,34 +327,40 @@ function setBaskets(baskets)
     const flipcarts = document.getElementsByClassName("flip-cards")
     const NoOrder = document.getElementById("NoOrder")
     
-    let counter = 0;  
+    let counter = 0;   
+    const values = document.getElementsByClassName("values-flip-cards") 
     
     
     for(let key in baskets)
     {   
+            
         NoOrder.style.display = "none"
         flipcarts[key - 1].style.display = "block"  
 
-        const values = document.getElementsByClassName("values-flip-cards")
-        // values[counter]
         values[counter].innerHTML = baskets[key]["time"]
         counter++
         values[counter].innerHTML = baskets[key]["price"]
         counter++
         values[counter].innerHTML = baskets[key]["number"]
+        counter++
 
         const back = document.getElementsByClassName("flip-card-back")
 
         const len = baskets[key]["products"].length * 60
         
         // console.log(baskets[key]["products"].length * 75)
+<<<<<<< Updated upstream
         // console.log(len)
+=======
+>>>>>>> Stashed changes
 
         if (baskets[key]["products"].length >= 3)
         {   
             // back.style.height = "400px"
             back[key - 1].style.height = len + "px"
         } 
+
+        let cc = 1
 
         for(let product in baskets[key]["products"])
         {   
@@ -373,10 +369,11 @@ function setBaskets(baskets)
             h5.style.textAlign = "left"
             h5.style.fontWeight = "500"
             h5.style.fontSize = "15px"
-            h5.innerHTML = product + ". " + baskets[key]["products"][product]["number"] + " * " + baskets[key]["products"][product]["brand"] + " " + baskets[key]["products"][product]["model"] + 
+            h5.innerHTML = cc + ". " + baskets[key]["products"][product]["number"] + " * " + baskets[key]["products"][product]["brand"] + " " + baskets[key]["products"][product]["model"] + 
             " " + " " + baskets[key]["products"][product]["price"]
             
             back[key - 1].append(h5)
+            cc++
         }
     }
 }
@@ -385,8 +382,6 @@ async function getBaskets() {
     
     const url = "/user/getBaskets"
 
-    const userData = localStorage.getItem("userData")
-    const result = JSON.parse(userData)
     const token = result["token"]
 
     try
@@ -425,102 +420,11 @@ async function getBaskets() {
     }
 }
 
-async function getBasketInfo(){
-
-    const url = "/user/getBasketInfo"
-
-    const userData = localStorage.getItem("userData")
-    const result = JSON.parse(userData)
-    const token = result["token"]
-
-    try
-    {
-        const response = await fetch(url, {
-            method: "POST",
-            headers: {"Authorization": token} 
-        })
-
-        if (response.status === 200)
-        {   
-            const result = await response.json()
-            console.log("salam",result)
-        }
-
-        else
-        {   
-            const result = await response.json()
-            message.style.display = "inline"
-            message.style.backgroundColor = "#EC407A"
-            message.style.color = "#212121"
-            message.innerHTML = result["error"]
-            setTimeout(function(){message.style.display = "none"}, 2000)        
-        }
-    }
-
-    catch(error)
-    {
-        message.style.display = "inline"
-        message.style.backgroundColor = "#EC407A"
-        message.style.color = "#212121"
-        message.innerHTML = error
-        setTimeout(function(){message.style.display = "none"}, 2000)
-        console.log(error)
-    }
-}
-
-async function getCompatible()
-{   
-    const url = "http://localhost:8080/compatiblityFinder/ramMotherBoard"
-
-    const userData = localStorage.getItem("userData")
-    const result = JSON.parse(userData)
-    const token = result["token"]
-
-    try
-    {
-        const response = await fetch(url, {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({model:"ModelQ", brand: "BrandA", src: "Motherboard_ID", dest:"RAM_ID"})
-        })
-
-        if (response.status === 200)
-        {   
-            const result = await response.json()
-            
-            for(let number in result)
-            {   
-                console.log(number+":",result[number]["brand"], result[number]["model"])
-            }
-        }
-
-        else
-        {
-            const result = await response.json()
-            message.style.display = "inline"
-            message.style.backgroundColor = "#EC407A"
-            message.style.color = "#212121"
-            message.innerHTML = result["error"]
-            setTimeout(function(){message.style.display = "none"}, 2000)  
-        }
-    }
-
-    catch(error)
-    {
-        message.style.display = "inline"
-        message.style.backgroundColor = "#EC407A"
-        message.style.color = "#212121"
-        message.innerHTML = error
-        setTimeout(function(){message.style.display = "none"}, 2000)
-    }
-}
-
 getAddress()
 getDisCodes()
 getCarts()
 setValueInHtml()
-// getBasketInfo()
 getBaskets()
-// getCompatible()
+
 
 

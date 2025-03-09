@@ -147,14 +147,15 @@ async function getCompatibleProducts(query)
     const userData = localStorage.getItem("userData")
     const res = JSON.parse(userData)
     const token = res["token"]
-
+    const id = res["user"]["ID"]
+    
     const  obj = Object.fromEntries(query)
     
     try
     {
         const response = await fetch(url, {
             method: "POST",
-            headers: {"Content-Type": "application/json", "Authorization": token},
+            headers: {"Content-Type": "application/json", "Authorization": token, "id": id},
             body: JSON.stringify(obj)
         })
 

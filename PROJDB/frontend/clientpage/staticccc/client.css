@@ -72,6 +72,21 @@ main {
     background-color: #0056b3;
 }
 
+#compatibility{
+
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 40px;
+}
+
+#compatibility:hover {
+    background-color: #0056b3;
+}
+
 .values
 {
     margin-left: 10px;
