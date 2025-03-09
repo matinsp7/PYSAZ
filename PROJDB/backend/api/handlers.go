@@ -317,7 +317,7 @@ func getCommon(common map[string][]data.Compatible)map[string]mapset.Set[data.Co
 }
 
 func monthlyBonus (c *gin.Context) {
-	log.Print("monthlyBonus")
+	
 	ID, _ := c.Get("ID")
 
 	res, err := sql.MonthlyBonus(ID)
@@ -328,4 +328,19 @@ func monthlyBonus (c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H {"monthlyBonus": res})
+}
+
+func conutGiftCodes (c *gin.Context) {
+
+	log.Print("hiiiiiaaaa")
+
+	ID, _ := c.Get("ID")
+
+	res, err := sql.Conut_gift_codes(ID)
+	if err != nil {
+		log.Print(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H {"Error":err.Error()})
+	}
+
+	c.JSON(http.StatusOK, gin.H{"conut_gift_codes": res})
 }

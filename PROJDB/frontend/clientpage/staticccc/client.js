@@ -28,13 +28,9 @@ compatibility.addEventListener("click", function(e)
 
 async function setValueInHtml()
 {   
-<<<<<<< Updated upstream
     
     const userData = localStorage.getItem("userData")
     const result = JSON.parse(userData)
-=======
-
->>>>>>> Stashed changes
     const userResult = result["user"]
     const isVIP = result["isVIP"]
     const numOfIntr = result["NumberOfIntroduction"]
@@ -50,25 +46,27 @@ async function setValueInHtml()
     values[4].innerHTML = userResult["WalletBalance"]
     values[5].innerHTML = userResult["TimeStamp"]
     values[6].innerHTML = numOfIntr
+    console.log("lolo: ", await conutGiftCodes())
+    values[8].innerHTML = await conutGiftCodes()
 
     if (isVIP === '') {
-        values[8].innerHTML = "You are not VIP"
-        values[8].style.color = "red"
+        values[9].innerHTML = "You are not VIP"
+        values[9].style.color = "red"
         const infos = document.getElementsByClassName ("info")
         const btn = document.createElement('button')
         btn.className = 'VIPBtn'
         btn.innerHTML = "Become a VIP"
-        infos[8].append(btn)
+        infos[9].append(btn)
         values[7].innerHTML = 0
     }
     else {
-        values[8].innerHTML = "You are VIP until"
-        values[8].style.color = "green"
+        values[9].innerHTML = "You are VIP until"
+        values[9].style.color = "green"
         const infos = document.getElementsByClassName ("info")
         const EXDate = document.createElement('span')
         EXDate.innerHTML = isVIP
         EXDate.style.color = "green"
-        infos[8].append(EXDate)
+        infos[9].append(EXDate)
         const res = await fetch("/user/monthlyBounes", {
             method: "GET",
             headers: {"Authorization": token} 
@@ -201,7 +199,7 @@ async function getDisCodes () {
 async function setDisCodes (codes) {
     // console.log(codes)
     // console.log(codes["codes"])
-    // const codeList = codes["codes"]
+    const codeList = codes["codes"]
     // console.log(codeList[0])
     // console.log(codeList[0].Code)
 
@@ -349,10 +347,7 @@ function setBaskets(baskets)
         const len = baskets[key]["products"].length * 60
         
         // console.log(baskets[key]["products"].length * 75)
-<<<<<<< Updated upstream
         // console.log(len)
-=======
->>>>>>> Stashed changes
 
         if (baskets[key]["products"].length >= 3)
         {   
@@ -417,6 +412,140 @@ async function getBaskets() {
         message.style.color = "#212121"
         message.innerHTML = error
         setTimeout(function(){message.style.display = "none"}, 2000)
+    }
+}
+
+async function getBasketInfo(){
+
+    const url = "/user/getBasketInfo"
+
+    const userData = localStorage.getItem("userData")
+    const result = JSON.parse(userData)
+    const token = result["token"]
+
+    try
+    {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {"Authorization": token} 
+        })
+
+        if (response.status === 200)
+        {   
+            const result = await response.json()
+            console.log("salam",result)
+        }
+
+        else
+        {   
+            const result = await response.json()
+            message.style.display = "inline"
+            message.style.backgroundColor = "#EC407A"
+            message.style.color = "#212121"
+            message.innerHTML = result["error"]
+            setTimeout(function(){message.style.display = "none"}, 2000)        
+        }
+    }
+
+    catch(error)
+    {
+        message.style.display = "inline"
+        message.style.backgroundColor = "#EC407A"
+        message.style.color = "#212121"
+        message.innerHTML = error
+        setTimeout(function(){message.style.display = "none"}, 2000)
+        console.log(error)
+    }
+}
+
+async function getCompatible()
+{   
+    const url = "http://localhost:8080/compatiblityFinder/ramMotherBoard"
+
+    const userData = localStorage.getItem("userData")
+    const result = JSON.parse(userData)
+    const token = result["token"]
+
+    try
+    {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({model:"ModelQ", brand: "BrandA", src: "Motherboard_ID", dest:"RAM_ID"})
+        })
+
+        if (response.status === 200)
+        {   
+            const result = await response.json()
+            
+            for(let number in result)
+            {   
+                console.log(number+":",result[number]["brand"], result[number]["model"])
+            }
+        }
+
+        else
+        {
+            const result = await response.json()
+            message.style.display = "inline"
+            message.style.backgroundColor = "#EC407A"
+            message.style.color = "#212121"
+            message.innerHTML = result["error"]
+            setTimeout(function(){message.style.display = "none"}, 2000)  
+        }
+    }
+
+    catch(error)
+    {
+        message.style.display = "inline"
+        message.style.backgroundColor = "#EC407A"
+        message.style.color = "#212121"
+        message.innerHTML = error
+        setTimeout(function(){message.style.display = "none"}, 2000)
+    }
+}
+
+async function conutGiftCodes() {
+    console.log("joooo")
+    const url = "/user/conutGiftCodes"
+
+    const userData = localStorage.getItem("userData")
+    const result = JSON.parse(userData)
+    const token = result["token"]
+
+    try
+    {
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {"Authorization": token} 
+        })
+
+        if (response.status === 200)
+        {
+            const result = await response.json()
+            console.log("mongol: ", result["conut_gift_codes"])
+            return result["conut_gift_codes"]
+        }
+
+        else
+        {   
+            const result = await response.json()
+            message.style.display = "inline"
+            message.style.backgroundColor = "#EC407A"
+            message.style.color = "#212121"
+            message.innerHTML = result["error"]
+            setTimeout(function(){message.style.display = "none"}, 2000)        
+        }
+    }
+
+    catch(error)
+    {
+        message.style.display = "inline"
+        message.style.backgroundColor = "#EC407A"
+        message.style.color = "#212121"
+        message.innerHTML = error
+        setTimeout(function(){message.style.display = "none"}, 2000)
+        console.log(error)
     }
 }
 

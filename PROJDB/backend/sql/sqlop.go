@@ -674,3 +674,32 @@ func MonthlyBonus (id any) (float32, error){
 	log.Print("reeeeees: ", res)
 	return res, nil
 }
+
+func Conut_gift_codes (id any) (int, error){
+	log.Print("sosooooooooo")
+	query :=`
+		WITH RECURSIVE Referrals AS (
+			SELECT Referee FROM REFERS WHERE Referrer = ?
+			UNION ALL
+
+			SELECT r.Referee
+			FROM REFERS r JOIN Referrals rs ON r.Referrer = rs.Referee
+		)
+		SELECT COUNT(*) FROM Referrals;
+	`
+	var count int
+	err := db.QueryRow(query, id).Scan(&count)
+	if err != nil {
+		log.Print(err)
+		return 0, err
+	}
+	log.Print("coouunt: ", count)
+	query = "SELECT COUNT(*) FROM REFERS WHERE Referee = ?"
+	var tmp int
+	err = db.QueryRow(query, id).Scan(&tmp)
+	if err != nil {
+		log.Print(err)
+		return 0, err
+	}
+	return count + tmp, nil
+}
