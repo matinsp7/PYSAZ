@@ -3,14 +3,14 @@ USE PYSAZ;
 -- time stamp not implemented yet
 CREATE TABLE IF NOT EXISTS CLIENT
 (
-    First_name VARCHAR(15),
-    Last_name VARCHAR(15),
+    First_name VARCHAR(15) NOT NULL,
+    Last_name VARCHAR(15) NOT NULL,
     ID INT PRIMARY KEY AUTO_INCREMENT,
-    Phone_number VARCHAR(12) UNIQUE,
+    Phone_number VARCHAR(12) UNIQUE NOT NULL,
     Wallet_balance INT default 0 CHECK (Wallet_balance >= 0),
-    Refferal_code VARCHAR(20) default "",
+    Refferal_code VARCHAR(20) default "" NOT NULL,
     PasswordHash VARCHAR(255) NOT NULL,
-    Timestamp Timestamp
+    Timestamp Timestamp NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS ADDRESS
@@ -28,15 +28,15 @@ CREATE TABLE IF NOT EXISTS ADDRESS
 
 CREATE TABLE IF NOT EXISTS TRANSACTION
 (
-    Tracking_code INT PRIMARY KEY,
+    Tracking_code INT PRIMARY KEY NOT NULL,
     Status boolean NOT NULL, 
-    Timestamp Timestamp
+    Timestamp Timestamp NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS BANK_TRANSACTION
 (
     Tracking_code INT,
-    Card_number VARCHAR(16),
+    Card_number VARCHAR(16) NOT NULL,
 
     PRIMARY KEY(Tracking_code),
     FOREIGN KEY(Tracking_code) REFERENCES TRANSACTION(Tracking_code)
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS DEPOSITS_INTO_WALLET
 CREATE TABLE IF NOT EXISTS VIP_CLIENTS
 (
     ID INT PRIMARY KEY,
-    Subcription_expiration_time date,
+    Subcription_expiration_time date NOT NULL,
 
     FOREIGN KEY (ID) REFERENCES CLIENT(ID)
     ON DELETE CASCADE
@@ -127,8 +127,8 @@ CREATE TABLE IF NOT EXISTS DISCOUNT_CODE
     Code INT PRIMARY KEY,
     Amount INT NOT NULL CHECK(Amount > 0),
     Code_limit INT,
-    Usage_count INT,
-    Expiration_date date
+    Usage_count INT NOT NULL,
+    Expiration_date date NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS PRIVATE_CODE
@@ -161,7 +161,7 @@ CREATE TABLE IF NOT EXISTS LOCKED_SHOPPING_CART
     Cart_number INT,
 -- might auto incremnt needed-----------------
     Number INT,          
-    Timestamp TIMESTAMP,
+    Timestamp TIMESTAMP NOT NULL,
 
     PRIMARY KEY(ID, Cart_number, Number),
 
@@ -189,12 +189,12 @@ CREATE TABLE IF NOT EXISTS ISSUED_FOR
 CREATE TABLE IF NOT EXISTS PRODUCT 
 (
     ID INT PRIMARY KEY,
-    Category VARCHAR(20),
+    Category VARCHAR(20) NOT NULL,
     Image BLOB,
-    Current_price INT,
-    Stock_count INT, 
-    Brand VARCHAR(20),
-    Model VARCHAR(30),
+    Current_price INT NOT NULL,
+    Stock_count INT NOT NULL, 
+    Brand VARCHAR(20) NOT NULL,
+    Model VARCHAR(30) NOT NULL,
     Image_address VARCHAR(50) default "/exploreAsset/no-image.jpg"
 
     CHECK (Current_price > 0 and Stock_count > 0)
@@ -206,8 +206,8 @@ CREATE TABLE IF NOT EXISTS ADDED_TO
     Cart_number INT,
     Locked_number INT,
     Product_ID INT,
-    Quantity VARCHAR(20),
-    Cart_price INT CHECK (Cart_price > 0),
+    Quantity VARCHAR(20) NOT NULL,
+    Cart_price INT CHECK (Cart_price > 0) NOT NULL,
 
     PRIMARY KEY (ID, Cart_number, Locked_number, Product_ID),
 
@@ -226,7 +226,7 @@ CREATE TABLE IF NOT EXISTS APPLIED_TO
     Cart_number INT,
     Locked_number INT,
     Code INT,
-    Timestamp date,
+    Timestamp date NOT NULL,
 
     PRIMARY KEY (ID, Cart_number, Locked_number, Code),
 
@@ -242,12 +242,12 @@ CREATE TABLE IF NOT EXISTS APPLIED_TO
 CREATE TABLE IF NOT EXISTS HDD
 (
     ID INT PRIMARY KEY,
-    Rotational_speed INT,
-    Wattage INT,
-    Capacity INT,
-    Depth INT,
-    Height INT,
-    Width INT,
+    Rotational_speed INT NOT NULL,
+    Wattage INT NOT NULL,
+    Capacity INT NOT NULL,
+    Depth INT NOT NULL,
+    Height INT NOT NULL,
+    Width INT NOT NULL,
 
     FOREIGN KEY (ID) REFERENCES PRODUCT(ID)
     ON DELETE CASCADE
@@ -258,13 +258,13 @@ CREATE TABLE IF NOT EXISTS HDD
 CREATE TABLE IF NOT EXISTS GPU
 (
     ID INT PRIMARY KEY,
-    Clock_speed INT,
-    Ram_size INT,
-    Number_of_fans INT,
-    Wattage INT,
-    Depth INT,
-    Height INT,
-    Width INT,
+    Clock_speed INT NOT NULL,
+    Ram_size INT NOT NULL,
+    Number_of_fans INT NOT NULL,
+    Wattage INT NOT NULL,
+    Depth INT NOT NULL,
+    Height INT NOT NULL,
+    Width INT NOT NULL,
 
     FOREIGN KEY (ID) REFERENCES PRODUCT(ID)
     ON DELETE CASCADE
@@ -277,10 +277,10 @@ CREATE TABLE IF NOT EXISTS GPU
 CREATE TABLE IF NOT EXISTS POWER_SUPPLY
 (   
     ID INT PRIMARY KEY,
-    Supported_Wattage INT,
-    Depth INT,
-    Height INT,
-    Width INT,
+    Supported_Wattage INT NOT NULL,
+    Depth INT NOT NULL,
+    Height INT NOT NULL,
+    Width INT NOT NULL,
 
     FOREIGN KEY (ID) REFERENCES PRODUCT(ID)
     ON DELETE CASCADE
@@ -292,13 +292,13 @@ CREATE TABLE IF NOT EXISTS POWER_SUPPLY
 CREATE TABLE IF NOT EXISTS COOLER
 (   
     ID INT PRIMARY KEY,
-    Maximum_rotational_speed INT,
-    Wattage INT,
-    Fan_size INT,
-    Cooling_method INT,
-    Depth INT,
-    Height INT,
-    Width INT,
+    Maximum_rotational_speed INT NOT NULL,
+    Wattage INT NOT NULL,
+    Fan_size INT NOT NULL, 
+    Cooling_method INT NOT NULL,
+    Depth INT NOT NULL,
+    Height INT NOT NULL,
+    Width INT NOT NULL,
 
     FOREIGN KEY (ID) REFERENCES PRODUCT(ID)
     ON DELETE CASCADE
@@ -308,13 +308,13 @@ CREATE TABLE IF NOT EXISTS COOLER
 CREATE TABLE IF NOT EXISTS CPU
 (   
     ID INT PRIMARY KEY,
-    Maximum_addressable_memory_limit INT,
-    Boost_frequency INT,
-    Base_frequency INT,
-    Number_of_cores INT,
-    Number_of_Threads INT,
-    Generation INT,
-    Wattage INT,
+    Maximum_addressable_memory_limit INT NOT NULL,
+    Boost_frequency INT NOT NULL,
+    Base_frequency INT NOT NULL,
+    Number_of_cores INT NOT NULL,
+    Number_of_Threads INT NOT NULL,
+    Generation INT NOT NULL,
+    Wattage INT NOT NULL,
 
     FOREIGN KEY (ID) REFERENCES PRODUCT(ID)
     ON DELETE CASCADE
@@ -324,13 +324,13 @@ CREATE TABLE IF NOT EXISTS CPU
 CREATE TABLE IF NOT EXISTS MOTHERBOARD
 (   
     ID INT PRIMARY KEY,
-    Chipset VARCHAR(30),
-    Number_of_memory_slots INT,
-    Memory_speed_range INT,
-    Wattage INT,
-    Depth INT,
-    Height INT,
-    Width INT,
+    Chipset VARCHAR(30) NOT NULL,
+    Number_of_memory_slots INT NOT NULL,
+    Memory_speed_range INT NOT NULL,
+    Wattage INT NOT NULL,
+    Depth INT NOT NULL,
+    Height INT NOT NULL,
+    Width INT NOT NULL,
 
     FOREIGN KEY (ID) REFERENCES PRODUCT(ID)
     ON DELETE CASCADE
@@ -342,13 +342,13 @@ CREATE TABLE IF NOT EXISTS MOTHERBOARD
 CREATE TABLE IF NOT EXISTS RAM_STICK
 (
     ID INT PRIMARY KEY,
-    Frequency INT,  
-    Wattage INT, 
-    Capacity INT,
-    Generation VARCHAR(10),
-    Depth INT,
-    Height INT,
-    Width INT,
+    Frequency INT NOT NULL,  
+    Wattage INT NOT NULL, 
+    Capacity INT NOT NULL,
+    Generation VARCHAR(10) NOT NULL,
+    Depth INT NOT NULL,
+    Height INT NOT NULL,
+    Width INT NOT NULL,
 
     FOREIGN KEY (ID) REFERENCES PRODUCT(ID)
     ON DELETE CASCADE
@@ -358,8 +358,26 @@ CREATE TABLE IF NOT EXISTS RAM_STICK
 CREATE TABLE IF NOT EXISTS SSD
 (
     ID INT PRIMARY KEY,
-    Wattage INT,
-    Capacity INT,
+    Wattage INT NOT NULL,
+    Capacity INT NOT NULL,
+
+    FOREIGN KEY (ID) REFERENCES PRODUCT(ID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS MYCASE
+(
+    ID INT PRIMARY KEY,
+    Number_of_fans INT NOT NULL,  
+    Fan_size INT NOT NULL,
+    Wattage INT NOT NULL, 
+    Type VARCHAR(10) NOT NULL,
+    Material VARCHAR(10) NOT NULL,
+    Color VARCHAR(10) NOT NULL,
+    Depth INT NOT NULL,
+    Height INT NOT NULL,
+    Width INT NOT NULL,
 
     FOREIGN KEY (ID) REFERENCES PRODUCT(ID)
     ON DELETE CASCADE
@@ -368,7 +386,7 @@ CREATE TABLE IF NOT EXISTS SSD
 
 CREATE TABLE IF NOT EXISTS CC_SOCKET_COMPATIBLE_WITH
 (
-    Cooler_ID INT,
+    Cooler_ID INT ,
     CPU_ID INT,
 
     PRIMARY KEY (Cooler_ID, CPU_ID),
