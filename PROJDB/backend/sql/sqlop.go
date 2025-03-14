@@ -6,11 +6,9 @@ import (
 	"errors"
 	"fmt"
 	"log"
-
 	_ "github.com/go-sql-driver/mysql"
 	"golang.org/x/crypto/bcrypt"
 	// mapset "github.com/deckarep/golang-set/v2"
-
 )
 
 var db *sql.DB
@@ -27,10 +25,10 @@ func InsertNewUser(newUser *data.Client) error {
 	hashedPassword := hashPassword(newUser.Password)
 	query := `
 	INSERT INTO CLIENT (First_name, Last_name, Phone_number, Wallet_balance, Refferal_code, PasswordHash, Timestamp)
-	VALUES (?, ?, ?, ?, ?, ?, ?)
+	VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
 	`
 	_, err := db.Exec(query, newUser.FirstName, newUser.LastName, newUser.PhoneNumber,
-		newUser.WalletBalance, newUser.RefferalCode, hashedPassword, "2025-01-10")
+		newUser.WalletBalance, newUser.RefferalCode, hashedPassword)
 	return err
 }
 
@@ -185,7 +183,7 @@ func GetShoppingCart (id any) ([]data.ShoppingCart, error) {
 
 func GetUserBasketShop(id any) (map[int]data.Basket, error) {
 
-	query := "SELECT LSC.ID, LSC.Cart_number, LSC.Number, LSC.Timestamp FROM LOCKED_SHOPPING_CART LSC JOIN ISSUED_FOR ISF ON LSC.ID = ISF.ID and LSC.Cart_number = ISF.Cart_number and LSC.Number = ISF.Locked_number JOIN TRANSACTION T ON ISF.Tracking_code = T.Tracking_code WHERE LSC.ID = ? and T.Status = True ORDER BY LSC.Timestamp DESC"
+	query := "SELECT LSC.ID, LSC.Cart_number, LSC.Number, LSC.Timestamp FROM LOCKED_SHOPPING_CART LSC JOIN ISSUED_FOR ISF ON LSC.ID = ISF.ID and LSC.Cart_number = ISF.Cart_number and LSC.Number = ISF.Locked_number JOIN TRANSACTION T ON ISF.Tracking_code = T.Tracking_code WHERE LSC.ID = ? and T.Status = True ORDER BY LSC.Timestamp DESC LIMIT 5"
 
 	row, err := db.Query(query, id)
 
@@ -219,7 +217,7 @@ func GetUserBasketShop(id any) (map[int]data.Basket, error) {
 		query := `SELECT Brand, Model, Quantity, Cart_price 
 		FROM ADDED_TO A JOIN PRODUCT P ON P.ID = A.Product_ID 
 		WHERE A.ID = ? and A.Cart_number = ? and A.Locked_number = ?
-		LIMIT 5`
+		`
 
 		row2, err := db.Query(query, id, cartnumber, lockednumber)
 
@@ -374,6 +372,12 @@ func FindCompatibleWithGPU(product data.Compatible) ([]data.Compatible, error) {
 	}
 
 	Power, err := CompatibleGPUWithPower("Power_ID", product.Model, product.Brand, "GPU_ID")
+
+	if err != nil {
+		log.Print(err.Error())
+		return nil, err
+	}
+
 
 	products = append(products, Motherboard...)
 	products = append(products, Power...)

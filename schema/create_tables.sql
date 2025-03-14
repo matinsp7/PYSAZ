@@ -195,7 +195,6 @@ CREATE TABLE IF NOT EXISTS PRODUCT
     Stock_count INT NOT NULL, 
     Brand VARCHAR(20) NOT NULL,
     Model VARCHAR(30) NOT NULL,
-    Image_address VARCHAR(50) default "/exploreAsset/no-image.jpg"
 
     CHECK (Current_price > 0 and Stock_count > 0)
 );
@@ -207,7 +206,7 @@ CREATE TABLE IF NOT EXISTS ADDED_TO
     Locked_number INT,
     Product_ID INT,
     Quantity VARCHAR(20) NOT NULL,
-    Cart_price INT CHECK (Cart_price > 0) NOT NULL,
+    Cart_price INT NOT NULL CHECK (Cart_price > 0),
 
     PRIMARY KEY (ID, Cart_number, Locked_number, Product_ID),
 

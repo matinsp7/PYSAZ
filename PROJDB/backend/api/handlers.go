@@ -21,7 +21,7 @@ func signup (c *gin.Context){
     }
 
 	client.RefferalCode = string(client.PhoneNumber[2:]) + string(client.FirstName[0]) + string(client.LastName[0])
-	client.WalletBalance = 0
+	client.WalletBalance = "0"
 	
 	err := sql.InsertNewUser(&client)
 	if err != nil {
@@ -172,8 +172,6 @@ func compatiblity(c *gin.Context){
 
 	err := c.ShouldBindBodyWithJSON(&income)
 
-	log.Print("********************", income)
-
 	if err != nil{
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return 
@@ -195,8 +193,6 @@ func compatiblity(c *gin.Context){
 		
 		functionName := fmt.Sprintf("FindCompatibleWith%s", product.Category)
 
-		log.Print(functionName)
-
 		if fn, exists := functionMap[functionName]; exists {
 		
 			res, err := fn(product)
@@ -209,7 +205,6 @@ func compatiblity(c *gin.Context){
 
 			if len(res) >= 1{
 
-				// result[product.Category] = res
 				for _, data := range res{
 
 					result[data.Category] = append(result[data.Category], data)
@@ -222,18 +217,17 @@ func compatiblity(c *gin.Context){
 
 			
 		} else {
-			fmt.Println("Function not found")
 			c.JSON(http.StatusBadRequest, gin.H{"error":"this category not exist"})
 			return 
 		}
 	} 
 		
-		if len(result) == 1{
-			c.JSON(http.StatusOK, result)
-			return
-		}
-		
-		common := getCommon(result)
+	if len(result) == 1{
+		c.JSON(http.StatusOK, result)
+		return
+	}
+	
+	common := getCommon(result)
 
 	
 	c.JSON(http.StatusOK, common)
@@ -331,8 +325,6 @@ func monthlyBonus (c *gin.Context) {
 }
 
 func conutGiftCodes (c *gin.Context) {
-
-	log.Print("hiiiiiaaaa")
 
 	ID, _ := c.Get("ID")
 

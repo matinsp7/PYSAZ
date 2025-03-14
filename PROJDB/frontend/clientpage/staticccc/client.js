@@ -3,6 +3,7 @@ const compatibility = document.getElementById("compatibility")
 const userData = localStorage.getItem("userData")
 const result = JSON.parse(userData)
 
+
 console.log(result)
 
 
