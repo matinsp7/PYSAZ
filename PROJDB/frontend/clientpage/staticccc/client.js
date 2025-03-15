@@ -4,9 +4,6 @@ const userData = localStorage.getItem("userData")
 const result = JSON.parse(userData)
 
 
-console.log(result)
-
-
 compatibility.addEventListener("click", function(e)
 {   
     e.preventDefault()
@@ -459,52 +456,6 @@ async function getBasketInfo(){
     }
 }
 
-async function getCompatible()
-{   
-    const url = "http://localhost:8080/compatiblityFinder/ramMotherBoard"
-
-    const userData = localStorage.getItem("userData")
-    const result = JSON.parse(userData)
-    const token = result["token"]
-
-    try
-    {
-        const response = await fetch(url, {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({model:"ModelQ", brand: "BrandA", src: "Motherboard_ID", dest:"RAM_ID"})
-        })
-
-        if (response.status === 200)
-        {   
-            const result = await response.json()
-            
-            for(let number in result)
-            {   
-                console.log(number+":",result[number]["brand"], result[number]["model"])
-            }
-        }
-
-        else
-        {
-            const result = await response.json()
-            message.style.display = "inline"
-            message.style.backgroundColor = "#EC407A"
-            message.style.color = "#212121"
-            message.innerHTML = result["error"]
-            setTimeout(function(){message.style.display = "none"}, 2000)  
-        }
-    }
-
-    catch(error)
-    {
-        message.style.display = "inline"
-        message.style.backgroundColor = "#EC407A"
-        message.style.color = "#212121"
-        message.innerHTML = error
-        setTimeout(function(){message.style.display = "none"}, 2000)
-    }
-}
 
 async function conutGiftCodes() {
     console.log("joooo")
@@ -550,11 +501,82 @@ async function conutGiftCodes() {
     }
 }
 
+async function addAddress(Province, Remainder) {
+
+    const url = "/user/addAddress"
+    const token = result["token"]
+
+
+    try
+    {
+        const response = await fetch(url, {
+            method:"POST",
+            headers: {"Authorization": token},
+            body: JSON.stringify({province: Province, remainder: Remainder})
+        })
+
+        if (response.status != 200)
+        {   
+            console.log("khar")
+            const result = await response.json()
+            message.style.display = "inline"
+            message.style.backgroundColor = "#EC407A"
+            message.style.color = "#212121"
+            message.innerHTML = result["error"]
+            setTimeout(function(){message.style.display = "none"}, 2000) 
+        }
+
+        else
+        {
+            console.log("sag")
+        }
+    }
+
+    catch(error)
+    {
+
+        message.style.display = "inline"
+        message.style.backgroundColor = "#EC407A"
+        message.style.color = "#212121"
+        message.innerHTML = result["error"]
+        setTimeout(function(){message.style.display = "none"}, 2000) 
+    }
+    
+}
+
 getAddress()
 getDisCodes()
 getCarts()
 setValueInHtml()
 getBaskets()
 
+// Get the modal, button, and close elements
+const modal = document.getElementById("addressModal");
+const btn = document.getElementById("btn_addAddress");
+const span = document.getElementsByClassName("close")[0];
 
+// When the user clicks the button, open the modal
+btn.onclick = function() {
+    modal.style.display = "flex";
+}
 
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+// Save button functionality
+document.getElementById("saveButton").onclick = function() {
+    const province = document.getElementById("province").value;
+    const remainder = document.getElementById("remainder").value
+    alert("your Address succesfully added!")
+    addAddress(province, remainder)
+    modal.style.display = "none"; // Close the modal after saving
+}

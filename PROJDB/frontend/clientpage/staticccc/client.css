@@ -1,4 +1,8 @@
 /* General Styles */
+*{
+    box-sizing: border-box;
+}
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -66,6 +70,8 @@ main {
     border-radius: 5px;
     cursor: pointer;
     height: 40px;
+    font-size: 14px;
+    font-weight: 500;
 }
 
 .edit-button:hover {
@@ -73,18 +79,44 @@ main {
 }
 
 #compatibility{
-
-    background-color: #007bff;
+    background-color: #00C853;
     color: #fff;
     border: none;
     padding: 10px 15px;
     border-radius: 5px;
     cursor: pointer;
     height: 40px;
+    font-weight: 500;
+    font-size: 14px;
 }
 
 #compatibility:hover {
-    background-color: #0056b3;
+    background-color: #28a745;
+}
+
+.addres-section-inner
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#btn_addAddress
+{
+    background-color: #00C853;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 40px;
+    text-align: center;
+}
+
+#btn_addAddress:hover
+{
+    scale: 1.05;
+    background-color: #28a745;
 }
 
 .values
@@ -290,4 +322,85 @@ footer {
     position: relative;
     bottom: 0;
     width: 100%;
+}
+
+
+/* Basic styling for the modal */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    padding: 5px 20px;
+    border: 1px solid #888;
+    border-radius: 6px;
+    width: 350px; /* Example width */
+    height: 250px; /* Example height */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.modal-head
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+}
+
+.modal-content-inner
+{
+    display: grid;
+    gap: 10px;
+}
+
+/* Input and Button Styling */
+.modal-content-inner > input, select {
+    width: 100%;
+    height: 30px;
+    padding: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+}
+
+#saveButton {
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 30px;
+    margin-top: 15px;
+}
+
+#saveButton:hover {
+    background-color: #45a049;
 }

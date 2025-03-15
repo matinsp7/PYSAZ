@@ -73,18 +73,22 @@
     <!-- Address Section -->
 
     <section id="Address" class="dashboard-section">
-      <h2>Address</h2>
-      <table class="order-table">
-        <thead>
-          <tr>
-            <th>Number</th>
-            <th>Province</th>
-            <th>Remainder</th>
-          </tr>
-        </thead>
-        <tbody id="table">
-        </tbody>
-      </table>
+		<div class="addres-section-inner">
+			<h2>Address</h2>
+			<button id="btn_addAddress"> Add Address</button>
+		</div>
+		</div>
+		<table class="order-table">
+			<thead>
+			<tr>
+				<th>Number</th>
+				<th>Province</th>
+				<th>Remainder</th>
+			</tr>
+			</thead>
+			<tbody id="table">
+			</tbody>
+		</table>
     </section>
 
 	<!-- Discount Code Section -->
@@ -267,10 +271,41 @@
 	<div id="message">
         
     </div>
-  </main>
-  <footer>
-    <p>&copy; 2023 Online Shop. All rights reserved.</p>
-  </footer>
+
+	<div id="addAddress">
+
+	</div>
+
+	<div id="addressModal" class="modal">
+		<div class="modal-content">
+			<div class="modal-head">
+				<h4>Add new address</h4>
+				<span class="close">&times;</span>
+			</div>
+			<div class="modal-content-inner">
+				<select name="Provinces" id="province">
+					<option value="Tehran">Tehran</option>
+					<option value="Qazvin">Qazvin</option>
+					<option value="Shiraz">Shiraz</option>
+					<option value="Isfihan">Isfihan</option>
+					<option value="Alborz">Alborz</option>
+					<option value="Arak">Arak</option>
+					<option value="Qom">Qom</option>
+					<option value="Mashhad">Mashhad</option>
+					<option value="Tabriz">Tabriz</option>
+					<option value="Hamedan">Hamedan</option>
+				</select>
+				<input type="text" placeholder="Enter your address" id="remainder">
+				<button id="saveButton">Save</button>
+			</div>
+		</div>
+    </div>
+	
+</main>
+<footer>
+	<p>&copy; 2023 Online Shop. All rights reserved.</p>
+</footer>
+
   <script src="./staticccc/client.js"></script>
 </body>
 </html>
