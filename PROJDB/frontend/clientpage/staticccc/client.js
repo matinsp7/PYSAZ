@@ -544,6 +544,36 @@ async function addAddress(Province, Remainder) {
     
 }
 
+async function editInformation(FirstName, LastName, PhoneNumber) {
+    
+    const url = "/user/editInforamtion" 
+    const token = result["token"]
+
+    try
+    {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {"Authorization": token},
+            body: JSON.stringify({firstname: FirstName, lastname: LastName, phonenumber: PhoneNumber})
+        })
+
+        if(response.status != 200)
+        {   
+            const result = await response.json()
+            alert(result["error"])
+        }
+    }
+
+    catch(error)
+    {
+        message.style.display = "inline"
+        message.style.backgroundColor = "#EC407A"
+        message.style.color = "#212121"
+        message.innerHTML = result["error"]
+        setTimeout(function(){message.style.display = "none"}, 2000) 
+    }
+}
+
 getAddress()
 getDisCodes()
 getCarts()
@@ -553,7 +583,12 @@ getBaskets()
 // Get the modal, button, and close elements
 const modal = document.getElementById("addressModal");
 const btn = document.getElementById("btn_addAddress");
-const span = document.getElementsByClassName("close")[0];
+const span = document.getElementsByClassName("close")[1];
+
+const editModal = document.getElementById("edditModal")
+const btnEdit = document.getElementById("btn_eddit")
+const editClose = document.getElementsByClassName("close")[0]
+
 
 // When the user clicks the button, open the modal
 btn.onclick = function() {
@@ -562,13 +597,13 @@ btn.onclick = function() {
 
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
-    modal.style.display = "none";
+    closeModal();
 }
 
 // When the user clicks anywhere outside the modal, close it
 window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
+    if (event.target == editModal) {
+        closeModal()
     }
 }
 
@@ -578,5 +613,48 @@ document.getElementById("saveButton").onclick = function() {
     const remainder = document.getElementById("remainder").value
     alert("your Address succesfully added!")
     addAddress(province, remainder)
-    modal.style.display = "none"; // Close the modal after saving
+    closeModal() // Close the modal after saving
 }
+
+document.getElementById("editSaveButton").onclick = function(){
+    const firstname = document.getElementsByClassName("edit")[0].value
+    const lastname = document.getElementsByClassName("edit")[1].value
+    const phonenumber = document.getElementsByClassName("edit")[2].value
+
+    editInformation(firstname, lastname, phonenumber)
+    closeEditModal()
+}   
+
+function closeModal() {
+    modal.classList.add("closing"); // Add closing class for fade-out animation
+    setTimeout(() => {
+        modal.style.display = "none"; // Hide the modal after animation
+        modal.classList.remove("closing"); // Remove closing class
+    }, 300); // Match the duration of the fade-out animation (300ms)
+}
+
+function closeEditModal(){
+    editModal.classList.add("closing")
+    setTimeout(() => {
+        editModal.style.display = "none"
+        editModal.classList.remove("closing")
+    }, 300);
+}
+
+btnEdit.onclick = function(){
+    editModal.style.display = "flex"
+}
+
+editClose.onclick = function(){
+    closeEditModal()
+}
+
+window.onclick = function(event){
+    if(event.target == modal)
+    {
+        closeEditModal()
+    }
+}
+
+
+

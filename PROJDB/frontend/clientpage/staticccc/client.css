@@ -62,7 +62,7 @@ main {
     margin-top: 20px;
 }
 
-.edit-button {
+#btn_eddit {
     background-color: #007bff;
     color: #fff;
     border: none;
@@ -74,7 +74,7 @@ main {
     font-weight: 500;
 }
 
-.edit-button:hover {
+#btn_eddit:hover {
     background-color: #0056b3;
 }
 
@@ -300,19 +300,6 @@ main {
     background-color: #1e7e34;
 }
 
-#message
-{
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    height: 40px;
-    width: 250px;
-    text-align: center;
-    padding-top: 8px;
-    border-radius: 10px;
-}
-
-
 footer {
     text-align: center;
     padding: 10px;
@@ -340,6 +327,41 @@ footer {
     align-items: center;
 }
 
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-100%); /* Start from above */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0); /* Slide to center */
+    }
+}
+
+@keyframes slideOut {
+    from {
+        opacity: 1;
+        transform: translateY(0); /* Start from center */
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-100%); /* Slide back up */
+    }
+}
+
+
+#message
+{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    height: 40px;
+    width: 250px;
+    text-align: center;
+    padding-top: 8px;
+    border-radius: 10px;
+}
+
 /* Modal Content */
 .modal-content {
     background-color: #fefefe;
@@ -349,6 +371,11 @@ footer {
     width: 350px; /* Example width */
     height: 250px; /* Example height */
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.5s ease-out;
+}
+
+#edditModal-contet{
+    height: 300px;
 }
 
 .modal-head
@@ -379,6 +406,12 @@ footer {
     gap: 10px;
 }
 
+.modal.closing .modal-content {
+    animation: slideOut 0.5s ease-out; /* Apply fade-out animation */
+}
+
+
+
 /* Input and Button Styling */
 .modal-content-inner > input, select {
     width: 100%;
@@ -403,4 +436,20 @@ footer {
 
 #saveButton:hover {
     background-color: #45a049;
+}
+
+#editSaveButton{
+
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 30px;
+    margin-top: 15px;
+}
+
+#editSaveButton:hover{
+    background-color: #0056b3;
 }

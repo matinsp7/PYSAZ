@@ -57,8 +57,6 @@ type BasketInfo struct{
 	Price int 		`json:"price"`
 }
 
-
-
 type Product struct {
 	ID           int     `json:"id"`
     Category     string  `json:"category"`
@@ -68,6 +66,12 @@ type Product struct {
     Brand        string  `json:"brand"`
     Model        string  `json:"model"`
 	Image_address string `json:"Image_address"`
+}
+
+type EditInfo struct{
+	FirstName string 	`json:"firstname"`
+	LastName string 	`json:"lastname"`
+	PhoneNumber string	`json:"phonenumber"`
 }
 
 type HandlerFunc func(product Compatible)([]Compatible, error)

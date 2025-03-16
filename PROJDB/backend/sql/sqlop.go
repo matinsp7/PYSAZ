@@ -6,7 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	_ "github.com/go-sql-driver/mysql"
+	_"github.com/go-sql-driver/mysql"
 	"golang.org/x/crypto/bcrypt"
 	// mapset "github.com/deckarep/golang-set/v2"
 )
@@ -706,4 +706,26 @@ func Conut_gift_codes (id any) (int, error){
 		return 0, err
 	}
 	return count + tmp, nil
+}
+
+func EditInforamtion(eddited data.EditInfo, id any) error {
+	var query string = "UPDATE CLIENT SET "
+	var args []interface{}
+
+	if eddited.FirstName != ""   {query += "First_name = ? " ; args = append(args, eddited.FirstName)}
+	if eddited.LastName != ""    {query += "First_name = ? " ; args = append(args, eddited.LastName)}
+	if eddited.PhoneNumber != "" {query += "Phone_number = ?"; args = append(args, eddited.PhoneNumber)}
+
+	query += fmt.Sprintf("WHERE ID = %d", id)
+
+	if len(args) != 0{
+
+		_, err := db.Exec(query, args...)
+	
+		if err != nil{
+			return err
+		}
+	}
+
+	return nil
 }

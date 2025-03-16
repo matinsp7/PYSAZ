@@ -235,6 +235,58 @@ func compatiblity(c *gin.Context){
 
 //check if len == 1
 
+
+func monthlyBonus (c *gin.Context) {
+	
+	ID, _ := c.Get("ID")
+	
+	res, err := sql.MonthlyBonus(ID)
+	
+	if err != nil {
+		log.Print(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H {"Error":err.Error()})
+	}
+	
+	c.JSON(http.StatusOK, gin.H {"monthlyBonus": res})
+}
+
+func conutGiftCodes (c *gin.Context) {
+
+	ID, _ := c.Get("ID")
+	
+	res, err := sql.Conut_gift_codes(ID)
+	if err != nil {
+		log.Print(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H {"Error":err.Error()})
+	}
+	
+	c.JSON(http.StatusOK, gin.H{"conut_gift_codes": res})
+}
+
+func edditInformation (c *gin.Context){
+
+	ID, _ := c.Get("ID")
+
+	var income data.EditInfo
+
+	err := c.ShouldBindBodyWithJSON(&income)
+
+	if err != nil{
+		log.Print(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error":err.Error()})
+		return 
+	}
+
+	err = sql.EditInforamtion(income, ID)
+
+	if err != nil{
+		log.Print(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error":err.Error()})
+		return 
+	}
+
+	c.JSON(http.StatusOK, "")
+}
 func getCommon(common map[string][]data.Compatible)map[string]mapset.Set[data.Compatible]{
 
 	intersect := mapset.NewSet[data.Compatible]()
@@ -308,31 +360,4 @@ func getCommon(common map[string][]data.Compatible)map[string]mapset.Set[data.Co
 		return newCommon
 	}
 	return nil
-}
-
-func monthlyBonus (c *gin.Context) {
-	
-	ID, _ := c.Get("ID")
-
-	res, err := sql.MonthlyBonus(ID)
-
-	if err != nil {
-		log.Print(err.Error())
-		c.JSON(http.StatusBadRequest, gin.H {"Error":err.Error()})
-	}
-
-	c.JSON(http.StatusOK, gin.H {"monthlyBonus": res})
-}
-
-func conutGiftCodes (c *gin.Context) {
-
-	ID, _ := c.Get("ID")
-
-	res, err := sql.Conut_gift_codes(ID)
-	if err != nil {
-		log.Print(err.Error())
-		c.JSON(http.StatusBadRequest, gin.H {"Error":err.Error()})
-	}
-
-	c.JSON(http.StatusOK, gin.H{"conut_gift_codes": res})
 }

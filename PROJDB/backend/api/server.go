@@ -1,16 +1,17 @@
 package api
 
 import (
-	"net/http"
 	middleware "PROJDB/backend/midelware"
+	"net/http"
+	"time"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/ulule/limiter/v3"
 	"github.com/ulule/limiter/v3/drivers/store/memory"
-	"time"
 
-	"PROJDB/backend/sql"
 	"PROJDB/backend/data"
+	"PROJDB/backend/sql"
 )
 
 type Server struct{
@@ -100,14 +101,15 @@ func ClientApi(r *Server){
 	Group := r.Router.Group("/user")
 	Group.Use(middleware.AuthoMiddelWare())
 	
-	Group.POST("/login", login)
-	Group.GET("/getAddress",  getAddress)
-	Group.GET("/getDisCodes", getDisCodes)
-	Group.GET("/getShoppingCart", getShoppingCart)
-	Group.POST("/getBaskets", getUserBasketShop)
-	Group.POST("/addAddress", saveAddress)
-	Group.GET("/monthlyBounes", monthlyBonus)
-	Group.GET("/conutGiftCodes", conutGiftCodes)
+	Group.POST("/login", 			login)
+	Group.GET("/getAddress",  		getAddress)
+	Group.GET("/getDisCodes", 		getDisCodes)
+	Group.GET("/getShoppingCart", 	getShoppingCart)
+	Group.POST("/getBaskets", 		getUserBasketShop)
+	Group.POST("/addAddress",		saveAddress)
+	Group.GET("/monthlyBounes", 	monthlyBonus)
+	Group.GET("/conutGiftCodes", 	conutGiftCodes)
+	Group.POST("/editInforamtion", 	edditInformation)
 }
 
 func CompatibilityFinder(r *Server){

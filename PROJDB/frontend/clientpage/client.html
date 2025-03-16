@@ -65,7 +65,7 @@
 				<span class="values"></span>
 			</div>
         </div>
-        <button class="edit-button">Edit Information</button>
+        <button id="btn_eddit">Edit Information</button>
 		<button id="compatibility">Compatibility</button>
       </div>
     </section>
@@ -272,7 +272,19 @@
         
     </div>
 
-	<div id="addAddress">
+	<div class="modal" id="edditModal">
+		<div class="modal-content" id="edditModal-contet">
+			<div class="modal-head">
+				<h4>Edit your Information</h4>
+				<span class="close">&times;</span>
+			</div>
+			<div class="modal-content-inner">
+				<input type="text" placeholder="First name" class="edit">
+				<input type="text" placeholder="Last name" class="edit">
+				<input type="text" placeholder="Phonenumber" class="edit">
+				<button id="editSaveButton">Save</button>
+			</div>
+		</div>
 
 	</div>
 
